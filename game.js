@@ -198,7 +198,34 @@ const REAL_PRO_PLAYERS = [
     {"id":"p167","name":"s0m","realName":"s0m","country":"🇺🇸","team":"自由市场","role":"Controller","avatar":"s0","power":83,"rating":"A","price":420000,"aim":82,"gameSense":84,"leadership":82,"utility":84,"isPro":true,"bio":"北美瞄准天才，自由市场控场。"},
     {"id":"p168","name":"crashies","realName":"crashies","country":"🇺🇸","team":"自由市场","role":"Initiator","avatar":"cs","power":82,"rating":"A","price":400000,"aim":78,"gameSense":86,"leadership":84,"utility":86,"isPro":true,"bio":"北美冠军先锋，经验丰富的自由身老将。"},
     {"id":"p169","name":"SUYGETSU","realName":"SUYGETSU","country":"🇷🇺","team":"自由市场","role":"Sentinel","avatar":"SG","power":82,"rating":"A","price":400000,"aim":78,"gameSense":86,"leadership":80,"utility":88,"isPro":true,"bio":"欧洲顶级哨位，自由市场上最稳的防守核心。"},
-    {"id":"p170","name":"nAts","realName":"nAts","country":"🇷🇺","team":"自由市场","role":"Sentinel","avatar":"nA","power":81,"rating":"A","price":380000,"aim":76,"gameSense":86,"leadership":82,"utility":88,"isPro":true,"bio":"欧洲哨位大师，自由身等待新挑战。"}
+    {"id":"p170","name":"nAts","realName":"nAts","country":"🇷🇺","team":"自由市场","role":"Sentinel","avatar":"nA","power":81,"rating":"A","price":380000,"aim":76,"gameSense":86,"leadership":82,"utility":88,"isPro":true,"bio":"欧洲哨位大师，自由身等待新挑战。"},
+    {"id":"p171","name":"Jinggg","realName":"Jinggg","country":"🇸🇬","team":"Talon Esports","role":"Duelist","avatar":"Jg","power":88,"rating":"A","price":680000,"aim":90,"gameSense":82,"leadership":76,"utility":78,"isPro":true,"bio":"前 PRX 王牌决斗者，转会 Talon 后继续以飘逸操作统治 Pacific。"},
+    {"id":"p172","name":"something","realName":"something","country":"🇹🇭","team":"Bleed Esports","role":"Duelist","avatar":"Sm","power":84,"rating":"A","price":460000,"aim":86,"gameSense":80,"leadership":72,"utility":76,"isPro":true,"bio":"泰国天才决斗者，Bleed 的核心火力点。"},
+    {"id":"p173","name":"Vorz","realName":"Vorz","country":"🇮🇩","team":"Rex Regum Qeon","role":"Controller","avatar":"Vz","power":82,"rating":"A","price":420000,"aim":76,"gameSense":86,"leadership":84,"utility":88,"isPro":true,"bio":"RRQ 指挥兼控场，东南亚新生代 IGL 代表。"},
+    {"id":"p174","name":"KangKang","realName":"KangKang","country":"🇨🇳","team":"EDward Gaming Youth","role":"Duelist","avatar":"KK","power":83,"rating":"A","price":450000,"aim":88,"gameSense":78,"leadership":70,"utility":74,"isPro":true,"bio":"EDG 青训头号决斗者，CN 未来之星。"},
+    {"id":"p175","name":"Yuicaw","realName":"Yuicaw","country":"🇨🇳","team":"EDward Gaming Youth","role":"Initiator","avatar":"Yc","power":81,"rating":"B","price":360000,"aim":76,"gameSense":86,"leadership":80,"utility":86,"isPro":true,"bio":"EDGY 先锋，视野控制与信息拆解能力出色。"},
+    {"id":"p176","name":"Feng","realName":"Feng","country":"🇨🇳","team":"Wolves Rising","role":"Controller","avatar":"Fn","power":80,"rating":"B","price":340000,"aim":74,"gameSense":86,"leadership":82,"utility":88,"isPro":true,"bio":"狼队青训指挥，以冷静的烟位调度著称。"},
+    {"id":"p177","name":"BerLIN","realName":"BerLIN","country":"🇩🇪","team":"Team BDS","role":"Duelist","avatar":"BL","power":85,"rating":"A","price":520000,"aim":88,"gameSense":80,"leadership":74,"utility":76,"isPro":true,"bio":"BDS 德国决斗者，枪法凶悍的 EMEA 新星。"},
+    {"id":"p178","name":"maTc","realName":"maTc","country":"🇫🇷","team":"Team BDS","role":"Initiator","avatar":"mt","power":83,"rating":"A","price":460000,"aim":78,"gameSense":88,"leadership":84,"utility":86,"isPro":true,"bio":"BDS 法国先锋兼 IGL，战术执行严谨。"},
+    {"id":"p179","name":"Kami","realName":"Kami","country":"🇫🇷","team":"Team BDS","role":"Sentinel","avatar":"Km","power":82,"rating":"A","price":420000,"aim":76,"gameSense":86,"leadership":80,"utility":90,"isPro":true,"bio":"BDS 哨位核心，残局处理教科书级别。"},
+    {"id":"p180","name":"anka","realName":"anka","country":"🇨🇳","team":"FunPlus Phoenix","role":"Duelist","avatar":"ak","power":82,"rating":"A","price":440000,"aim":86,"gameSense":78,"leadership":72,"utility":76,"isPro":true,"bio":"FPX 王牌决斗者，CN 赛区最被低估的火力点之一。"},
+    {"id":"p181","name":"BerBer","realName":"BerBer","country":"🇨🇳","team":"FunPlus Phoenix","role":"Controller","avatar":"Bb","power":80,"rating":"B","price":360000,"aim":74,"gameSense":86,"leadership":84,"utility":88,"isPro":true,"bio":"FPX 控场兼指挥，烟位覆盖精准。"},
+    {"id":"p182","name":"LifeNP","realName":"LifeNP","country":"🇨🇳","team":"FunPlus Phoenix","role":"Sentinel","avatar":"LN","power":79,"rating":"B","price":320000,"aim":74,"gameSense":84,"leadership":76,"utility":88,"isPro":true,"bio":"FPX 哨位，防守站位刁钻。"},
+    {"id":"p183","name":"Zin","realName":"Zin","country":"🇨🇳","team":"Nova Esports","role":"Duelist","avatar":"Zn","power":81,"rating":"B","price":380000,"aim":84,"gameSense":78,"leadership":70,"utility":74,"isPro":true,"bio":"NOVA 决斗者，激进风格的突破手。"},
+    {"id":"p184","name":"K1ng","realName":"K1ng","country":"🇨🇳","team":"Nova Esports","role":"Initiator","avatar":"K1","power":79,"rating":"B","price":300000,"aim":74,"gameSense":84,"leadership":80,"utility":84,"isPro":true,"bio":"NOVA 先锋，信息位稳健。"},
+    {"id":"p185","name":"AG47","realName":"AG47","country":"🇨🇳","team":"All Gamers","role":"Duelist","avatar":"AG","power":80,"rating":"B","price":340000,"aim":84,"gameSense":76,"leadership":70,"utility":72,"isPro":true,"bio":"AG 王牌决斗者，CN 次级联赛得分王。"},
+    {"id":"p186","name":"L1ttt","realName":"L1ttt","country":"🇨🇳","team":"All Gamers","role":"Controller","avatar":"L1","power":78,"rating":"B","price":280000,"aim":72,"gameSense":84,"leadership":82,"utility":86,"isPro":true,"bio":"AG 控场指挥，战术素养扎实。"},
+    {"id":"p187","name":"Dirk","realName":"Dirksen","country":"🇳🇱","team":"Trace Esports","role":"Duelist","avatar":"Dk","power":83,"rating":"A","price":460000,"aim":86,"gameSense":80,"leadership":72,"utility":74,"isPro":true,"bio":"Trace 荷兰决斗者，EMEA 挑战者联赛的明星。"},
+    {"id":"p188","name":"Kendo","realName":"Kendo","country":"🇪🇸","team":"Trace Esports","role":"Sentinel","avatar":"Ke","power":81,"rating":"A","price":400000,"aim":76,"gameSense":86,"leadership":80,"utility":88,"isPro":true,"bio":"Trace 西班牙哨位，防守核心。"},
+    {"id":"p189","name":"loll","realName":"loll","country":"🇪🇸","team":"Movistar Riders","role":"Controller","avatar":"ll","power":82,"rating":"A","price":420000,"aim":74,"gameSense":88,"leadership":84,"utility":90,"isPro":true,"bio":"MRS 控场 IGL，西班牙国家队大脑。"},
+    {"id":"p190","name":"T1rax","realName":"T1rax","country":"🇪🇸","team":"Movistar Riders","role":"Duelist","avatar":"T1","power":80,"rating":"B","price":340000,"aim":84,"gameSense":76,"leadership":70,"utility":74,"isPro":true,"bio":"MRS 决斗者，爆发力十足。"},
+    {"id":"p191","name":"Laz","realName":"Laz","country":"🇯🇵","team":"DFM","role":"Controller","avatar":"Lz","power":82,"rating":"A","price":420000,"aim":74,"gameSense":88,"leadership":84,"utility":88,"isPro":true,"bio":"DFM 日本传奇控场兼教练，Pacific 常青树。"},
+    {"id":"p192","name":"Popogachi","realName":"Popogachi","country":"🇯🇵","team":"DFM","role":"Duelist","avatar":"Pg","power":80,"rating":"B","price":340000,"aim":84,"gameSense":76,"leadership":70,"utility":74,"isPro":true,"bio":"DFM 决斗者，日式精准枪法代表。"},
+    {"id":"p193","name":"Striker","realName":"Striker","country":"🇯🇵","team":"FENNEL","role":"Sentinel","avatar":"Sk","power":79,"rating":"B","price":300000,"aim":74,"gameSense":84,"leadership":78,"utility":86,"isPro":true,"bio":"FENNEL 哨位，日本新生代防守专家。"},
+    {"id":"p194","name":"Meiy","realName":"Meiy","country":"🇯🇵","team":"FENNEL","role":"Duelist","avatar":"My","power":81,"rating":"B","price":360000,"aim":86,"gameSense":76,"leadership":70,"utility":72,"isPro":true,"bio":"FENNEL 王牌决斗者，Pacific 崛起的新星。"},
+    {"id":"p195","name":"Cned","realName":"Cned","country":"🇹🇷","team":"自由市场","role":"Duelist","avatar":"Cn","power":86,"rating":"A","price":560000,"aim":90,"gameSense":78,"leadership":72,"utility":74,"isPro":true,"bio":"土耳其第一决斗者，Champions 冠军成员，自由身。"},
+    {"id":"p196","name":"Starxo","realName":"Starxo","country":"🇪🇸","team":"自由市场","role":"Sentinel","avatar":"Sx","power":84,"rating":"A","price":480000,"aim":78,"gameSense":88,"leadership":82,"utility":90,"isPro":true,"bio":"欧洲顶级哨位，自由市场最抢手的防守核心。"},
+    {"id":"p197","name":"Redgar","realName":"Redgar","country":"🇷🇺","team":"自由市场","role":"Controller","avatar":"Rg","power":83,"rating":"A","price":440000,"aim":74,"gameSense":90,"leadership":90,"utility":88,"isPro":true,"bio":"俄罗斯传奇 IGL，自由身等待下一支冠军战队。"}
 ];
 
 const AI_TEAMS = [
@@ -254,7 +281,14 @@ const AI_TEAMS = [
     {"name":"Bleed Esports","tag":"BLEED","region":"Pacific","country":"🇸🇬","power":67,"color":"#E60012","coach":"sScary","bio":"新加坡 Bleed，东南亚新生代战队，敢打敢拼。"},
     {"name":"Rex Regum Qeon","tag":"RRQ","region":"Pacific","country":"🇮🇩","power":69,"color":"#FFC000","coach":"Vorz","bio":"印尼 RRQ，东南亚最具人气的挑战者战队，主场氛围火爆。"},
     {"name":"EDward Gaming Youth","tag":"EDGY","region":"China","country":"🇨🇳","power":69,"color":"#FFD700","coach":"KangKang","bio":"EDG 青训队，CN 赛区的人才库，KangKang 与 Yuicaw 被视为下一代核心。"},
-    {"name":"Wolves Rising","tag":"WOLR","region":"China","country":"🇨🇳","power":68,"color":"#FF6600","coach":"Feng","bio":"狼队青训，CN 次级联赛的年轻力量，以勤奋和执行力著称。"}
+    {"name":"Wolves Rising","tag":"WOLR","region":"China","country":"🇨🇳","power":68,"color":"#FF6600","coach":"Feng","bio":"狼队青训，CN 次级联赛的年轻力量，以勤奋和执行力著称。"},
+    {"name":"Team BDS","tag":"BDS","region":"EMEA","country":"🇨🇭","power":73,"color":"#00C2FF","coach":"Goose","bio":"瑞士豪门 BDS，EMEA 挑战者联赛统治者，BerLIN 与 maTc 双核带领下冲击顶级联赛。"},
+    {"name":"Nova Esports","tag":"NOVA","region":"China","country":"🇨🇳","power":70,"color":"#7B68EE","coach":"Mole","bio":"NOVA 电竞，CN 次级联赛黑马，年轻阵容以快攻和执行力著称。"},
+    {"name":"All Gamers","tag":"AG","region":"China","country":"🇨🇳","power":69,"color":"#FF6347","coach":"OldSix","bio":"AG 老牌电竞俱乐部，Valorant 分部深耕 CN 次级联赛，青训体系完善。"},
+    {"name":"Trace Esports","tag":"TRACE","region":"EMEA","country":"🇳🇱","power":72,"color":"#00CED1","coach":"Hammer","bio":"荷兰 Trace，EMEA 挑战者联赛稳定前列，Dirk 与 Kendo 一攻一守的核心组合。"},
+    {"name":"Movistar Riders","tag":"MRS","region":"EMEA","country":"🇪🇸","power":71,"color":"#FFD700","coach":"Petrow","bio":"西班牙 Movistar Riders，伊比利亚半岛的 Valorant 旗帜，loll 指挥的体系成熟。"},
+    {"name":"DFM","tag":"DFM","region":"Pacific","country":"🇯🇵","power":70,"color":"#E60012","coach":"Laz","bio":"日本 DFM，Pacific 常客，Laz 坐镇的控场体系让队伍始终保持竞争力。"},
+    {"name":"FENNEL","tag":"FNL","region":"Pacific","country":"🇯🇵","power":69,"color":"#FF69B4","coach":"Reita","bio":"日本 FENNEL，Pacific 新生代力量，Meiy 与 Striker 的年轻组合充满潜力。"}
 ];
 
 const TOTAL_WEEKS = 24;
@@ -371,6 +405,14 @@ function initExtras(state) {
     if (!Array.isArray(state.shop.stickers)) state.shop.stickers = [];
     state.shop.scoutUnlocked = !!state.shop.scoutUnlocked;
     state.shop.replayUnlocked = !!state.shop.replayUnlocked;
+
+    state.tactic = state.tactic || 'balanced';
+    if (!Array.isArray(state.roster)) state.roster = [];
+    state.roster.forEach(p => {
+        const m = Number(p.morale);
+        p.morale = isNaN(m) ? 70 : Math.max(0, Math.min(100, m));
+        p.trainedWeek = Number(p.trainedWeek) || 0;
+    });
 
     if (!Array.isArray(state.mail)) state.mail = [];
     if (!Array.isArray(state.friendlyHistory)) state.friendlyHistory = [];
@@ -521,6 +563,41 @@ function calculateTeamPower(teamData) {
     }
 }
 
+function getTeamMorale() {
+    if (!gameState || !gameState.roster || gameState.roster.length === 0) return 70;
+    const sum = gameState.roster.reduce((acc, a) => acc + (typeof a.morale === 'number' ? a.morale : 70), 0);
+    return Math.round(sum / gameState.roster.length);
+}
+
+function getEffectiveTeamPower() {
+    const base = gameState.teamPower || 0;
+    const factor = 0.9 + (getTeamMorale() / 100) * 0.2;
+    return Math.round(base * factor);
+}
+
+function applyMoraleToRoster(didWin) {
+    if (!gameState || !Array.isArray(gameState.roster)) return;
+    const delta = didWin ? 8 : -10;
+    gameState.roster.forEach(p => {
+        const cur = typeof p.morale === 'number' ? p.morale : 70;
+        p.morale = Math.max(0, Math.min(100, cur + delta));
+    });
+}
+
+function setTactic(t) {
+    if (!['aggressive', 'balanced', 'defensive'].includes(t)) return;
+    gameState.tactic = t;
+    updateAllDisplays();
+    renderDashboard();
+}
+
+function applyTacticToPower(ownPower, oppPower) {
+    const t = (gameState && gameState.tactic) || 'balanced';
+    if (t === 'aggressive') return [Math.round(ownPower * 1.05), oppPower];
+    if (t === 'defensive') return [ownPower, Math.round(oppPower * 0.95)];
+    return [ownPower, oppPower];
+}
+
 function updateTeamPower() {
     if (!gameState || !Array.isArray(gameState.standings)) return;
     const playerStanding = gameState.standings.find(s => s && s.isPlayerTeam);
@@ -662,6 +739,14 @@ function renderDashboard() {
     const nextMatch = gameState.schedule.find(s => s.week === gameState.currentWeek && !s.played);
     const nextInfo = document.getElementById('next-match-info');
     const playBtn = document.getElementById('play-next-match');
+    const teamMorale = getTeamMorale();
+    const effPower = getEffectiveTeamPower();
+    const tacticBtns = ['aggressive', 'balanced', 'defensive'].map(t => {
+        const cn = { aggressive: '激进进攻', balanced: '均衡战术', defensive: '稳固防守' }[t];
+        const desc = { aggressive: '己方+5%战力', balanced: '无修正', defensive: '对手-5%战力' }[t];
+        const active = (gameState.tactic || 'balanced') === t ? 'active' : '';
+        return `<button class="tactic-btn ${active}" onclick="setTactic('${t}')">${cn}<small>${desc}</small></button>`;
+    }).join('');
     if (nextMatch && nextMatch.opponent) {
         const opp = AI_TEAMS.find(t => t.name === nextMatch.opponent);
         const oppPower = getTeamPowerByName(nextMatch.opponent);
@@ -670,7 +755,8 @@ function renderDashboard() {
             <div class="teams-row">
                 <div class="team-half">
                     <h3>${gameState.teamName}</h3>
-                    <span class="power">战力 ${gameState.teamPower}</span>
+                    <span class="power">战力 ${gameState.teamPower} · 有效 ${effPower}</span>
+                    <span class="team-morale-summary">💪 士气 ${teamMorale}</span>
                 </div>
                 <div class="vs-badge">VS</div>
                 <div class="team-half">
@@ -678,12 +764,14 @@ function renderDashboard() {
                     <span class="power">战力 ${oppPower}</span>
                 </div>
             </div>
+            <div class="tactic-selector">${tacticBtns}</div>
         `;
         playBtn.style.display = 'block';
     } else {
         const week = gameState.schedule.find(s => s.week === gameState.currentWeek);
         const label = week ? matchLabel(week) : '';
-        nextInfo.innerHTML = `<p class="no-match">${label || '本周无比赛'}${gameState.currentWeek >= TOTAL_WEEKS ? ' · 赛季结束' : ' · 轮空'}</p>`;
+        nextInfo.innerHTML = `<p class="no-match">${label || '本周无比赛'}${gameState.currentWeek >= TOTAL_WEEKS ? ' · 赛季结束' : ' · 轮空'}</p>
+            <div class="tactic-selector">${tacticBtns}</div>`;
         playBtn.style.display = 'none';
     }
     const miniList = document.getElementById('team-overview-list');
@@ -739,11 +827,17 @@ function renderAgentCard(agent, isOwned) {
                 ${renderStatRow('意识', agent.gameSense)}
                 ${renderStatRow('领导', agent.leadership)}
                 ${renderStatRow('技能', agent.utility)}
+                ${isOwned ? (() => {
+                    const m = typeof agent.morale === 'number' ? agent.morale : 70;
+                    const color = m >= 70 ? '#00E5A0' : m >= 40 ? '#F7B500' : '#FF4655';
+                    return `<div class="morale-label"><span>士气</span><span>${m}</span></div>
+                            <div class="morale-bar"><div class="morale-bar-fill" style="width:${m}%;background:${color};"></div></div>`;
+                })() : ''}
             </div>
             <div class="agent-card-footer">
                 ${isOwned ? `
                     <div class="agent-actions">
-                        <button class="btn btn-train" onclick="trainAgent('${agent.uniqueId}')">训练 $5,000</button>
+                        <button class="btn ${agent.trainedWeek === gameState.currentWeek ? 'btn-basic' : 'btn-train'}" ${agent.trainedWeek === gameState.currentWeek ? 'disabled' : ''} onclick="trainAgent('${agent.uniqueId}')">${agent.trainedWeek === gameState.currentWeek ? '本周已训练' : '训练 $8,000'}</button>
                         <button class="btn btn-basic" onclick="showAgentDetail('${agent.uniqueId}', true)">详情</button>
                         <button class="btn btn-release" onclick="releaseAgent('${agent.uniqueId}')">释放</button>
                         <button class="btn btn-remove" onclick="removeAgent('${agent.uniqueId}')" title="直接移除，不返还资金">移除</button>
@@ -958,6 +1052,7 @@ function signAgent(uniqueId) {
     gameState.money -= agent.price;
     agent.isPlayerOwned = true;
     agent.wins = 0; agent.losses = 0;
+    agent.morale = 70; agent.trainedWeek = 0;
     gameState.roster.push(agent);
     gameState.market = gameState.market.filter(a => a.uniqueId !== uniqueId);
     const tag = agent.isPro ? 'VCT 巨星加入！' : '签约成功';
@@ -986,17 +1081,48 @@ function releaseAgent(uniqueId) {
 function trainAgent(uniqueId) {
     const agent = gameState.roster.find(a => a.uniqueId === uniqueId);
     if (!agent) return;
-    const cost = 5000;
-    if (gameState.money < cost) { showToast('资金不足', '训练需要 $5,000', 'error'); return; }
-    gameState.money -= cost;
-    const statNames = ['aim', 'gameSense', 'leadership', 'utility'];
-    const randomStat = statNames[Math.floor(Math.random() * statNames.length)];
-    const increase = Math.floor(Math.random() * 4) + 2;
-    agent[randomStat] = Math.min(100, agent[randomStat] + increase);
+    if (agent.trainedWeek === gameState.currentWeek) {
+        showToast('本周已训练', agent.name + ' 本周已完成训练，下周再来吧', 'warning');
+        return;
+    }
+    const cost = 8000;
+    if (gameState.money < cost) { showToast('资金不足', '训练需要 $' + cost.toLocaleString(), 'error'); return; }
+    const body = document.getElementById('modal-body');
+    const statCN = { aim: '瞄准', gameSense: '意识', leadership: '领导', utility: '技能' };
+    body.innerHTML = `
+        <h2>训练 ${agent.name}</h2>
+        <p style="margin-bottom: 16px; color: var(--text-secondary);">选择一项属性进行专项训练（花费 $${cost.toLocaleString()}，每名选手每周限 1 次）。</p>
+        <div class="train-stat-grid">
+            ${['aim','gameSense','leadership','utility'].map(s => `
+                <button class="btn btn-primary train-stat-btn" onclick="doTrainAgent('${uniqueId}','${s}')">
+                    <div class="train-stat-name">${statCN[s]}</div>
+                    <div class="train-stat-val">${agent[s]}</div>
+                </button>
+            `).join('')}
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">取消</button>
+        </div>
+    `;
+    openModal();
+}
+
+function doTrainAgent(uniqueId, stat) {
+    const agent = gameState.roster.find(a => a.uniqueId === uniqueId);
+    if (!agent) return;
+    if (agent.trainedWeek === gameState.currentWeek) { closeModal(); showToast('本周已训练', '该选手本周已训练', 'warning'); return; }
+    const cost = 8000;
+    if (gameState.money < cost) { closeModal(); showToast('资金不足', '训练需要 $' + cost.toLocaleString(), 'error'); return; }
+    const base = Math.floor(Math.random() * 4) + 2;
+    const increase = agent[stat] >= 90 ? Math.floor(base / 2) : base;
+    agent[stat] = Math.min(99, agent[stat] + increase);
     agent.power = calculateAgentPower(agent);
     updateAgentRating(agent);
+    agent.trainedWeek = gameState.currentWeek;
+    gameState.money -= cost;
     const statCN = { aim: '瞄准', gameSense: '意识', leadership: '领导', utility: '技能' };
-    showToast('训练完成', agent.name + ' 的 ' + statCN[randomStat] + ' +' + increase + '!', 'success');
+    closeModal();
+    showToast('训练完成', agent.name + ' 的 ' + statCN[stat] + ' +' + increase + '！', 'success');
     renderRoster();
     updateAllDisplays();
 }
@@ -1898,7 +2024,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.2.1';
+const APP_VERSION = '1.3.0';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -3343,11 +3469,15 @@ function recordStandingResult(opponent, didWin) {
 
 function simulateMatchResult(match) {
     if (!match || match.played || !match.opponent) return;
-    const [sa, sb] = simulateScoreFor(gameState.teamPower, getTeamPowerByName(match.opponent));
+    const effOwn = getEffectiveTeamPower();
+    const oppPower = getTeamPowerByName(match.opponent);
+    const [ownP, oppP] = applyTacticToPower(effOwn, oppPower);
+    const [sa, sb] = simulateScoreFor(ownP, oppP);
     match.played = true;
     match.playerScore = sa;
     match.opponentScore = sb;
     match.result = sa > sb ? 'win' : 'loss';
+    applyMoraleToRoster(sa > sb);
     if (isCupMatch(match)) applyCupPlayerResult(match, sa, sb);
     else recordStandingResult(match.opponent, sa > sb);
     gameState.matchHistory.push({
@@ -3365,13 +3495,16 @@ function playMatch(match) {
     const oppPlayers = oppTeam
         ? REAL_PRO_PLAYERS.filter(p => p.team === oppTeam.name).map(p => ({ name: p.name, role: p.role, power: p.power }))
         : [];
+    const effOwn = getEffectiveTeamPower();
+    const oppPower = getTeamPowerByName(match.opponent);
+    const [leftP, rightP] = applyTacticToPower(effOwn, oppPower);
     runVisualMatch({
         mode: 'league',
         weekLabel: matchLabel(match),
         leftName: gameState.teamName,
         rightName: match.opponent + (oppTeam ? ' ' + oppTeam.country : ''),
-        leftPower: gameState.teamPower,
-        rightPower: getTeamPowerByName(match.opponent),
+        leftPower: leftP,
+        rightPower: rightP,
         leftPlayers: gameState.roster,
         rightPlayers: oppPlayers,
         onFinish: (l, r) => finishMatch(match, l, r)
@@ -3381,6 +3514,7 @@ function playMatch(match) {
 function finishMatch(match, playerScore, opponentScore) {
     match.played = true; match.playerScore = playerScore; match.opponentScore = opponentScore;
     const didWin = playerScore > opponentScore; match.result = didWin ? 'win' : 'loss';
+    applyMoraleToRoster(didWin);
     const cup = isCupMatch(match);
     if (cup) applyCupPlayerResult(match, playerScore, opponentScore);
     else recordStandingResult(match.opponent, didWin);
@@ -3512,17 +3646,36 @@ function closeMatchModal() {
 
 /* ---------- 赛季结算 / 升降级 / 下赛季 ---------- */
 
+function simulateLeaguePlayoff(leagueKey) {
+    const table = leagueTable(leagueKey).slice(0, 4);
+    if (table.length < 4) return null;
+    const powerOf = (t) => t.isPlayerTeam ? (gameState.teamPower || 70) : ((AI_TEAMS.find(a => a.name === t.name) || {}).power || 70);
+    const sim = (a, b) => {
+        const [sa, sb] = simulateScoreFor(powerOf(a), powerOf(b));
+        return { a: a.name, b: b.name, sa, sb, winner: sa > sb ? a.name : b.name };
+    };
+    const sf1 = sim(table[0], table[3]);
+    const sf2 = sim(table[1], table[2]);
+    const sf1W = sf1.winner === table[0].name ? table[0] : table[3];
+    const sf2W = sf2.winner === table[1].name ? table[1] : table[2];
+    const final = sim(sf1W, sf2W);
+    return { semifinal1: sf1, semifinal2: sf2, final, champion: final.winner };
+}
+
 function buildSeasonSummary() {
     const table = leagueTable(gameState.league);
     const me = table.find(t => t.isPlayerTeam) || {};
     const myRank = table.findIndex(t => t.isPlayerTeam) + 1;
     const prem = leagueTable('premier');
     const chal = leagueTable('challengers');
+    const over = gameState.currentWeek >= TOTAL_WEEKS;
+    const playoff = over ? simulateLeaguePlayoff(gameState.league) : null;
     return {
         table,
         me,
         myRank,
         leader: table[0] || null,
+        playoff,
         masters: (gameState.cups && gameState.cups.masters) ? gameState.cups.masters : null,
         champions: (gameState.cups && gameState.cups.champions) ? gameState.cups.champions : null,
         promoted: chal.slice(0, 2).map(t => t.name),
@@ -3538,6 +3691,13 @@ function showSeasonSummary() {
     const over = gameState.currentWeek >= TOTAL_WEEKS;
     if (over) gameState.seasonEnded = true;
 
+    if (over && s.playoff && gameState._playoffSeason !== gameState.season) {
+        gameState._playoffSeason = gameState.season;
+        const champ = s.playoff.champion;
+        gameState.money += 80000;
+        addMail('🏆 联赛季后赛', champ + ' 赢得了 ' + LEAGUE_META[gameState.league].name + ' 季后赛冠军，获得 $80,000 奖金！' + (champ === gameState.teamName ? ' 恭喜你的战队夺冠！' : ''), 'info');
+    }
+
     const cupLine = (cup) => {
         if (!cup || !cup.champion) return '进行中 / 未决出';
         return cup.champion + (cup.champion === gameState.teamName ? ' 👈 你的战队' : '');
@@ -3545,6 +3705,21 @@ function showSeasonSummary() {
     const news = [];
     if (s.playerPromoted) news.push('🎉 恭喜！你的战队获得次级联赛前二，下赛季将升入 <b>VCT 顶级联赛</b>。');
     if (s.playerRelegated) news.push('⚠ 你的战队位于顶级联赛末二，下赛季将降入 <b>Challengers 次级联赛</b>。');
+    if (over && s.playoff && s.playoff.champion === gameState.teamName) news.push('🏆 恭喜！你的战队夺得联赛季后赛冠军！');
+
+    const playoffHtml = s.playoff ? `
+        <div class="playoff-bracket">
+            <h3 style="margin: 18px 0 10px;">联赛季后赛</h3>
+            <div class="playoff-round">
+                <div class="playoff-match"><span>${s.playoff.semifinal1.a}</span><b>${s.playoff.semifinal1.sa}</b> - <b>${s.playoff.semifinal1.sb}</b><span>${s.playoff.semifinal1.b}</span></div>
+                <div class="playoff-match"><span>${s.playoff.semifinal2.a}</span><b>${s.playoff.semifinal2.sa}</b> - <b>${s.playoff.semifinal2.sb}</b><span>${s.playoff.semifinal2.b}</span></div>
+            </div>
+            <div class="playoff-final">
+                <div class="playoff-match final"><span>${s.playoff.final.a}</span><b>${s.playoff.final.sa}</b> - <b>${s.playoff.final.sb}</b><span>${s.playoff.final.b}</span></div>
+                <div class="playoff-champion">🏆 冠军：<b>${s.playoff.champion}</b>${s.playoff.champion === gameState.teamName ? ' 👈 你的战队' : ''}</div>
+            </div>
+        </div>
+    ` : '';
 
     const body = document.getElementById('modal-body');
     body.innerHTML = `
@@ -3561,6 +3736,7 @@ function showSeasonSummary() {
             <div class="season-summary-item"><span>Champions 冠军</span><b>${cupLine(s.champions)}</b></div>
             <div class="season-summary-item"><span>${LEAGUE_META[gameState.league].name} 第一名</span><b>${s.leader ? s.leader.name : '-'}</b></div>
         </div>
+        ${playoffHtml}
         <div class="season-zone-preview">
             <div class="zone-line zone-up">↑ 次级联赛前二升级：${s.promoted.join('、') || '-'}</div>
             <div class="zone-line zone-down">↓ 顶级联赛末二降级：${s.relegated.join('、') || '-'}</div>
@@ -4068,6 +4244,20 @@ function applyShopItem(item) {
 /* ---------- 游戏公告 ---------- */
 
 const GAME_ANNOUNCEMENTS = [
+    {
+        version: '1.3.0',
+        date: '2026-11-07',
+        tag: '选手养成 & 赛季深度',
+        title: 'v1.3.0 大型更新：士气 · 战术 · 训练升级 · 联赛季后赛',
+        content: [
+            '新增选手士气系统：胜场提升、负场下降，团队平均士气影响有效战力（90%~110%）。',
+            '新增赛前战术选择：激进进攻（己方+5%）、均衡、稳固防守（对手-5%），控制台随时切换。',
+            '训练系统升级：可指定训练属性，每名选手每周限训 1 次，90 以上属性收益减半。',
+            '新增联赛季后赛：赛季末所在联赛前 4 进行单败淘汰赛，决出联赛冠军并发放奖金。',
+            '选手池扩充 27 人、战队池扩充 7 支，次级联赛与转会市场更加丰富。',
+            'UI 优化：阵容卡片显示士气条与训练状态，控制台展示有效战力与战术选择器。'
+        ]
+    },
     {
         version: '1.2.0',
         date: '2026-11-07',

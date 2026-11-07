@@ -3344,3 +3344,113 @@ body {
     .league-switch .league-tab { flex: 1; font-size: 11px; padding: 10px 8px; }
     .hero-league { font-size: 10px; }
 }
+
+/* ==================== v1.3.0：训练 / 士气 / 战术 / 季后赛 ==================== */
+
+.train-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 14px 0;
+}
+.train-stat-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 8px;
+}
+.train-stat-name { font-size: 15px; font-weight: 700; }
+.train-stat-val { font-size: 13px; color: var(--text-secondary); }
+
+.morale-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+}
+.morale-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+.morale-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+}
+
+.tactic-selector {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+}
+.tactic-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border: 1px solid var(--border);
+    background: var(--valorant-bg2);
+    color: var(--text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    transition: all 0.2s;
+}
+.tactic-btn.active {
+    border-color: var(--valorant-red);
+    background: rgba(255, 70, 85, 0.15);
+    color: #fff;
+}
+.tactic-btn small { display: block; font-weight: 400; font-size: 10px; opacity: 0.7; margin-top: 2px; }
+
+.playoff-bracket { margin-top: 6px; }
+.playoff-round {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.playoff-final { margin-top: 12px; }
+.playoff-match {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--valorant-bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 13px;
+}
+.playoff-match.final {
+    border-color: var(--valorant-red);
+    background: rgba(255, 70, 85, 0.06);
+}
+.playoff-match span { flex: 1; text-align: center; }
+.playoff-match b { color: var(--valorant-red); }
+.playoff-champion {
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(247, 181, 0, 0.1);
+    border: 1px solid rgba(247, 181, 0, 0.4);
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.team-morale-summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 480px) {
+    .train-stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .playoff-round { grid-template-columns: 1fr; }
+}
