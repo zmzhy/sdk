@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VCT 战队经理 | Valorant Manager</title>
-    <link rel="stylesheet" href="style.css?v=1.0.0">
+    <link rel="stylesheet" href="style.css?v=1.1.0">
     <meta name="description" content="VCT 战队经理 —— 一款免费的《无畏契约》战队经营模拟游戏，支持云存档、全球排行榜与创意工坊。">
     <meta name="theme-color" content="#0f1923">
 </head>
@@ -79,6 +79,12 @@
                     <span class="stat-value" id="stat-day">第 1 周</span>
                 </div>
             </div>
+            <div class="top-actions">
+                <button class="top-action-btn" onclick="openMailbox()" title="邮箱">
+                    ✉<span class="top-badge" id="mail-badge" style="display:none;">0</span>
+                </button>
+                <button class="top-action-btn" onclick="openShop()" title="商城（纯外观 / 便利，不影响对局）">🛒</button>
+            </div>
         </header>
 
         <nav class="nav-tabs">
@@ -99,6 +105,9 @@
             </button>
             <button class="nav-btn" data-screen="teams">
                 <span class="nav-icon">🏆</span> VCT 战队
+            </button>
+            <button class="nav-btn" data-screen="versus">
+                <span class="nav-icon">⚔</span> 玩家对战
             </button>
             <button class="nav-btn" data-screen="online">
                 <span class="nav-icon">🌐</span> 全球榜
@@ -140,6 +149,10 @@
                         </div>
                     </div>
                     <div class="hero-decoration">◤ ◥ ◣ ◢</div>
+                </div>
+
+                <div id="rename-hint" class="rename-hint hidden" onclick="changeTeamName()">
+                    ⚠ 你的战队还是默认名字，点这里给它起个响亮的名号 →
                 </div>
 
                 <div class="dashboard-grid">
@@ -312,6 +325,39 @@
                 </div>
                 <div id="workshop-list" class="workshop-list"></div>
             </section>
+
+            <section id="screen-versus" class="screen">
+                <div class="screen-header">
+                    <h1>玩家对战</h1>
+                    <p>异步友谊赛与同屏双人，均不影响联赛积分</p>
+                </div>
+                <div class="versus-grid">
+                    <div class="panel">
+                        <h2 class="panel-title">🔗 异步友谊赛</h2>
+                        <p class="versus-desc">把你的阵容导出成一段阵容码发给朋友，双方各自本地模拟同一场对局；也可导入朋友的阵容码挑战。</p>
+                        <div class="versus-actions">
+                            <button class="btn btn-primary" onclick="showMyLineupCode()">生成我的阵容码</button>
+                            <button class="btn btn-ghost" onclick="openLineupImport()">导入对手阵容码</button>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <h2 class="panel-title">🎮 同屏双人</h2>
+                        <p class="versus-desc">同一台设备轮流操作：每回合双方各选一张战术卡，先拿到 13 分的一方获胜。选卡时请另一方回避。</p>
+                        <div class="versus-actions">
+                            <button class="btn btn-primary" onclick="openLocalPvp()">开始双人对战</button>
+                        </div>
+                    </div>
+                    <div class="panel">
+                        <h2 class="panel-title">🎨 挑战工坊战队</h2>
+                        <p class="versus-desc">从创意工坊挑一支玩家自创战队来打友谊赛。</p>
+                        <div id="versus-workshop-list" class="versus-list"></div>
+                    </div>
+                </div>
+                <div class="panel" style="margin-top: 20px;">
+                    <h2 class="panel-title">📜 友谊赛记录</h2>
+                    <div id="friendly-list" class="versus-list"></div>
+                </div>
+            </section>
         </main>
     </div>
 
@@ -394,6 +440,111 @@
         </div>
     </div>
 
+    <div id="mail-modal" class="modal hidden">
+        <div class="modal-content mail-modal-content">
+            <button class="modal-close" onclick="closeMailbox()">✕</button>
+            <h2 class="gh-title">✉ 站内邮箱</h2>
+            <div class="mail-toolbar">
+                <button class="btn btn-ghost btn-sm" onclick="markAllMailRead()">全部标为已读</button>
+                <button class="btn btn-ghost btn-sm" onclick="clearReadMail()">清理已读</button>
+            </div>
+            <div id="mail-list" class="mail-list"></div>
+            <div id="mail-detail" class="mail-detail hidden"></div>
+        </div>
+    </div>
+
+    <div id="shop-modal" class="modal hidden">
+        <div class="modal-content gh-modal-content">
+            <button class="modal-close" onclick="closeShop()">✕</button>
+            <h2 class="gh-title">🛒 战队商城</h2>
+            <p class="gh-desc">所有商品均为外观或便利道具，<b>不会改变任何比赛数值</b>。当前资金：<span id="shop-money">$0</span></p>
+            <div id="shop-grid" class="shop-grid"></div>
+            <div id="shop-result" class="gh-result"></div>
+        </div>
+    </div>
+
+    <div id="naming-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeNamingModal()">✕</button>
+            <h2>给你的战队起个名字</h2>
+            <p class="gh-desc" style="margin-top: 8px;">自创战队默认叫「我的战队」，改个名字会更有代入感（随时可在控制台再次修改）。</p>
+            <div class="gh-field">
+                <label>战队名称</label>
+                <input id="naming-name" type="text" maxlength="20" placeholder="例如 巅峰战队">
+            </div>
+            <div class="gh-field">
+                <label>战队缩写 (2-4 字符)</label>
+                <input id="naming-tag" type="text" maxlength="4" placeholder="例如 PEAK">
+            </div>
+            <div class="gh-actions">
+                <button class="btn btn-primary" onclick="confirmNaming()">保存队名</button>
+                <button class="btn btn-ghost" onclick="closeNamingModal()">稍后再说</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="lineup-modal" class="modal hidden">
+        <div class="modal-content gh-modal-content">
+            <button class="modal-close" onclick="closeLineupModal()">✕</button>
+            <h2 class="gh-title" id="lineup-title">🔗 阵容码</h2>
+            <p class="gh-desc" id="lineup-desc"></p>
+            <div id="lineup-code-wrap" class="gh-field">
+                <label>阵容码（点击可全选）</label>
+                <textarea id="lineup-code" rows="5" readonly onclick="this.select()"></textarea>
+            </div>
+            <div id="lineup-import-wrap" class="gh-field hidden">
+                <label>粘贴对手的阵容码</label>
+                <textarea id="lineup-import" rows="5" placeholder="在此粘贴以 VCT1: 开头的阵容码"></textarea>
+            </div>
+            <div class="gh-actions">
+                <button class="btn btn-ghost" id="lineup-btn-copy" onclick="copyLineupCode()">复制阵容码</button>
+                <button class="btn btn-primary" id="lineup-btn-start" onclick="startAsyncFriendly()">开始友谊赛</button>
+            </div>
+            <div id="lineup-result" class="gh-result"></div>
+        </div>
+    </div>
+
+    <div id="pvp-modal" class="modal hidden">
+        <div class="modal-content pvp-modal-content">
+            <button class="modal-close" onclick="closeLocalPvp()">✕</button>
+            <h2 class="gh-title">🎮 同屏双人</h2>
+            <div id="pvp-setup">
+                <p class="gh-desc">两人同一台设备轮流选战术卡。快攻克稳守、稳守克转点、转点克快攻；同卡则重打本回合。先到 13 分获胜。</p>
+                <div class="gh-field">
+                    <label>玩家 1 战队名</label>
+                    <input id="pvp-name-1" type="text" maxlength="20" placeholder="玩家 1">
+                </div>
+                <div class="gh-field">
+                    <label>玩家 2 战队名</label>
+                    <input id="pvp-name-2" type="text" maxlength="20" placeholder="玩家 2">
+                </div>
+                <div class="gh-actions">
+                    <button class="btn btn-primary" onclick="startLocalPvp()">开始对战</button>
+                </div>
+            </div>
+            <div id="pvp-arena" class="hidden">
+                <div class="pvp-scoreboard">
+                    <div class="pvp-side">
+                        <div class="pvp-side-name" id="pvp-side-name-1"></div>
+                        <div class="pvp-side-score" id="pvp-score-1">0</div>
+                    </div>
+                    <div class="pvp-vs">VS</div>
+                    <div class="pvp-side">
+                        <div class="pvp-side-name" id="pvp-side-name-2"></div>
+                        <div class="pvp-side-score" id="pvp-score-2">0</div>
+                    </div>
+                </div>
+                <div id="pvp-turn" class="pvp-turn"></div>
+                <div id="pvp-cards" class="pvp-cards">
+                    <button class="pvp-card" onclick="pvpPick('rush')"><span class="pvp-card-icon">⚡</span><span>快攻</span></button>
+                    <button class="pvp-card" onclick="pvpPick('hold')"><span class="pvp-card-icon">🛡</span><span>稳守</span></button>
+                    <button class="pvp-card" onclick="pvpPick('rotate')"><span class="pvp-card-icon">🔄</span><span>转点</span></button>
+                </div>
+                <div id="pvp-log" class="pvp-log"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="modal" class="modal hidden">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">✕</button>
@@ -419,7 +570,17 @@
                     <div class="match-team-power" id="match-team-right-power"></div>
                 </div>
             </div>
+            <div class="match-board">
+                <svg id="match-board-svg" viewBox="0 0 400 180" preserveAspectRatio="xMidYMid meet"></svg>
+            </div>
+            <div id="match-pips" class="match-pips"></div>
             <div id="match-plays" class="match-plays"></div>
+            <div class="match-controls">
+                <button class="btn btn-ghost btn-sm" id="match-speed-0" onclick="setMatchSpeed(0)">⏸ 暂停</button>
+                <button class="btn btn-ghost btn-sm" id="match-speed-1" onclick="setMatchSpeed(1)">1×</button>
+                <button class="btn btn-ghost btn-sm" id="match-speed-2" onclick="setMatchSpeed(2)">2×</button>
+                <button class="btn btn-ghost btn-sm" onclick="skipMatch()">⏭ 跳过</button>
+            </div>
             <div id="match-stats-panel" class="match-stats-panel hidden">
                 <div class="stats-section">
                     <h4>🏆 MVP</h4>
@@ -505,6 +666,7 @@
                 <h3>📊 调试</h3>
                 <div class="admin-grid">
                     <button class="admin-btn admin-btn-wide" onclick="adminViewDebug()">📋 查看调试信息</button>
+                    <button class="admin-btn admin-btn-wide" onclick="adminSendMail()">✉ 群发系统邮件</button>
                 </div>
             </div>
 
@@ -514,7 +676,7 @@
         </div>
     </div>
 
-    <script src="github-backend.js?v=1.0.0"></script>
-    <script src="game.js?v=1.0.0"></script>
+    <script src="github-backend.js?v=1.1.0"></script>
+    <script src="game.js?v=1.1.0"></script>
 </body>
 </html>

@@ -187,6 +187,37 @@ const AI_TEAMS = [
 const TOTAL_WEEKS = 24;
 const MAX_ROSTER = 8;
 
+/* 商城道具：全部为外观或便利类，绝不修改任何比赛数值 */
+const SHOP_ITEMS = [
+    { id: 'badge_phoenix', kind: 'badge', name: '凤凰队徽', icon: '🔥', price: 40000, desc: '控制台队徽位展示，纯外观。' },
+    { id: 'badge_dragon', kind: 'badge', name: '龙纹队徽', icon: '🐉', price: 120000, desc: '控制台队徽位展示，纯外观。' },
+    { id: 'theme_ice', kind: 'theme', name: '冰霜主题', icon: '❄', price: 90000, desc: '把界面强调色换成冰蓝，不影响对局。', color: '#53A7E2' },
+    { id: 'theme_gold', kind: 'theme', name: '黄金主题', icon: '🏅', price: 150000, desc: '把界面强调色换成金色，不影响对局。', color: '#F7B500' },
+    { id: 'title_champion', kind: 'title', name: '「冠军教头」称号', icon: '👑', price: 70000, desc: '显示在队名下方，纯外观。' },
+    { id: 'title_godfather', kind: 'title', name: '「战队教父」称号', icon: '🎩', price: 200000, desc: '显示在队名下方，纯外观。' },
+    { id: 'card_rename', kind: 'rename', name: '改名卡', icon: '🔄', price: 25000, desc: '改名时自动消耗，省下 $20,000 改名费用。' },
+    { id: 'card_autosave', kind: 'autosave', name: '自动存档卡', icon: '💾', price: 60000, desc: '每场比赛结束后自动保存本地存档，纯便利。' }
+];
+
+function initExtras(state) {
+    if (!state.shop || typeof state.shop !== 'object') {
+        state.shop = { owned: [], badge: '', title: '', theme: '', autoSave: false, renameCards: 0 };
+    } else {
+        if (!Array.isArray(state.shop.owned)) state.shop.owned = [];
+        state.shop.badge = state.shop.badge || '';
+        state.shop.title = state.shop.title || '';
+        state.shop.theme = state.shop.theme || '';
+        state.shop.autoSave = !!state.shop.autoSave;
+        state.shop.renameCards = Number(state.shop.renameCards) || 0;
+    }
+    if (!Array.isArray(state.mail)) state.mail = [];
+    if (!Array.isArray(state.friendlyHistory)) state.friendlyHistory = [];
+    if (typeof state.teamNamed !== 'boolean') state.teamNamed = true;
+    state.lastSeasonMail = Number(state.lastSeasonMail) || 0;
+    return state;
+}
+
+
 let gameState = null;
 
 function initGame() {
@@ -207,6 +238,7 @@ function initGame() {
     setupAIStandings();
     generateMarket();
     generateSchedule();
+    initExtras(gameState);
     updateAllDisplays();
     showScreen('dashboard');
 }
@@ -351,6 +383,7 @@ function showScreen(screenName) {
     if (screenName === 'dashboard') renderDashboard();
     if (screenName === 'online') loadOnlineLeaderboard(false);
     if (screenName === 'workshop') loadWorkshop(false);
+    if (screenName === 'versus') renderVersus();
 }
 
 function navigateTo(screen) { showScreen(screen); }
@@ -372,7 +405,22 @@ function updateAllDisplays() {
     document.getElementById('stat-money').textContent = '$' + gameState.money.toLocaleString();
     document.getElementById('stat-season').textContent = '第 ' + gameState.season + ' 赛季';
     document.getElementById('stat-day').textContent = '第 ' + gameState.currentWeek + ' 周';
-    document.getElementById('team-name-display').textContent = gameState.teamName;
+    document.getElementById('team-name-display').textContent = (gameState.shop && gameState.shop.badge ? gameState.shop.badge + ' ' : '') + gameState.teamName;
+    if (gameState.shop && gameState.shop.title) {
+        document.getElementById('team-tagline').textContent = gameState.shop.title + ' · 建立你的冠军王朝';
+    } else {
+        document.getElementById('team-tagline').textContent = '建立你的冠军王朝';
+    }
+    applyShopTheme();
+    updateMailBadge();
+}
+
+function applyShopTheme() {
+    const app = document.getElementById('app');
+    if (!app) return;
+    const theme = gameState && gameState.shop ? gameState.shop.theme : '';
+    if (theme) app.style.setProperty('--valorant-red', theme);
+    else app.style.removeProperty('--valorant-red');
 }
 
 function renderDashboard() {
@@ -385,6 +433,8 @@ function renderDashboard() {
     document.getElementById('hero-wins').textContent = playerStanding.wins;
     document.getElementById('hero-losses').textContent = playerStanding.losses;
     document.getElementById('hero-rank').textContent = rankBadge;
+    const hint = document.getElementById('rename-hint');
+    if (hint) hint.classList.toggle('hidden', !!gameState.teamNamed);
     const recentMatches = gameState.matchHistory.slice(-5).reverse();
     const recentList = document.getElementById('recent-matches-list');
     recentList.innerHTML = recentMatches.length === 0 
@@ -808,34 +858,21 @@ function simulateMatchResult(match) {
 }
 
 function playMatch(match) {
-    const modal = document.getElementById('match-modal');
-    modal.classList.remove('hidden');
-    const playerPower = gameState.teamPower;
-    const opponentPower = getTeamPowerByName(match.opponent);
-    const opp = AI_TEAMS.find(t => t.name === match.opponent);
-    document.getElementById('match-week-label').textContent = '第 ' + match.week + ' 周 · VCT 冠军联赛';
-    document.getElementById('match-team-left-name').textContent = gameState.teamName;
-    document.getElementById('match-team-right-name').textContent = match.opponent + (opp ? ' ' + opp.country : '');
-    document.getElementById('match-team-left-power').textContent = '战力 ' + playerPower;
-    document.getElementById('match-team-right-power').textContent = '战力 ' + opponentPower;
-    document.getElementById('match-team-left-score').textContent = '0';
-    document.getElementById('match-team-right-score').textContent = '0';
-    document.getElementById('match-plays').innerHTML = '';
-    document.getElementById('match-result').textContent = '';
-    document.getElementById('match-close-btn').style.display = 'none';
-    let playerScore = 0; let opponentScore = 0; const winLimit = 13; let round = 0;
-    const interval = setInterval(() => {
-        round++;
-        const ownRound = Math.random() < (playerPower / (playerPower + opponentPower));
-        let playEntry = '';
-        if (ownRound) { playerScore++; playEntry = `<div class="play-entry own">第 ${round} 回合: ${gameState.teamName} 拿下！${playerScore} - ${opponentScore}</div>`; }
-        else { opponentScore++; playEntry = `<div class="play-entry">第 ${round} 回合: ${match.opponent} 拿下！${playerScore} - ${opponentScore}</div>`; }
-        const playsDiv = document.getElementById('match-plays');
-        playsDiv.innerHTML += playEntry; playsDiv.scrollTop = playsDiv.scrollHeight;
-        document.getElementById('match-team-left-score').textContent = playerScore;
-        document.getElementById('match-team-right-score').textContent = opponentScore;
-        if (playerScore >= winLimit || opponentScore >= winLimit) { clearInterval(interval); finishMatch(match, playerScore, opponentScore); }
-    }, 500);
+    const oppTeam = AI_TEAMS.find(t => t.name === match.opponent);
+    const oppPlayers = oppTeam
+        ? REAL_PRO_PLAYERS.filter(p => p.team === oppTeam.name).map(p => ({ name: p.name, role: p.role, power: p.power }))
+        : [];
+    runVisualMatch({
+        mode: 'league',
+        weekLabel: '第 ' + match.week + ' 周 · VCT 冠军联赛',
+        leftName: gameState.teamName,
+        rightName: match.opponent + (oppTeam ? ' ' + oppTeam.country : ''),
+        leftPower: gameState.teamPower,
+        rightPower: getTeamPowerByName(match.opponent),
+        leftPlayers: gameState.roster,
+        rightPlayers: oppPlayers,
+        onFinish: (l, r) => finishMatch(match, l, r)
+    });
 }
 
 function finishMatch(match, playerScore, opponentScore) {
@@ -891,6 +928,7 @@ function finishMatch(match, playerScore, opponentScore) {
     showToast('比赛奖金', didWin ? '胜利奖金 $15,000' : '安慰奖 $5,000', didWin ? 'success' : 'warning');
     document.getElementById('match-close-btn').style.display = 'block';
     updateAllDisplays(); renderDashboard();
+    if (gameState.shop && gameState.shop.autoSave) saveGame();
     if (typeof autoSyncAfterMatch === 'function') autoSyncAfterMatch();
 }
 
@@ -950,7 +988,20 @@ function closeMatchModal() {
     document.getElementById('match-team-right').classList.remove('winner', 'loser');
     const statsPanel = document.getElementById('match-stats-panel');
     if (statsPanel) statsPanel.classList.add('hidden');
-    if (gameState.currentWeek >= TOTAL_WEEKS) { showToast('赛季结束', '所有比赛已完成！', 'success'); }
+    if (matchFinishMode === 'friendly') {
+        matchFinishMode = 'league';
+        if (typeof renderVersus === 'function') renderVersus();
+        return;
+    }
+    if (gameState.currentWeek >= TOTAL_WEEKS) {
+        if (!gameState.lastSeasonMail || gameState.lastSeasonMail !== gameState.season) {
+            gameState.lastSeasonMail = gameState.season;
+            addMail('VCT 联盟', '赛季 ' + gameState.season + ' 结束', '本赛季全部比赛结束，联盟发放赛季结算奖金。', 100000);
+            showToast('赛季结算', '赛季奖金已发送到邮箱', 'success');
+        } else {
+            showToast('赛季结束', '所有比赛已完成！', 'success');
+        }
+    }
     else {
         showConfirmModal('下一周', '比赛结束！要进入下一周吗？', () => {
             const weeklyBonus = 10000 + gameState.currentWeek * 500;
@@ -1031,16 +1082,30 @@ function confirmChangeName() {
     const newName = input.value.trim();
     const newTag = tagInput.value.trim().toUpperCase();
     if (!newName) { showToast('队名不能为空', '', 'error'); return; }
+    if (gameState.teamNamed) {
+        if (gameState.shop.renameCards > 0) {
+            gameState.shop.renameCards--;
+        } else if (gameState.money >= 20000) {
+            gameState.money -= 20000;
+        } else {
+            return showToast('无法改名', '改名需要 $20,000，或购买一张改名卡', 'error');
+        }
+    }
+    renameTeam(newName, newTag);
+    gameState.teamNamed = true;
+    closeModal();
+    showToast('队名已修改', '新队名: ' + newName + ' (' + (newTag || 'MY') + ')', 'success');
+    updateAllDisplays(); renderDashboard(); saveGame();
+}
+
+function renameTeam(newName, newTag) {
     const oldName = gameState.teamName;
     gameState.teamName = newName;
     if (newTag) gameState.teamTag = newTag;
     const playerStanding = gameState.standings.find(s => s && s.isPlayerTeam);
-    if (playerStanding) { playerStanding.name = newName; playerStanding.tag = newTag; }
+    if (playerStanding) { playerStanding.name = newName; playerStanding.tag = gameState.teamTag; }
     gameState.schedule.forEach(m => { if (m.playerTeam === oldName) m.playerTeam = newName; });
     gameState.matchHistory.forEach(m => { if (m.playerTeam === oldName) m.playerTeam = newName; });
-    closeModal();
-    showToast('队名已修改', '新队名: ' + newName + ' (' + (newTag || 'MY') + ')', 'success');
-    updateAllDisplays(); renderDashboard();
 }
 
 function openModal() { document.getElementById('modal').classList.remove('hidden'); }
@@ -1130,6 +1195,7 @@ function sanitizeGameState(state) {
             });
         }
     });
+    initExtras(state);
     return true;
 }
 
@@ -1153,8 +1219,15 @@ function hideStartScreen() {
 
 function selectCustomTeam() {
     initGame_custom();
+    gameState.teamNamed = false;
     hideStartScreen();
     showToast('自创战队', '从零开始，打造你的王朝！', 'success');
+    if (!gameState.mail || gameState.mail.length === 0) {
+        addMail('VCT 联盟', '欢迎加入 VCT', '你的战队已注册成功。先给战队起个名字，再去转会市场签下第一批特工吧。', 50000);
+    }
+    updateAllDisplays();
+    renderDashboard();
+    openNamingModal();
 }
 
 function showExistingTeams() {
@@ -1230,6 +1303,7 @@ function initGame_custom() {
     setupAIStandings();
     generateMarket();
     generateSchedule();
+    initExtras(gameState);
     updateAllDisplays();
     showScreen('dashboard');
 }
@@ -1271,6 +1345,8 @@ function initGame_withTeam(team) {
     setupAIStandings_override(team);
     generateMarket();
     generateSchedule();
+    gameState.teamNamed = true;
+    initExtras(gameState);
     updateAllDisplays();
     showScreen('dashboard');
 }
@@ -1604,7 +1680,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.0.0';
+const APP_VERSION = '1.1.0';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -1955,6 +2031,7 @@ async function publishWorkshopNow() {
         });
         box.innerHTML = `发布成功：${res.id}`;
         showToast('作品已发布', name, 'success');
+        addMail('创意工坊', '作品发布成功：' + name, '你的战队已发布到创意工坊，其他玩家可以载入或挑战它。', 0);
         setTimeout(closeWorkshopPublish, 800);
         loadWorkshop(true);
     } catch (e) {
@@ -2029,3 +2106,678 @@ function autoSyncAfterMatch() {
 
 const versionEl = document.getElementById('app-version');
 if (versionEl) versionEl.textContent = APP_VERSION;
+
+/* ==================== v1.1.0：起名 / 商城 / 邮箱 / 玩家对战 / 可视化对局 ==================== */
+
+let matchFinishMode = 'league';
+let matchRunner = null;
+let pvpState = null;
+const LINEUP_PREFIX = 'VCT1:';
+
+/* ---------- 1. 自创战队起名提醒 ---------- */
+
+function openNamingModal() {
+    if (!gameState) return;
+    const nameEl = document.getElementById('naming-name');
+    const tagEl = document.getElementById('naming-tag');
+    nameEl.value = (gameState.teamName && gameState.teamName !== '我的战队') ? gameState.teamName : '';
+    tagEl.value = (gameState.teamTag && gameState.teamTag !== 'MY') ? gameState.teamTag : '';
+    document.getElementById('naming-modal').classList.remove('hidden');
+    setTimeout(() => nameEl.focus(), 120);
+}
+
+function closeNamingModal() {
+    document.getElementById('naming-modal').classList.add('hidden');
+}
+
+function confirmNaming() {
+    if (!gameState) return;
+    const name = document.getElementById('naming-name').value.trim();
+    const tag = document.getElementById('naming-tag').value.trim().toUpperCase();
+    if (!name) return showToast('队名不能为空', '请输入一个战队名字', 'error');
+    renameTeam(name, tag);
+    gameState.teamNamed = true;
+    closeNamingModal();
+    updateAllDisplays();
+    renderDashboard();
+    saveGame();
+    showToast('命名完成', name + ' 已正式成立！', 'success');
+}
+
+/* ---------- 2. 商城（纯外观 / 便利） ---------- */
+
+function openShop() {
+    if (!gameState) return showToast('请先开始游戏', '进入战队后才能购物', 'warning');
+    document.getElementById('shop-result').innerHTML = '';
+    renderShop();
+    document.getElementById('shop-modal').classList.remove('hidden');
+}
+
+function closeShop() {
+    document.getElementById('shop-modal').classList.add('hidden');
+}
+
+function renderShop() {
+    document.getElementById('shop-money').textContent = '$' + gameState.money.toLocaleString();
+    const grid = document.getElementById('shop-grid');
+    grid.innerHTML = SHOP_ITEMS.map(item => {
+        const owned = gameState.shop.owned.indexOf(item.id) !== -1;
+        const affordable = gameState.money >= item.price;
+        return `
+            <div class="shop-card${owned ? ' owned' : ''}">
+                <div class="shop-icon">${item.icon}</div>
+                <div class="shop-body">
+                    <div class="shop-name">${item.name}</div>
+                    <div class="shop-desc">${item.desc}</div>
+                    <div class="shop-price">$${item.price.toLocaleString()}</div>
+                </div>
+                <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
+                    ${owned || !affordable ? 'disabled' : ''}
+                    onclick="buyShopItem('${item.id}')">${owned ? '已拥有' : (affordable ? '购买' : '资金不足')}</button>
+            </div>
+        `;
+    }).join('');
+}
+
+function buyShopItem(id) {
+    if (!gameState) return;
+    const item = SHOP_ITEMS.find(i => i.id === id);
+    if (!item) return;
+    if (gameState.shop.owned.indexOf(id) !== -1) return;
+    if (gameState.money < item.price) return showToast('资金不足', '还差 $' + (item.price - gameState.money).toLocaleString(), 'error');
+    gameState.money -= item.price;
+    gameState.shop.owned.push(id);
+    applyShopItem(item);
+    addMail('战队商城', '购买成功：' + item.name, '已扣除 $' + item.price.toLocaleString() + '，该道具不影响比赛数值。', 0);
+    document.getElementById('shop-result').innerHTML = '已购买：' + item.name;
+    updateAllDisplays();
+    renderDashboard();
+    renderShop();
+    saveGame();
+    showToast('购买成功', item.name + '（纯外观，不影响对局）', 'success');
+}
+
+function applyShopItem(item) {
+    if (item.kind === 'badge') gameState.shop.badge = item.icon;
+    if (item.kind === 'theme') gameState.shop.theme = item.color;
+    if (item.kind === 'title') gameState.shop.title = item.name;
+    if (item.kind === 'rename') gameState.shop.renameCards++;
+    if (item.kind === 'autosave') gameState.shop.autoSave = true;
+}
+
+/* ---------- 3. 站内邮箱 ---------- */
+
+function addMail(from, subject, body, rewardAmount) {
+    if (!gameState) return null;
+    if (!Array.isArray(gameState.mail)) gameState.mail = [];
+    const mail = {
+        id: 'mail_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+        from: from || '系统',
+        subject: subject || '(无标题)',
+        body: body || '',
+        time: new Date().toLocaleString('zh-CN'),
+        read: false,
+        reward: Number(rewardAmount) || 0,
+        claimed: false
+    };
+    gameState.mail.unshift(mail);
+    if (gameState.mail.length > 60) gameState.mail.length = 60;
+    updateMailBadge();
+    return mail;
+}
+
+function updateMailBadge() {
+    const badge = document.getElementById('mail-badge');
+    if (!badge) return;
+    const unread = (gameState && Array.isArray(gameState.mail))
+        ? gameState.mail.filter(m => m && !m.read).length : 0;
+    badge.textContent = unread > 99 ? '99+' : String(unread);
+    badge.style.display = unread > 0 ? 'inline-flex' : 'none';
+}
+
+function openMailbox() {
+    if (!gameState) return showToast('请先开始游戏', '', 'warning');
+    document.getElementById('mail-detail').classList.add('hidden');
+    document.getElementById('mail-list').classList.remove('hidden');
+    renderMailList();
+    document.getElementById('mail-modal').classList.remove('hidden');
+}
+
+function closeMailbox() {
+    document.getElementById('mail-modal').classList.add('hidden');
+}
+
+function renderMailList() {
+    const list = document.getElementById('mail-list');
+    const mails = (gameState && Array.isArray(gameState.mail)) ? gameState.mail : [];
+    if (!mails.length) {
+        list.innerHTML = '<p class="empty-hint">邮箱是空的。比赛、购买、发布作品后都会收到通知。</p>';
+        return;
+    }
+    list.innerHTML = mails.map(m => `
+        <div class="mail-item${m.read ? '' : ' unread'}" onclick="openMailDetail('${m.id}')">
+            <div class="mail-item-main">
+                <div class="mail-item-subject">${m.read ? '' : '<span class="mail-dot"></span>'}${escapeHtml(m.subject)}</div>
+                <div class="mail-item-meta">${escapeHtml(m.from)} · ${escapeHtml(m.time)}</div>
+            </div>
+            ${m.reward > 0 ? `<div class="mail-reward${m.claimed ? ' claimed' : ''}">$${m.reward.toLocaleString()}</div>` : ''}
+        </div>
+    `).join('');
+}
+
+function openMailDetail(id) {
+    const mail = gameState.mail.find(m => m && m.id === id);
+    if (!mail) return;
+    mail.read = true;
+    document.getElementById('mail-list').classList.add('hidden');
+    const detail = document.getElementById('mail-detail');
+    detail.classList.remove('hidden');
+    detail.innerHTML = `
+        <button class="btn btn-ghost btn-sm" onclick="renderMailList(); document.getElementById('mail-detail').classList.add('hidden'); document.getElementById('mail-list').classList.remove('hidden');">← 返回收件箱</button>
+        <h3 class="mail-detail-subject">${escapeHtml(mail.subject)}</h3>
+        <div class="mail-item-meta">${escapeHtml(mail.from)} · ${escapeHtml(mail.time)}</div>
+        <div class="mail-detail-body">${escapeHtml(mail.body)}</div>
+        ${mail.reward > 0
+            ? (mail.claimed
+                ? '<div class="mail-claimed">奖励已领取</div>'
+                : `<button class="btn btn-primary" onclick="claimMailReward('${mail.id}')">领取奖励 $${mail.reward.toLocaleString()}</button>`)
+            : ''}
+    `;
+    updateMailBadge();
+}
+
+function claimMailReward(id) {
+    const mail = gameState.mail.find(m => m && m.id === id);
+    if (!mail || mail.claimed || mail.reward <= 0) return;
+    gameState.money += mail.reward;
+    mail.claimed = true;
+    updateAllDisplays();
+    renderDashboard();
+    saveGame();
+    openMailDetail(id);
+    showToast('领取成功', '+$' + mail.reward.toLocaleString(), 'success');
+}
+
+function markAllMailRead() {
+    if (!gameState) return;
+    gameState.mail.forEach(m => { if (m) m.read = true; });
+    renderMailList();
+    updateMailBadge();
+}
+
+function clearReadMail() {
+    if (!gameState) return;
+    gameState.mail = gameState.mail.filter(m => m && !m.read);
+    renderMailList();
+    updateMailBadge();
+}
+
+function adminSendMail() {
+    if (!gameState) return;
+    const subject = prompt('系统邮件标题', '赛季运营公告');
+    if (!subject) return;
+    const body = prompt('邮件正文', '感谢各位经理的支持，祝取得好成绩！') || '';
+    addMail('VCT 联盟', subject, body, 0);
+    showToast('已群发', subject, 'success');
+}
+
+/* ---------- 4. 玩家对战：阵容码 ---------- */
+
+function b64FromText(text) {
+    const bytes = new TextEncoder().encode(text);
+    let bin = '';
+    bytes.forEach(b => { bin += String.fromCharCode(b); });
+    return btoa(bin).replace(/=+$/, '');
+}
+
+function textFromB64(b64) {
+    const bin = atob(b64);
+    const bytes = Uint8Array.from(bin, c => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+}
+
+function encodeLineup() {
+    const payload = {
+        n: gameState.teamName,
+        t: gameState.teamTag,
+        p: gameState.teamPower,
+        r: gameState.roster.map(p => [p.name, p.role, p.power, p.rating || 'B'])
+    };
+    return LINEUP_PREFIX + b64FromText(JSON.stringify(payload));
+}
+
+function decodeLineup(code) {
+    const raw = (code || '').trim().replace(/\s+/g, '');
+    if (!raw.startsWith(LINEUP_PREFIX)) throw new Error('阵容码格式不正确（应以 VCT1: 开头）');
+    let obj;
+    try {
+        obj = JSON.parse(textFromB64(raw.slice(LINEUP_PREFIX.length)));
+    } catch (e) {
+        throw new Error('阵容码内容损坏，无法解析');
+    }
+    if (!obj || !Array.isArray(obj.r) || obj.r.length === 0) throw new Error('阵容码里没有选手数据');
+    return {
+        name: obj.n || '神秘战队',
+        tag: obj.t || '???',
+        power: Number(obj.p) || 0,
+        players: obj.r.map(row => ({
+            name: row[0] || '未知选手',
+            role: row[1] || 'Duelist',
+            power: Number(row[2]) || 70,
+            rating: row[3] || 'B'
+        }))
+    };
+}
+
+function showMyLineupCode() {
+    if (!gameState) return;
+    document.getElementById('lineup-title').textContent = '🔗 我的阵容码';
+    document.getElementById('lineup-desc').textContent = '把这段码发给朋友，对方在「导入对手阵容码」里粘贴即可与你对战。';
+    document.getElementById('lineup-code-wrap').classList.remove('hidden');
+    document.getElementById('lineup-import-wrap').classList.add('hidden');
+    document.getElementById('lineup-code').value = encodeLineup();
+    document.getElementById('lineup-result').innerHTML = '';
+    document.getElementById('lineup-modal').classList.remove('hidden');
+    document.getElementById('lineup-btn-copy').style.display = '';
+    document.getElementById('lineup-btn-start').style.display = 'none';
+}
+
+function openLineupImport() {
+    if (!gameState) return showToast('请先开始游戏', '', 'warning');
+    document.getElementById('lineup-title').textContent = '🔗 导入对手阵容码';
+    document.getElementById('lineup-desc').textContent = '粘贴朋友发来的阵容码，立刻在本地打一场友谊赛（不影响联赛积分）。';
+    document.getElementById('lineup-code-wrap').classList.add('hidden');
+    document.getElementById('lineup-import-wrap').classList.remove('hidden');
+    document.getElementById('lineup-import').value = '';
+    document.getElementById('lineup-result').innerHTML = '';
+    document.getElementById('lineup-modal').classList.remove('hidden');
+    document.getElementById('lineup-btn-copy').style.display = 'none';
+    document.getElementById('lineup-btn-start').style.display = '';
+}
+
+function closeLineupModal() {
+    document.getElementById('lineup-modal').classList.add('hidden');
+}
+
+function copyLineupCode() {
+    const code = document.getElementById('lineup-code').value;
+    if (!code) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(
+            () => showToast('已复制', '阵容码已复制到剪贴板', 'success'),
+            () => showToast('复制失败', '请手动全选复制', 'error')
+        );
+    } else {
+        document.getElementById('lineup-code').select();
+        document.execCommand('copy');
+        showToast('已复制', '阵容码已复制', 'success');
+    }
+}
+
+function startAsyncFriendly() {
+    const box = document.getElementById('lineup-result');
+    let opponent;
+    try {
+        opponent = decodeLineup(document.getElementById('lineup-import').value);
+    } catch (e) {
+        box.innerHTML = '导入失败：' + escapeHtml(e.message);
+        return;
+    }
+    closeLineupModal();
+    startFriendlyMatch(opponent);
+}
+
+/* ---------- 4b. 玩家对战：友谊赛 ---------- */
+
+function startFriendlyMatch(opponent) {
+    if (!gameState) return;
+    if (!gameState.roster || gameState.roster.length === 0) {
+        return showToast('没有选手', '先去转会市场签下队员再打友谊赛', 'error');
+    }
+    runVisualMatch({
+        mode: 'friendly',
+        weekLabel: '友谊赛 · ' + (opponent.source || '玩家对战'),
+        leftName: gameState.teamName,
+        rightName: opponent.name + (opponent.tag ? ' [' + opponent.tag + ']' : ''),
+        leftPower: gameState.teamPower,
+        rightPower: opponent.power || 70,
+        leftPlayers: gameState.roster,
+        rightPlayers: opponent.players || [],
+        onFinish: (l, r) => finishFriendlyMatch(opponent, l, r)
+    });
+}
+
+function finishFriendlyMatch(opponent, playerScore, opponentScore) {
+    const didWin = playerScore > opponentScore;
+    const myStats = generatePlayerStats(gameState.roster, playerScore, opponentScore, true);
+    const oppStats = generatePlayerStats(opponent.players || [], opponentScore, playerScore, false);
+    const mvp = [...myStats, ...oppStats].sort((a, b) => b.performance - a.performance)[0];
+    renderMatchStats(mvp, myStats, oppStats);
+
+    const resultDiv = document.getElementById('match-result');
+    resultDiv.textContent = didWin ? '🏆 友谊赛胜利！' : '💀 友谊赛失利';
+    resultDiv.className = 'match-result ' + (didWin ? 'win' : 'loss');
+
+    gameState.friendlyHistory.unshift({
+        opponent: opponent.name,
+        source: opponent.source || '阵容码',
+        playerScore, opponentScore, didWin,
+        time: new Date().toLocaleString('zh-CN')
+    });
+    if (gameState.friendlyHistory.length > 20) gameState.friendlyHistory.length = 20;
+
+    const bonus = didWin ? 8000 : 3000;
+    gameState.money += bonus;
+    showToast('友谊赛结束', (didWin ? '胜利' : '惜败') + ' · 奖励 $' + bonus.toLocaleString(), didWin ? 'success' : 'warning');
+    document.getElementById('match-close-btn').style.display = 'block';
+    updateAllDisplays();
+    renderDashboard();
+    saveGame();
+}
+
+function renderFriendlyHistory() {
+    const box = document.getElementById('friendly-list');
+    if (!box) return;
+    const list = gameState && Array.isArray(gameState.friendlyHistory) ? gameState.friendlyHistory : [];
+    if (!list.length) {
+        box.innerHTML = '<p class="empty-hint">还没有友谊赛记录，去打一场吧。</p>';
+        return;
+    }
+    box.innerHTML = list.map(m => `
+        <div class="friendly-row">
+            <span class="friendly-vs">${escapeHtml(m.opponent)}</span>
+            <span class="friendly-score ${m.didWin ? 'win' : 'loss'}">${m.playerScore} - ${m.opponentScore}</span>
+            <span class="friendly-meta">${escapeHtml(m.source || '')} · ${escapeHtml(m.time)}</span>
+        </div>
+    `).join('');
+}
+
+/* ---------- 4c. 玩家对战：同屏双人 ---------- */
+
+const PVP_TACTIC_LABEL = { rush: '快攻', hold: '稳守', rotate: '转点' };
+const PVP_BEATS = { rush: 'hold', hold: 'rotate', rotate: 'rush' };
+
+function openLocalPvp() {
+    if (!gameState) return showToast('请先开始游戏', '', 'warning');
+    pvpState = null;
+    document.getElementById('pvp-setup').classList.remove('hidden');
+    document.getElementById('pvp-arena').classList.add('hidden');
+    document.getElementById('pvp-name-1').value = gameState.teamName || '玩家 1';
+    document.getElementById('pvp-name-2').value = '挑战者';
+    document.getElementById('pvp-modal').classList.remove('hidden');
+}
+
+function closeLocalPvp() {
+    pvpState = null;
+    document.getElementById('pvp-modal').classList.add('hidden');
+}
+
+function startLocalPvp() {
+    const n1 = document.getElementById('pvp-name-1').value.trim() || '玩家 1';
+    const n2 = document.getElementById('pvp-name-2').value.trim() || '玩家 2';
+    pvpState = { n1, n2, s1: 0, s2: 0, round: 1, phase: 'pick1', pick1: null, pick2: null };
+    document.getElementById('pvp-setup').classList.add('hidden');
+    document.getElementById('pvp-arena').classList.remove('hidden');
+    document.getElementById('pvp-side-name-1').textContent = n1;
+    document.getElementById('pvp-side-name-2').textContent = n2;
+    document.getElementById('pvp-log').innerHTML = '';
+    pvpRender();
+}
+
+function pvpRender() {
+    if (!pvpState) return;
+    document.getElementById('pvp-score-1').textContent = pvpState.s1;
+    document.getElementById('pvp-score-2').textContent = pvpState.s2;
+    const turn = document.getElementById('pvp-turn');
+    if (pvpState.phase === 'over') {
+        turn.textContent = (pvpState.s1 > pvpState.s2 ? pvpState.n1 : pvpState.n2) + ' 获胜！';
+    } else if (pvpState.phase === 'pick1') {
+        turn.textContent = '第 ' + pvpState.round + ' 回合 · ' + pvpState.n1 + ' 请选择战术（' + pvpState.n2 + ' 请回避）';
+    } else {
+        turn.textContent = '第 ' + pvpState.round + ' 回合 · ' + pvpState.n2 + ' 请选择战术';
+    }
+}
+
+function pvpLog(text) {
+    const box = document.getElementById('pvp-log');
+    const el = document.createElement('div');
+    el.className = 'pvp-log-entry';
+    el.textContent = text;
+    box.appendChild(el);
+    box.scrollTop = box.scrollHeight;
+}
+
+function pvpPick(tactic) {
+    if (!pvpState || pvpState.phase === 'over') return;
+    if (pvpState.phase === 'pick1') {
+        pvpState.pick1 = tactic;
+        pvpState.phase = 'pick2';
+        pvpRender();
+        return;
+    }
+    if (pvpState.phase === 'pick2') {
+        pvpState.pick2 = tactic;
+        const a = pvpState.pick1, b = pvpState.pick2;
+        const labA = PVP_TACTIC_LABEL[a], labB = PVP_TACTIC_LABEL[b];
+        if (a === b) {
+            pvpLog('R' + pvpState.round + ' · 双方同为「' + labA + '」，本回合重打');
+            pvpState.phase = 'pick1';
+            pvpState.pick1 = null; pvpState.pick2 = null;
+            pvpRender();
+            return;
+        }
+        const p1Wins = PVP_BEATS[a] === b;
+        if (p1Wins) pvpState.s1++; else pvpState.s2++;
+        pvpLog('R' + pvpState.round + ' · ' + labA + ' vs ' + labB + ' → ' +
+            (p1Wins ? pvpState.n1 : pvpState.n2) + ' 得分  ' + pvpState.s1 + '-' + pvpState.s2);
+        pvpState.round++;
+        pvpState.phase = 'pick1';
+        pvpState.pick1 = null; pvpState.pick2 = null;
+        if (pvpState.s1 >= 13 || pvpState.s2 >= 13) {
+            pvpState.phase = 'over';
+            const winner = pvpState.s1 > pvpState.s2 ? pvpState.n1 : pvpState.n2;
+            pvpLog('🏆 ' + winner + ' 以 ' + pvpState.s1 + '-' + pvpState.s2 + ' 获胜');
+            showToast('对战结束', winner + ' 获胜', 'success');
+        }
+        pvpRender();
+    }
+}
+
+/* ---------- 5. 可视化对局 ---------- */
+
+function runVisualMatch(cfg) {
+    if (!gameState) return;
+    matchFinishMode = cfg.mode === 'friendly' ? 'friendly' : 'league';
+    const modal = document.getElementById('match-modal');
+    modal.classList.remove('hidden');
+    document.getElementById('match-week-label').textContent = cfg.weekLabel || 'VCT 冠军联赛';
+    document.getElementById('match-team-left-name').textContent = cfg.leftName;
+    document.getElementById('match-team-right-name').textContent = cfg.rightName;
+    document.getElementById('match-team-left-power').textContent = '战力 ' + Math.round(cfg.leftPower || 0);
+    document.getElementById('match-team-right-power').textContent = '战力 ' + Math.round(cfg.rightPower || 0);
+    document.getElementById('match-team-left-score').textContent = '0';
+    document.getElementById('match-team-right-score').textContent = '0';
+    document.getElementById('match-plays').innerHTML = '';
+    document.getElementById('match-result').textContent = '';
+    document.getElementById('match-result').className = 'match-result';
+    document.getElementById('match-close-btn').style.display = 'none';
+    document.getElementById('match-team-left').classList.remove('winner', 'loser');
+    document.getElementById('match-team-right').classList.remove('winner', 'loser');
+    const statsPanel = document.getElementById('match-stats-panel');
+    if (statsPanel) statsPanel.classList.add('hidden');
+    document.querySelectorAll('.match-controls .btn').forEach(b => { b.disabled = false; });
+
+    matchRunner = { cfg, leftScore: 0, rightScore: 0, round: 0, speed: 1, timer: null, pips: [] };
+    renderMatchPips();
+    drawMatchBoard(0);
+    setMatchSpeed(1);
+}
+
+function startMatchTimer() {
+    if (!matchRunner) return;
+    clearInterval(matchRunner.timer);
+    if (matchRunner.speed === 0) { matchRunner.timer = null; return; }
+    matchRunner.timer = setInterval(matchTick, Math.round(650 / matchRunner.speed));
+}
+
+function matchTick() {
+    const r = matchRunner;
+    if (!r) return;
+    const total = (r.cfg.leftPower || 1) + (r.cfg.rightPower || 1);
+    applyMatchRound(Math.random() < ((r.cfg.leftPower || 1) / total));
+}
+
+function applyMatchRound(own) {
+    const r = matchRunner;
+    if (!r) return;
+    r.round++;
+    if (own) r.leftScore++; else r.rightScore++;
+    r.pips.push(own ? 'left' : 'right');
+    document.getElementById('match-team-left-score').textContent = r.leftScore;
+    document.getElementById('match-team-right-score').textContent = r.rightScore;
+    renderMatchPips();
+    drawMatchBoard(r.round);
+    appendMatchPlay(r, own);
+    if (r.leftScore >= 13 || r.rightScore >= 13) finishMatchRunner();
+}
+
+function appendMatchPlay(r, own) {
+    const plays = document.getElementById('match-plays');
+    const myNames = (r.cfg.leftPlayers || []).map(p => p && p.name).filter(Boolean);
+    const oppNames = (r.cfg.rightPlayers || []).map(p => p && p.name).filter(Boolean);
+    const myKiller = myNames.length ? myNames[Math.floor(Math.random() * myNames.length)] : r.cfg.leftName;
+    const oppKiller = oppNames.length ? oppNames[Math.floor(Math.random() * oppNames.length)] : r.cfg.rightName;
+    const entry = document.createElement('div');
+    entry.className = 'play-entry ' + (own ? 'own' : 'enemy');
+    entry.textContent = own
+        ? 'R' + r.round + ' · ' + myKiller + ' 突破拿下回合  ' + r.leftScore + '-' + r.rightScore
+        : 'R' + r.round + ' · ' + oppKiller + ' 残局获胜  ' + r.leftScore + '-' + r.rightScore;
+    plays.appendChild(entry);
+    plays.scrollTop = plays.scrollHeight;
+}
+
+function renderMatchPips() {
+    const box = document.getElementById('match-pips');
+    if (!box) return;
+    const pips = matchRunner ? matchRunner.pips : [];
+    let html = '';
+    for (let i = 0; i < 25; i++) {
+        html += '<span class="match-pip' + (pips[i] ? ' ' + pips[i] : '') + '"></span>';
+    }
+    box.innerHTML = html;
+}
+
+function drawMatchBoard(round) {
+    const svg = document.getElementById('match-board-svg');
+    if (!svg) return;
+    const dot = (color, x, y) => '<circle cx="' + x + '" cy="' + y + '" r="4" fill="' + color + '"/>';
+    let leftDots = '', rightDots = '';
+    for (let i = 0; i < 5; i++) {
+        leftDots += dot('#FF4655', 18 + Math.random() * 150, 20 + Math.random() * 140);
+        rightDots += dot('#53A7E2', 232 + Math.random() * 150, 20 + Math.random() * 140);
+    }
+    svg.innerHTML = `
+        <rect x="0" y="0" width="400" height="180" fill="#0B131B"/>
+        <g stroke="#2B3A4A" fill="none" stroke-width="1">
+            <rect x="6" y="6" width="388" height="168"/>
+            <line x1="200" y1="6" x2="200" y2="174"/>
+            <rect x="18" y="26" width="96" height="52"/>
+            <rect x="18" y="102" width="96" height="52"/>
+            <rect x="152" y="54" width="96" height="72"/>
+            <rect x="286" y="26" width="96" height="52"/>
+            <rect x="286" y="102" width="96" height="52"/>
+        </g>
+        <g fill="#768079" font-size="9" font-family="Consolas, monospace" letter-spacing="1">
+            <text x="26" y="42">A SITE</text>
+            <text x="26" y="118">B SITE</text>
+            <text x="184" y="64">MID</text>
+            <text x="294" y="42">A SITE</text>
+            <text x="294" y="118">B SITE</text>
+            <text x="352" y="170" fill="#4A5A68">R${round}</text>
+        </g>
+        ${leftDots}${rightDots}
+    `;
+}
+
+function setMatchSpeed(speed) {
+    if (!matchRunner) return;
+    matchRunner.speed = speed;
+    document.querySelectorAll('.match-controls .btn').forEach(b => b.classList.remove('active'));
+    const btn = document.getElementById('match-speed-' + speed);
+    if (btn) btn.classList.add('active');
+    startMatchTimer();
+}
+
+function skipMatch() {
+    if (!matchRunner) return;
+    matchRunner.speed = 0;
+    clearInterval(matchRunner.timer);
+    matchRunner.timer = null;
+    while (matchRunner && matchRunner.leftScore < 13 && matchRunner.rightScore < 13) {
+        const total = (matchRunner.cfg.leftPower || 1) + (matchRunner.cfg.rightPower || 1);
+        applyMatchRound(Math.random() < ((matchRunner.cfg.leftPower || 1) / total));
+    }
+}
+
+function finishMatchRunner() {
+    const r = matchRunner;
+    if (!r) return;
+    clearInterval(r.timer);
+    r.timer = null;
+    const cfg = r.cfg, l = r.leftScore, rr = r.rightScore;
+    matchRunner = null;
+    document.querySelectorAll('.match-controls .btn').forEach(b => { b.disabled = true; });
+    drawMatchBoard(r.round);
+    if (typeof cfg.onFinish === 'function') cfg.onFinish(l, rr);
+}
+
+/* ---------- 玩家对战页面渲染 ---------- */
+
+function renderVersus() {
+    if (!gameState) return;
+    renderFriendlyHistory();
+    renderVersusWorkshop();
+}
+
+async function renderVersusWorkshop() {
+    const box = document.getElementById('versus-workshop-list');
+    if (!box) return;
+    if (!GHBackend.isConfigured()) {
+        box.innerHTML = '<p class="empty-hint">连接 GitHub 仓库后可从创意工坊挑选对手。<br><a href="#" onclick="openGhSettings(); return false;">去云端设置 →</a></p>';
+        return;
+    }
+    box.innerHTML = '<p class="empty-hint">加载中…</p>';
+    try {
+        const items = await GHBackend.fetchWorkshopIndex();
+        if (!items || !items.length) {
+            box.innerHTML = '<p class="empty-hint">工坊还没有作品。</p>';
+            return;
+        }
+        box.innerHTML = items.slice(0, 8).map(item => `
+            <div class="versus-item">
+                <span class="versus-item-name">${escapeHtml(item.name)}</span>
+                <span class="versus-item-power">战力 ${item.power || 0}</span>
+                <button class="btn btn-sm btn-ghost" onclick="challengeWorkshopTeam('${escapeHtml(item.id)}')">挑战</button>
+            </div>
+        `).join('');
+    } catch (e) {
+        box.innerHTML = '<p class="empty-hint">读取失败：' + escapeHtml(e.message) + '</p>';
+    }
+}
+
+async function challengeWorkshopTeam(id) {
+    if (!gameState) return;
+    try {
+        const item = await GHBackend.fetchWorkshopItem(id);
+        if (!item) return showToast('作品不存在', '可能已被删除', 'warning');
+        startFriendlyMatch({
+            name: item.name,
+            tag: item.tag,
+            power: item.power,
+            players: item.roster || [],
+            source: '工坊挑战'
+        });
+    } catch (e) {
+        showToast('读取失败', e.message, 'error');
+    }
+}
