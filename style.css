@@ -2936,3 +2936,411 @@ body {
         flex-wrap: wrap;
     }
 }
+
+/* ==================== v1.2.0：联赛 / 杯赛 / 公告 / 分享 ==================== */
+
+.league-stat {
+    color: var(--valorant-red);
+    font-size: 15px !important;
+    letter-spacing: 1px;
+}
+
+.hero-league {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    padding: 4px 12px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--valorant-red);
+    background: rgba(255, 70, 85, 0.12);
+    color: var(--valorant-red);
+}
+
+.hero-league.league-challengers {
+    border-left-color: #53A7E2;
+    background: rgba(83, 167, 226, 0.12);
+    color: #53A7E2;
+}
+
+.start-announcement {
+    margin: 18px auto 0;
+    max-width: 720px;
+}
+
+.start-announcement.hidden { display: none; }
+
+.start-announcement-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    background: rgba(255, 70, 85, 0.08);
+    border: 1px solid rgba(255, 70, 85, 0.35);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.start-announcement-inner:hover { background: rgba(255, 70, 85, 0.16); }
+
+.news-tag {
+    flex: 0 0 auto;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    background: var(--valorant-red);
+    color: #fff;
+}
+
+.news-text {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    font-size: 13px;
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.news-more {
+    flex: 0 0 auto;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--valorant-red);
+}
+
+.dashboard-news {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 12px 18px;
+    background: rgba(83, 167, 226, 0.08);
+    border: 1px solid rgba(83, 167, 226, 0.3);
+    cursor: pointer;
+}
+
+.dashboard-news.hidden { display: none; }
+
+.dashboard-news .news-tag { background: #53A7E2; }
+
+.dashboard-news .news-text { white-space: normal; }
+
+.league-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.league-tab {
+    padding: 11px 20px;
+    background: var(--valorant-bg2);
+    border: 1px solid var(--valorant-bg3);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.league-tab:hover { color: var(--text-primary); }
+
+.league-tab.active {
+    color: #fff;
+    background: var(--valorant-red);
+    border-color: var(--valorant-red);
+}
+
+.league-tab[data-league="challengers"].active {
+    background: #53A7E2;
+    border-color: #53A7E2;
+}
+
+.standings-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.standings-legend {
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.standings-legend .dot {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    margin-left: 8px;
+}
+
+.standings-legend .dot.up { background: var(--success); }
+.standings-legend .dot.down { background: var(--danger); }
+
+#standings-note .zone-line {
+    display: inline-block;
+    font-size: 11px;
+    padding: 2px 8px;
+    margin-left: 8px;
+}
+
+.zone-line.zone-up { color: var(--success); background: rgba(125, 221, 145, 0.1); }
+.zone-line.zone-down { color: var(--danger); background: rgba(255, 70, 85, 0.1); }
+
+.standings-table tbody tr.zone-up { box-shadow: inset 3px 0 0 var(--success); }
+.standings-table tbody tr.zone-down { box-shadow: inset 3px 0 0 var(--danger); }
+
+.zone-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    margin-left: 8px;
+    letter-spacing: 1px;
+}
+
+.zone-tag.up { color: var(--success); border: 1px solid rgba(125, 221, 145, 0.5); }
+.zone-tag.down { color: var(--danger); border: 1px solid rgba(255, 70, 85, 0.5); }
+
+.team-color-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.schedule-stage-name {
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: 1px;
+    margin-left: auto;
+    margin-right: 12px;
+}
+
+.week-current-tag {
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--valorant-red);
+    border: 1px solid var(--valorant-red);
+    padding: 2px 8px;
+    margin-right: 8px;
+}
+
+.week-done-tag {
+    font-size: 10px;
+    color: var(--text-secondary);
+}
+
+.schedule-week.current {
+    border-color: var(--valorant-red);
+    box-shadow: 0 0 0 1px rgba(255, 70, 85, 0.25);
+}
+
+.schedule-match.bye {
+    justify-content: center;
+    color: var(--text-secondary);
+    font-size: 12px;
+}
+
+.schedule-match.finished.win .schedule-result { color: var(--success); }
+.schedule-match.finished.loss .schedule-result { color: var(--danger); }
+
+.match-stage-line {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--valorant-red);
+    border: 1px solid rgba(255, 70, 85, 0.4);
+    padding: 3px 10px;
+    margin-bottom: 10px;
+}
+
+.btn-remove {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px dashed var(--text-secondary);
+}
+
+.btn-remove:hover {
+    color: #fff;
+    background: var(--danger);
+    border-color: var(--danger);
+}
+
+/* 商城分类 */
+.shop-category { margin-bottom: 18px; }
+
+.shop-category-title {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--valorant-red);
+    border-left: 3px solid var(--valorant-red);
+    padding-left: 10px;
+    margin: 6px 0 10px;
+}
+
+.shop-category-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.shop-note {
+    font-size: 11px;
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 8px;
+}
+
+/* 公告 */
+.announcement-list {
+    max-height: 55vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.announcement-item {
+    background: var(--valorant-bg3);
+    border-left: 3px solid var(--valorant-red);
+    padding: 16px;
+}
+
+.announcement-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.announcement-tag {
+    color: #fff;
+    background: var(--valorant-red);
+    padding: 2px 8px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.announcement-ver { color: var(--warning); font-weight: 700; }
+
+.announcement-item h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.announcement-item ul {
+    padding-left: 18px;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+/* 赛季结算 */
+.season-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.season-summary-item {
+    background: var(--valorant-bg3);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.season-summary-item span {
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+}
+
+.season-summary-item b { font-size: 14px; color: var(--text-primary); }
+
+.season-zone-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.season-zone-preview .zone-line { font-size: 12px; padding: 6px 10px; }
+
+.season-news {
+    background: rgba(247, 181, 0, 0.08);
+    border: 1px solid rgba(247, 181, 0, 0.3);
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+
+/* 战队分组 */
+.team-group { margin-bottom: 28px; }
+
+.team-group-title {
+    font-size: 16px;
+    letter-spacing: 2px;
+    border-left: 4px solid var(--valorant-red);
+    padding-left: 12px;
+    margin-bottom: 14px;
+}
+
+.team-group-title span {
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.teams-grid-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+/* 分享卡片 */
+.share-canvas-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 16px;
+    overflow: auto;
+    max-height: 56vh;
+}
+
+.share-canvas-wrap canvas {
+    width: min(100%, 420px);
+    height: auto;
+    border: 1px solid var(--valorant-bg3);
+}
+
+@media (max-width: 820px) {
+    .shop-category-grid { grid-template-columns: 1fr; }
+    .season-summary-grid { grid-template-columns: repeat(2, 1fr); }
+    .teams-grid-inner { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .season-summary-grid { grid-template-columns: 1fr; }
+    .league-switch .league-tab { flex: 1; font-size: 11px; padding: 10px 8px; }
+    .hero-league { font-size: 10px; }
+}

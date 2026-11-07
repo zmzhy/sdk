@@ -138,7 +138,67 @@ const REAL_PRO_PLAYERS = [
     {"id":"p107","name":"guerra","realName":"Guerra","country":"🇧🇷","team":"FURIA","role":"Sentinel","avatar":"gu","power":81,"rating":"B","price":300000,"aim":75,"gameSense":84,"leadership":84,"utility":86,"isPro":true,"bio":"FURIA 教练兼哨位！身兼两职的传奇，既是场上指挥官又是场下导师。前 CS:GO 职业选手。"},
     {"id":"p108","name":"Leo","realName":"Leo Junior","country":"🇧🇷","team":"Team Liquid Brazil","role":"Controller","avatar":"LJ","power":80,"rating":"B","price":280000,"aim":72,"gameSense":82,"leadership":82,"utility":84,"isPro":true,"bio":"TLBR 控场者"},
     {"id":"p109","name":"M80player","realName":"Player X","country":"🇺🇸","team":"M80","role":"Initiator","avatar":"M8","power":80,"rating":"B","price":280000,"aim":74,"gameSense":82,"leadership":82,"utility":82,"isPro":true,"bio":"M80 替补先锋，偶尔上场时有惊人表现。北美的隐藏天才。"},
-    {"id":"p110","name":"PRX2","realName":"PRX Player","country":"🇸🇬","team":"Paper Rex","role":"Controller","avatar":"PR","power":82,"rating":"B","price":320000,"aim":74,"gameSense":84,"leadership":82,"utility":84,"isPro":true,"bio":"Paper Rex 替补控场，新加坡老将。d4v41 和 f0rsakeN 的可靠后盾。"}
+    {"id":"p110","name":"PRX2","realName":"PRX Player","country":"🇸🇬","team":"Paper Rex","role":"Controller","avatar":"PR","power":82,"rating":"B","price":320000,"aim":74,"gameSense":84,"leadership":82,"utility":84,"isPro":true,"bio":"Paper Rex 替补控场，新加坡老将。d4v41 和 f0rsakeN 的可靠后盾。"},
+    {"id":"p111","name":"miniBoo","realName":"Boo Kwon","country":"🇪🇸","team":"Team Heretics","role":"Initiator","avatar":"mB","power":80,"rating":"B","price":280000,"aim":76,"gameSense":84,"leadership":86,"utility":84,"isPro":true,"bio":"西班牙 Team Heretics 的韩裔指挥，以冷静的节奏控制带领队伍冲击 EMEA 顶级。"},
+    {"id":"p112","name":"Zyppan","realName":"Pontus Johansson","country":"🇸🇪","team":"Team Heretics","role":"Duelist","avatar":"Zy","power":82,"rating":"B","price":320000,"aim":86,"gameSense":78,"leadership":72,"utility":74,"isPro":true,"bio":"瑞典枪男，Team Heretics 的头号火力点，以激进入场和精准爆头闻名。"},
+    {"id":"p113","name":"Boo","realName":"Boo","country":"🇪🇸","team":"Team Heretics","role":"Controller","avatar":"Bo","power":79,"rating":"B","price":260000,"aim":72,"gameSense":82,"leadership":82,"utility":84,"isPro":true,"bio":"西班牙控场老将，Team Heretics 战术体系的中枢。"},
+    {"id":"p114","name":"Nivera","realName":"Nivera","country":"🇧🇪","team":"Team Heretics","role":"Sentinel","avatar":"Ni","power":78,"rating":"B","price":240000,"aim":76,"gameSense":80,"leadership":74,"utility":84,"isPro":true,"bio":"比利时哨位，前 CS 选手转型，守点极其扎实。"},
+    {"id":"p115","name":"yetujey","realName":"Yetu","country":"🇹🇷","team":"FUT Esports","role":"Initiator","avatar":"Ye","power":79,"rating":"B","price":260000,"aim":74,"gameSense":82,"leadership":84,"utility":82,"isPro":true,"bio":"FUT 的土耳其先锋指挥，大胆的前压风格令人印象深刻。"},
+    {"id":"p116","name":"qutionerX","realName":"Qutioner","country":"🇹🇷","team":"FUT Esports","role":"Duelist","avatar":"Qu","power":80,"rating":"B","price":280000,"aim":85,"gameSense":76,"leadership":70,"utility":72,"isPro":true,"bio":"土耳其最强狙之一，FUT 的进攻箭头。"},
+    {"id":"p117","name":"Mojj","realName":"Mojj","country":"🇹🇷","team":"FUT Esports","role":"Controller","avatar":"Mo","power":77,"rating":"B","price":220000,"aim":70,"gameSense":80,"leadership":80,"utility":82,"isPro":true,"bio":"FUT 控场者，擅长用烟雾为队友创造空间。"},
+    {"id":"p118","name":"Ata","realName":"Ata","country":"🇹🇷","team":"FUT Esports","role":"Sentinel","avatar":"At","power":76,"rating":"B","price":200000,"aim":72,"gameSense":78,"leadership":72,"utility":82,"isPro":true,"bio":"FUT 哨位，稳健的防守者。"},
+    {"id":"p119","name":"Xante","realName":"Xante","country":"🇹🇷","team":"Eternal Fire","role":"Duelist","avatar":"Xa","power":79,"rating":"B","price":260000,"aim":84,"gameSense":76,"leadership":72,"utility":74,"isPro":true,"bio":"Eternal Fire 的土耳其决斗者，火力凶猛。"},
+    {"id":"p120","name":"Wolf","realName":"Wolf","country":"🇹🇷","team":"Eternal Fire","role":"Initiator","avatar":"Wo","power":76,"rating":"B","price":210000,"aim":72,"gameSense":80,"leadership":80,"utility":80,"isPro":true,"bio":"EF 先锋，队伍的信息发动机。"},
+    {"id":"p121","name":"Jemkin","realName":"Jemkin","country":"🇹🇷","team":"Eternal Fire","role":"Controller","avatar":"Je","power":75,"rating":"B","price":200000,"aim":68,"gameSense":80,"leadership":78,"utility":82,"isPro":true,"bio":"EF 控场，擅长节奏型烟雾。"},
+    {"id":"p122","name":"Kawhi","realName":"Kawhi","country":"🇹🇷","team":"Eternal Fire","role":"Sentinel","avatar":"Ka","power":74,"rating":"B","price":180000,"aim":70,"gameSense":78,"leadership":70,"utility":80,"isPro":true,"bio":"EF 哨位，沉稳可靠。"},
+    {"id":"p123","name":"HyP","realName":"HyP","country":"🇫🇷","team":"Gentle Mates","role":"Initiator","avatar":"Hy","power":78,"rating":"B","price":240000,"aim":74,"gameSense":82,"leadership":84,"utility":82,"isPro":true,"bio":"法国 Gentle Mates 队长，以天马行空的战术闻名欧洲次级联赛。"},
+    {"id":"p124","name":"Taka","realName":"Taka","country":"🇫🇷","team":"Gentle Mates","role":"Duelist","avatar":"Ta","power":79,"rating":"B","price":250000,"aim":83,"gameSense":75,"leadership":70,"utility":72,"isPro":true,"bio":"法国年轻决斗者，Gentle Mates 的突破口。"},
+    {"id":"p125","name":"Vert","realName":"Vert","country":"🇫🇷","team":"Gentle Mates","role":"Controller","avatar":"Ve","power":75,"rating":"B","price":200000,"aim":70,"gameSense":80,"leadership":78,"utility":82,"isPro":true,"bio":"Gentle Mates 控场，法国体系的重要一环。"},
+    {"id":"p126","name":"Nay","realName":"Nay","country":"🇫🇷","team":"Gentle Mates","role":"Sentinel","avatar":"Na","power":74,"rating":"B","price":180000,"aim":68,"gameSense":78,"leadership":72,"utility":80,"isPro":true,"bio":"Gentle Mates 哨位，以稳定著称。"},
+    {"id":"p127","name":"Shado","realName":"Shado","country":"🇬🇧","team":"Apeks","role":"Duelist","avatar":"Sh","power":78,"rating":"B","price":240000,"aim":82,"gameSense":76,"leadership":72,"utility":74,"isPro":true,"bio":"英国 Apeks 的决斗者，北欧体系下的英伦枪手。"},
+    {"id":"p128","name":"Kawaii","realName":"Kawaii","country":"🇵🇱","team":"Apeks","role":"Initiator","avatar":"Ka","power":76,"rating":"B","price":210000,"aim":72,"gameSense":80,"leadership":80,"utility":80,"isPro":true,"bio":"波兰先锋，Apeks 的战术执行者。"},
+    {"id":"p129","name":"Maka","realName":"Maka","country":"🇸🇪","team":"Apeks","role":"Controller","avatar":"Mk","power":75,"rating":"B","price":200000,"aim":70,"gameSense":80,"leadership":78,"utility":82,"isPro":true,"bio":"瑞典控场，Apeks 的中路指挥官。"},
+    {"id":"p130","name":"Papi","realName":"Papi","country":"🇸🇪","team":"Apeks","role":"Sentinel","avatar":"Pa","power":73,"rating":"C","price":160000,"aim":68,"gameSense":76,"leadership":70,"utility":78,"isPro":true,"bio":"Apeks 哨位老将，北欧防守体系专家。"},
+    {"id":"p131","name":"Sheydos","realName":"Sheydos","country":"🇪🇸","team":"KOI","role":"Controller","avatar":"Sh","power":76,"rating":"B","price":210000,"aim":72,"gameSense":80,"leadership":80,"utility":82,"isPro":true,"bio":"KOI 控场核心，西班牙赛区知名老将。"},
+    {"id":"p132","name":"Koldamenta","realName":"Koldamenta","country":"🇪🇸","team":"KOI","role":"Duelist","avatar":"Ko","power":77,"rating":"B","price":220000,"aim":81,"gameSense":74,"leadership":68,"utility":72,"isPro":true,"bio":"KOI 的西班牙决斗者，枪法出众。"},
+    {"id":"p133","name":"Bax","realName":"Bax","country":"🇪🇸","team":"KOI","role":"Initiator","avatar":"Bx","power":74,"rating":"B","price":180000,"aim":70,"gameSense":78,"leadership":78,"utility":80,"isPro":true,"bio":"KOI 先锋，擅长信息收集。"},
+    {"id":"p134","name":"Toose","realName":"Toose","country":"🇪🇸","team":"KOI","role":"Sentinel","avatar":"To","power":73,"rating":"C","price":160000,"aim":68,"gameSense":76,"leadership":70,"utility":78,"isPro":true,"bio":"KOI 哨位，西班牙防线的最后一环。"},
+    {"id":"p135","name":"AspasJr","realName":"Aspas Jr","country":"🇧🇷","team":"MIBR","role":"Duelist","avatar":"Aj","power":80,"rating":"B","price":280000,"aim":85,"gameSense":76,"leadership":70,"utility":72,"isPro":true,"bio":"MIBR 的巴西新星决斗者，被视为 Aspas 接班人。"},
+    {"id":"p136","name":"Frz","realName":"Frz","country":"🇧🇷","team":"MIBR","role":"Initiator","avatar":"Fz","power":77,"rating":"B","price":220000,"aim":72,"gameSense":81,"leadership":80,"utility":80,"isPro":true,"bio":"MIBR 先锋，巴西体系的信息核心。"},
+    {"id":"p137","name":"Kurtz","realName":"Kurtz","country":"🇧🇷","team":"MIBR","role":"Controller","avatar":"Ku","power":76,"rating":"B","price":210000,"aim":70,"gameSense":80,"leadership":78,"utility":82,"isPro":true,"bio":"MIBR 控场，老练的巴西指挥。"},
+    {"id":"p138","name":"Bzii","realName":"Bzii","country":"🇧🇷","team":"MIBR","role":"Sentinel","avatar":"Bz","power":75,"rating":"B","price":190000,"aim":70,"gameSense":78,"leadership":72,"utility":80,"isPro":true,"bio":"MIBR 哨位，巴西防线新血。"},
+    {"id":"p139","name":"kiNgg","realName":"kiNgg","country":"🇨🇱","team":"Leviatán","role":"Duelist","avatar":"kN","power":82,"rating":"B","price":340000,"aim":86,"gameSense":78,"leadership":74,"utility":76,"isPro":true,"bio":"智利 Leviatán 的超级新星，美洲赛区最炙手可热的决斗者之一。"},
+    {"id":"p140","name":"Mazino","realName":"Mazino","country":"🇨🇱","team":"Leviatán","role":"Initiator","avatar":"Mz","power":79,"rating":"B","price":260000,"aim":74,"gameSense":82,"leadership":84,"utility":82,"isPro":true,"bio":"Leviatán 的智利队长，美洲次级联赛杀出的顶级 IGL。"},
+    {"id":"p141","name":"Tex","realName":"Tex","country":"🇨🇱","team":"Leviatán","role":"Controller","avatar":"Tx","power":77,"rating":"B","price":220000,"aim":70,"gameSense":82,"leadership":80,"utility":82,"isPro":true,"bio":"Leviatán 控场，南美战术体系的执行者。"},
+    {"id":"p142","name":"Crow","realName":"Crow","country":"🇨🇱","team":"Leviatán","role":"Sentinel","avatar":"Cr","power":76,"rating":"B","price":210000,"aim":72,"gameSense":78,"leadership":72,"utility":80,"isPro":true,"bio":"Leviatán 哨位，智利防线支柱。"},
+    {"id":"p143","name":"Jinggg","realName":"Jinggg","country":"🇸🇬","team":"Talon Esports","role":"Duelist","avatar":"Jg","power":79,"rating":"B","price":260000,"aim":83,"gameSense":76,"leadership":70,"utility":74,"isPro":true,"bio":"新加坡 Talon 的决斗者，前 Paper Rex 选手，东南亚火力代表。"},
+    {"id":"p144","name":"Patiphan","realName":"Patiphan","country":"🇹🇭","team":"Talon Esports","role":"Initiator","avatar":"Pt","power":77,"rating":"B","price":220000,"aim":72,"gameSense":80,"leadership":80,"utility":80,"isPro":true,"bio":"泰国先锋，Talon 的东南亚老将。"},
+    {"id":"p145","name":"Lakia","realName":"Lakia","country":"🇯🇵","team":"Talon Esports","role":"Controller","avatar":"Lk","power":75,"rating":"B","price":200000,"aim":70,"gameSense":80,"leadership":78,"utility":82,"isPro":true,"bio":"日本控场，Talon 的战术大脑。"},
+    {"id":"p146","name":"Sushiboy","realName":"Sushiboy","country":"🇭🇰","team":"Talon Esports","role":"Sentinel","avatar":"Su","power":74,"rating":"B","price":180000,"aim":70,"gameSense":78,"leadership":72,"utility":80,"isPro":true,"bio":"香港哨位，Talon 的稳定后盾。"},
+    {"id":"p147","name":"Deryeon","realName":"Deryeon","country":"🇸🇬","team":"Bleed Esports","role":"Duelist","avatar":"Dy","power":76,"rating":"B","price":210000,"aim":81,"gameSense":74,"leadership":68,"utility":72,"isPro":true,"bio":"新加坡 Bleed 的决斗者，东南亚新锐枪手。"},
+    {"id":"p148","name":"sScary","realName":"sScary","country":"🇹🇭","team":"Bleed Esports","role":"Controller","avatar":"Sc","power":74,"rating":"B","price":180000,"aim":70,"gameSense":78,"leadership":78,"utility":80,"isPro":true,"bio":"泰国控场，Bleed 的节奏指挥。"},
+    {"id":"p149","name":"Crazyguy","realName":"Crazyguy","country":"🇸🇬","team":"Bleed Esports","role":"Initiator","avatar":"Cg","power":73,"rating":"C","price":160000,"aim":68,"gameSense":78,"leadership":76,"utility":78,"isPro":true,"bio":"Bleed 先锋，东南亚赛区敢打敢拼的代表。"},
+    {"id":"p150","name":"Neph","realName":"Neph","country":"🇸🇬","team":"Bleed Esports","role":"Sentinel","avatar":"Ne","power":72,"rating":"C","price":150000,"aim":66,"gameSense":76,"leadership":70,"utility":78,"isPro":true,"bio":"Bleed 哨位，稳健的防守者。"},
+    {"id":"p151","name":"Jemkin2","realName":"Jemkin RRQ","country":"🇮🇩","team":"Rex Regum Qeon","role":"Duelist","avatar":"J2","power":77,"rating":"B","price":220000,"aim":82,"gameSense":74,"leadership":70,"utility":72,"isPro":true,"bio":"印尼 RRQ 的决斗者，东南亚新崛起的天才少年。"},
+    {"id":"p152","name":"Vorz","realName":"Vorz","country":"🇮🇩","team":"Rex Regum Qeon","role":"Initiator","avatar":"Vz","power":75,"rating":"B","price":200000,"aim":70,"gameSense":79,"leadership":80,"utility":80,"isPro":true,"bio":"RRQ 先锋，印尼战队的核心指挥。"},
+    {"id":"p153","name":"Shiro","realName":"Shiro","country":"🇮🇩","team":"Rex Regum Qeon","role":"Controller","avatar":"Sr","power":73,"rating":"C","price":160000,"aim":68,"gameSense":78,"leadership":76,"utility":78,"isPro":true,"bio":"RRQ 控场，印尼赛区的战术执行者。"},
+    {"id":"p154","name":"Estrella","realName":"Estrella","country":"🇮🇩","team":"Rex Regum Qeon","role":"Sentinel","avatar":"Es","power":72,"rating":"C","price":150000,"aim":66,"gameSense":76,"leadership":70,"utility":78,"isPro":true,"bio":"RRQ 哨位，以稳定发挥立足。"},
+    {"id":"p155","name":"KangKang","realName":"康康","country":"🇨🇳","team":"EDward Gaming Youth","role":"Duelist","avatar":"KK","power":78,"rating":"B","price":240000,"aim":82,"gameSense":74,"leadership":70,"utility":72,"isPro":true,"bio":"EDG 青训头号决斗者，被寄予厚望的 CN 未来之星。"},
+    {"id":"p156","name":"Yuicaw","realName":"于晨阳","country":"🇨🇳","team":"EDward Gaming Youth","role":"Initiator","avatar":"Yu","power":76,"rating":"B","price":210000,"aim":72,"gameSense":80,"leadership":80,"utility":80,"isPro":true,"bio":"EDG 青训先锋，是青训队的战术大脑。"},
+    {"id":"p157","name":"Spring","realName":"史普林","country":"🇨🇳","team":"EDward Gaming Youth","role":"Controller","avatar":"Sp","power":75,"rating":"B","price":200000,"aim":70,"gameSense":80,"leadership":78,"utility":80,"isPro":true,"bio":"EDG 青训控场，沉稳的年轻指挥。"},
+    {"id":"p158","name":"BaiYe","realName":"白夜","country":"🇨🇳","team":"EDward Gaming Youth","role":"Sentinel","avatar":"BY","power":74,"rating":"B","price":180000,"aim":70,"gameSense":78,"leadership":72,"utility":78,"isPro":true,"bio":"EDG 青训哨位，防守端的中流砥柱。"},
+    {"id":"p159","name":"Feng","realName":"峰","country":"🇨🇳","team":"Wolves Rising","role":"Duelist","avatar":"Fg","power":76,"rating":"B","price":210000,"aim":81,"gameSense":74,"leadership":68,"utility":72,"isPro":true,"bio":"狼队青训决斗者，CN 次级联赛的潜力新人。"},
+    {"id":"p160","name":"XiaoL","realName":"小狼","country":"🇨🇳","team":"Wolves Rising","role":"Initiator","avatar":"XL","power":74,"rating":"B","price":180000,"aim":70,"gameSense":78,"leadership":78,"utility":80,"isPro":true,"bio":"狼队青训先锋，敢打敢拼。"},
+    {"id":"p161","name":"Mist","realName":"迷雾","country":"🇨🇳","team":"Wolves Rising","role":"Controller","avatar":"Ms","power":73,"rating":"C","price":160000,"aim":68,"gameSense":78,"leadership":76,"utility":78,"isPro":true,"bio":"狼队青训控场，CN 赛区冉冉升起的新星。"},
+    {"id":"p162","name":"Ash","realName":"灰烬","country":"🇨🇳","team":"Wolves Rising","role":"Sentinel","avatar":"As","power":72,"rating":"C","price":150000,"aim":66,"gameSense":76,"leadership":70,"utility":78,"isPro":true,"bio":"狼队青训哨位，沉稳可靠。"},
+    {"id":"p163","name":"crowd","realName":"Crowd","country":"🇺🇸","team":"自由市场","role":"Duelist","avatar":"Cr","power":84,"rating":"A","price":450000,"aim":88,"gameSense":78,"leadership":70,"utility":74,"isPro":true,"bio":"北美自由市场枪男，等待一支有野心的战队签下他。"},
+    {"id":"p164","name":"Sayaplayer","realName":"Sayaplayer","country":"🇰🇷","team":"自由市场","role":"Duelist","avatar":"Sy","power":85,"rating":"A","price":480000,"aim":89,"gameSense":80,"leadership":74,"utility":76,"isPro":true,"bio":"亚洲传奇狙神，自由身等待重返顶级赛场。"},
+    {"id":"p165","name":"d4v41","realName":"d4v41","country":"🇸🇬","team":"自由市场","role":"Initiator","avatar":"d4","power":84,"rating":"A","price":450000,"aim":80,"gameSense":86,"leadership":84,"utility":86,"isPro":true,"bio":"东南亚传奇先锋，自由市场最抢手的选手之一。"},
+    {"id":"p166","name":"f0rsakeN","realName":"f0rsakeN","country":"🇸🇬","team":"自由市场","role":"Duelist","avatar":"f0","power":85,"rating":"A","price":480000,"aim":88,"gameSense":80,"leadership":74,"utility":76,"isPro":true,"bio":"东南亚最强决斗者，自由身。"},
+    {"id":"p167","name":"s0m","realName":"s0m","country":"🇺🇸","team":"自由市场","role":"Controller","avatar":"s0","power":83,"rating":"A","price":420000,"aim":82,"gameSense":84,"leadership":82,"utility":84,"isPro":true,"bio":"北美瞄准天才，自由市场控场。"},
+    {"id":"p168","name":"crashies","realName":"crashies","country":"🇺🇸","team":"自由市场","role":"Initiator","avatar":"cs","power":82,"rating":"A","price":400000,"aim":78,"gameSense":86,"leadership":84,"utility":86,"isPro":true,"bio":"北美冠军先锋，经验丰富的自由身老将。"},
+    {"id":"p169","name":"SUYGETSU","realName":"SUYGETSU","country":"🇷🇺","team":"自由市场","role":"Sentinel","avatar":"SG","power":82,"rating":"A","price":400000,"aim":78,"gameSense":86,"leadership":80,"utility":88,"isPro":true,"bio":"欧洲顶级哨位，自由市场上最稳的防守核心。"},
+    {"id":"p170","name":"nAts","realName":"nAts","country":"🇷🇺","team":"自由市场","role":"Sentinel","avatar":"nA","power":81,"rating":"A","price":380000,"aim":76,"gameSense":86,"leadership":82,"utility":88,"isPro":true,"bio":"欧洲哨位大师，自由身等待新挑战。"}
 ];
 
 const AI_TEAMS = [
@@ -181,39 +241,87 @@ const AI_TEAMS = [
     {"name":"JD Gaming","tag":"JDG","region":"China","country":"🇨🇳","power":77,"color":"#C71585","coach":"Li","bio":"京东集团战队，LPL 2023 春夏双冠。Valorant 分部 Haoye 先锋指挥，体系成熟。"},
     {"name":"Toutiao Gaming","tag":"TTG","region":"China","country":"🇨🇳","power":76,"color":"#FF4500","coach":"Chen","bio":"字节跳动旗下，专注年轻选手培养。Chen 带橙色战队 VCT CN 稳步提升。"},
     {"name":"Gamelanders","tag":"GLD","region":"Americas","country":"🇺🇸","power":72,"color":"#FF4500","coach":"JDM","bio":"北美老牌挑战者联赛战队，多次冲 VCT 未果。JDM 队长兼控场，继续追梦。"},
-    {"name":"NRG 2","tag":"NRG2","region":"Americas","country":"🇺🇸","power":70,"color":"#FA0000","coach":"Turtle","bio":"NRG 发展联盟，培养一队替补和未来之星。Turtle 最有潜力年轻选手。"}
+    {"name":"NRG 2","tag":"NRG2","region":"Americas","country":"🇺🇸","power":70,"color":"#FA0000","coach":"Turtle","bio":"NRG 发展联盟，培养一队替补和未来之星。Turtle 最有潜力年轻选手。"},
+    {"name":"Team Heretics","tag":"TH","region":"EMEA","country":"🇪🇸","power":75,"color":"#00E5A0","coach":"Tanish","bio":"西班牙新贵，Team Heretics 以韩式纪律加欧洲创造力崛起，是 EMEA 升班马中的黑马。"},
+    {"name":"FUT Esports","tag":"FUT","region":"EMEA","country":"🇹🇷","power":73,"color":"#00B2FF","coach":"Ely","bio":"土耳其电竞豪门 FUT，以双狙体系和凶悍的前压闻名，长期在 EMEA 次级联赛冲顶。"},
+    {"name":"Eternal Fire","tag":"EF","region":"EMEA","country":"🇹🇷","power":72,"color":"#FF6A00","coach":"Dark","bio":"土耳其 Eternal Fire 的 Valorant 分部，纪律严明，擅长消耗战和残局。"},
+    {"name":"Gentle Mates","tag":"M8","region":"EMEA","country":"🇫🇷","power":71,"color":"#8A2BE2","coach":"Hyp","bio":"法国网红俱乐部 Gentle Mates，以脑洞战术和年轻阵容在 EMEA 次级联赛圈粉。"},
+    {"name":"Apeks","tag":"APK","region":"EMEA","country":"🇬🇧","power":70,"color":"#00A86B","coach":"Shado","bio":"英国 Apeks，北欧体系的英伦代表，以稳固防守和团队配合见长。"},
+    {"name":"KOI","tag":"KOI","region":"EMEA","country":"🇪🇸","power":69,"color":"#FFD700","coach":"Sheydos","bio":"西班牙 KOI，伊比利亚赛区的老牌挑战者，擅长慢节奏运营。"},
+    {"name":"MIBR","tag":"MIBR","region":"Americas","country":"🇧🇷","power":72,"color":"#FF0000","coach":"Kurtz","bio":"巴西 MIBR，CS 传奇俱乐部，Valorant 分部以激进的巴西风格著称。"},
+    {"name":"Leviatán","tag":"LEV","region":"Americas","country":"🇨🇱","power":74,"color":"#00C2FF","coach":"Mazino","bio":"智利 Leviatán，美洲次级联赛的统治者之一，kiNgg 是赛区最耀眼的新星。"},
+    {"name":"Talon Esports","tag":"TLN","region":"Pacific","country":"🇭🇰","power":68,"color":"#FFB300","coach":"Jinggg","bio":"香港 Talon，太平洋赛区的国际化战队，东南亚火力与日式纪律的结合。"},
+    {"name":"Bleed Esports","tag":"BLEED","region":"Pacific","country":"🇸🇬","power":67,"color":"#E60012","coach":"sScary","bio":"新加坡 Bleed，东南亚新生代战队，敢打敢拼。"},
+    {"name":"Rex Regum Qeon","tag":"RRQ","region":"Pacific","country":"🇮🇩","power":69,"color":"#FFC000","coach":"Vorz","bio":"印尼 RRQ，东南亚最具人气的挑战者战队，主场氛围火爆。"},
+    {"name":"EDward Gaming Youth","tag":"EDGY","region":"China","country":"🇨🇳","power":69,"color":"#FFD700","coach":"KangKang","bio":"EDG 青训队，CN 赛区的人才库，KangKang 与 Yuicaw 被视为下一代核心。"},
+    {"name":"Wolves Rising","tag":"WOLR","region":"China","country":"🇨🇳","power":68,"color":"#FF6600","coach":"Feng","bio":"狼队青训，CN 次级联赛的年轻力量，以勤奋和执行力著称。"}
 ];
 
 const TOTAL_WEEKS = 24;
 const MAX_ROSTER = 8;
 
 /* 商城道具：全部为外观或便利类，绝不修改任何比赛数值 */
+const SHOP_CATEGORIES = [
+    { key: 'badge', name: '队徽' },
+    { key: 'theme', name: '界面主题' },
+    { key: 'title', name: '称号' },
+    { key: 'board', name: '对局外观' },
+    { key: 'banner', name: '战队横幅' },
+    { key: 'collect', name: '收藏品' },
+    { key: 'util', name: '便利道具' }
+];
+
 const SHOP_ITEMS = [
-    { id: 'badge_phoenix', kind: 'badge', name: '凤凰队徽', icon: '🔥', price: 40000, desc: '控制台队徽位展示，纯外观。' },
-    { id: 'badge_dragon', kind: 'badge', name: '龙纹队徽', icon: '🐉', price: 120000, desc: '控制台队徽位展示，纯外观。' },
-    { id: 'theme_ice', kind: 'theme', name: '冰霜主题', icon: '❄', price: 90000, desc: '把界面强调色换成冰蓝，不影响对局。', color: '#53A7E2' },
-    { id: 'theme_gold', kind: 'theme', name: '黄金主题', icon: '🏅', price: 150000, desc: '把界面强调色换成金色，不影响对局。', color: '#F7B500' },
-    { id: 'title_champion', kind: 'title', name: '「冠军教头」称号', icon: '👑', price: 70000, desc: '显示在队名下方，纯外观。' },
-    { id: 'title_godfather', kind: 'title', name: '「战队教父」称号', icon: '🎩', price: 200000, desc: '显示在队名下方，纯外观。' },
-    { id: 'card_rename', kind: 'rename', name: '改名卡', icon: '🔄', price: 25000, desc: '改名时自动消耗，省下 $20,000 改名费用。' },
-    { id: 'card_autosave', kind: 'autosave', name: '自动存档卡', icon: '💾', price: 60000, desc: '每场比赛结束后自动保存本地存档，纯便利。' }
+    { id: 'badge_phoenix', kind: 'badge', cat: 'badge', name: '凤凰队徽', icon: '🔥', price: 40000, desc: '控制台队徽位展示，纯外观。' },
+    { id: 'badge_dragon', kind: 'badge', cat: 'badge', name: '龙纹队徽', icon: '🐉', price: 120000, desc: '控制台队徽位展示，纯外观。' },
+    { id: 'badge_wolf', kind: 'badge', cat: 'badge', name: '孤狼队徽', icon: '🐺', price: 80000, desc: '控制台队徽位展示，纯外观。' },
+    { id: 'badge_skull', kind: 'badge', cat: 'badge', name: '骷髅队徽', icon: '💀', price: 160000, desc: '控制台队徽位展示，纯外观。' },
+    { id: 'badge_lightning', kind: 'badge', cat: 'badge', name: '闪电队徽', icon: '⚡', price: 60000, desc: '控制台队徽位展示，纯外观。' },
+    { id: 'theme_ice', kind: 'theme', cat: 'theme', name: '冰霜主题', icon: '❄', price: 90000, desc: '把界面强调色换成冰蓝，不影响对局。', color: '#53A7E2' },
+    { id: 'theme_gold', kind: 'theme', cat: 'theme', name: '黄金主题', icon: '🏅', price: 150000, desc: '把界面强调色换成金色，不影响对局。', color: '#F7B500' },
+    { id: 'theme_emerald', kind: 'theme', cat: 'theme', name: '翡翠主题', icon: '💚', price: 120000, desc: '把界面强调色换成翡翠绿，不影响对局。', color: '#00E5A0' },
+    { id: 'theme_violet', kind: 'theme', cat: 'theme', name: '霓虹紫主题', icon: '💜', price: 180000, desc: '把界面强调色换成霓虹紫，不影响对局。', color: '#A855F7' },
+    { id: 'theme_sakura', kind: 'theme', cat: 'theme', name: '樱花主题', icon: '🌸', price: 140000, desc: '把界面强调色换成樱花粉，不影响对局。', color: '#FF7BAC' },
+    { id: 'title_champion', kind: 'title', cat: 'title', name: '「冠军教头」称号', icon: '👑', price: 70000, desc: '显示在队名下方，纯外观。' },
+    { id: 'title_godfather', kind: 'title', cat: 'title', name: '「战队教父」称号', icon: '🎩', price: 200000, desc: '显示在队名下方，纯外观。' },
+    { id: 'title_tactician', kind: 'title', cat: 'title', name: '「战术大师」称号', icon: '🧠', price: 180000, desc: '显示在队名下方，纯外观。' },
+    { id: 'title_rookie', kind: 'title', cat: 'title', name: '「菜鸟起飞」称号', icon: '🐣', price: 30000, desc: '显示在队名下方，纯外观。' },
+    { id: 'board_gold', kind: 'board', cat: 'board', name: '黄金战术板', icon: '🟨', price: 150000, desc: '可视化对局的己方点位变成金色，不影响战力。', color: '#F7B500' },
+    { id: 'board_neon', kind: 'board', cat: 'board', name: '霓虹战术板', icon: '🟩', price: 150000, desc: '可视化对局的己方点位变成霓虹绿，不影响战力。', color: '#00E5A0' },
+    { id: 'banner_crown', kind: 'banner', cat: 'banner', name: '王者横幅', icon: '♛', price: 220000, desc: '控制台大横幅背景装饰，纯外观。' },
+    { id: 'banner_flame', kind: 'banner', cat: 'banner', name: '烈焰横幅', icon: '✦', price: 100000, desc: '控制台大横幅背景装饰，纯外观。' },
+    { id: 'collect_tenz', kind: 'collect', cat: 'collect', name: 'TenZ 签名卡', icon: '🖊', price: 300000, desc: '收藏品，展示在队名旁，纯外观。' },
+    { id: 'collect_trophy', kind: 'collect', cat: 'collect', name: 'Champions 复刻奖杯', icon: '🏆', price: 250000, desc: '收藏品，展示在队名旁，纯外观。' },
+    { id: 'card_rename', kind: 'rename', cat: 'util', name: '改名卡', icon: '🔄', price: 25000, desc: '改名时自动消耗，省下 $20,000 改名费用。' },
+    { id: 'card_autosave', kind: 'autosave', cat: 'util', name: '自动存档卡', icon: '💾', price: 60000, desc: '每场比赛结束后自动保存本地存档，纯便利。' }
 ];
 
 function initExtras(state) {
     if (!state.shop || typeof state.shop !== 'object') {
         state.shop = { owned: [], badge: '', title: '', theme: '', autoSave: false, renameCards: 0 };
-    } else {
-        if (!Array.isArray(state.shop.owned)) state.shop.owned = [];
-        state.shop.badge = state.shop.badge || '';
-        state.shop.title = state.shop.title || '';
-        state.shop.theme = state.shop.theme || '';
-        state.shop.autoSave = !!state.shop.autoSave;
-        state.shop.renameCards = Number(state.shop.renameCards) || 0;
     }
+    if (!Array.isArray(state.shop.owned)) state.shop.owned = [];
+    state.shop.badge = state.shop.badge || '';
+    state.shop.title = state.shop.title || '';
+    state.shop.theme = state.shop.theme || '';
+    state.shop.autoSave = !!state.shop.autoSave;
+    state.shop.renameCards = Number(state.shop.renameCards) || 0;
+    state.shop.boardColor = state.shop.boardColor || '';
+    state.shop.bannerIcon = state.shop.bannerIcon || '';
+    state.shop.collectible = state.shop.collectible || '';
+
     if (!Array.isArray(state.mail)) state.mail = [];
     if (!Array.isArray(state.friendlyHistory)) state.friendlyHistory = [];
     if (typeof state.teamNamed !== 'boolean') state.teamNamed = true;
     state.lastSeasonMail = Number(state.lastSeasonMail) || 0;
+
+    if (!state.cups || typeof state.cups !== 'object') state.cups = {};
+    if (typeof state.league !== 'string') state.league = '';
+    if (!state.leagueTeams || typeof state.leagueTeams !== 'object') state.leagueTeams = null;
+    if (typeof state.simulatedWeek !== 'number') state.simulatedWeek = 0;
+    if (typeof state.scheduleVersion !== 'number') state.scheduleVersion = 1;
+    state.lastAnnouncementVersion = state.lastAnnouncementVersion || '';
+    state.seasonEnded = !!state.seasonEnded;
     return state;
 }
 
@@ -289,8 +397,8 @@ function setupAIStandings() {
 
 function generateMarket() {
     gameState.market = [];
-    const numProPlayers = 4;
-    const numAgents = 8;
+    const numProPlayers = 8;
+    const numAgents = 10;
     const availablePros = shuffle([...REAL_PRO_PLAYERS]);
     availablePros.slice(0, numProPlayers).forEach((template, i) => {
         const pro = cloneAgent(template);
@@ -405,7 +513,15 @@ function updateAllDisplays() {
     document.getElementById('stat-money').textContent = '$' + gameState.money.toLocaleString();
     document.getElementById('stat-season').textContent = '第 ' + gameState.season + ' 赛季';
     document.getElementById('stat-day').textContent = '第 ' + gameState.currentWeek + ' 周';
-    document.getElementById('team-name-display').textContent = (gameState.shop && gameState.shop.badge ? gameState.shop.badge + ' ' : '') + gameState.teamName;
+    document.getElementById('team-name-display').textContent = (gameState.shop && gameState.shop.badge ? gameState.shop.badge + ' ' : '') + gameState.teamName + (gameState.shop && gameState.shop.collectible ? ' ' + gameState.shop.collectible : '');
+    const leagueName = (typeof LEAGUE_META !== 'undefined' && gameState.league) ? LEAGUE_META[gameState.league].name : '';
+    const leagueEl = document.getElementById('stat-league');
+    if (leagueEl) leagueEl.textContent = leagueName || 'VCT';
+    const heroLeague = document.getElementById('hero-league');
+    if (heroLeague) {
+        heroLeague.textContent = leagueName || 'VCT';
+        heroLeague.className = 'hero-league league-' + (gameState.league || 'premier');
+    }
     if (gameState.shop && gameState.shop.title) {
         document.getElementById('team-tagline').textContent = gameState.shop.title + ' · 建立你的冠军王朝';
     } else {
@@ -421,6 +537,11 @@ function applyShopTheme() {
     const theme = gameState && gameState.shop ? gameState.shop.theme : '';
     if (theme) app.style.setProperty('--valorant-red', theme);
     else app.style.removeProperty('--valorant-red');
+    const deco = document.querySelector('.hero-decoration');
+    if (deco) {
+        const banner = gameState && gameState.shop ? gameState.shop.bannerIcon : '';
+        deco.textContent = banner ? (banner + ' ' + banner + ' ' + banner) : '◤ ◥ ◣ ◢';
+    }
 }
 
 function renderDashboard() {
@@ -435,6 +556,12 @@ function renderDashboard() {
     document.getElementById('hero-rank').textContent = rankBadge;
     const hint = document.getElementById('rename-hint');
     if (hint) hint.classList.toggle('hidden', !!gameState.teamNamed);
+    const newsEl = document.getElementById('dashboard-news');
+    if (newsEl && typeof latestAnnouncement === 'function') {
+        const a = latestAnnouncement();
+        newsEl.innerHTML = a ? `<span class="news-tag">公告</span><span class="news-text">${a.title} · ${a.tag}</span><span class="news-more">查看 →</span>` : '';
+        newsEl.classList.toggle('hidden', !a);
+    }
     const recentMatches = gameState.matchHistory.slice(-5).reverse();
     const recentList = document.getElementById('recent-matches-list');
     recentList.innerHTML = recentMatches.length === 0 
@@ -448,10 +575,11 @@ function renderDashboard() {
     const nextMatch = gameState.schedule.find(s => s.week === gameState.currentWeek && !s.played);
     const nextInfo = document.getElementById('next-match-info');
     const playBtn = document.getElementById('play-next-match');
-    if (nextMatch) {
+    if (nextMatch && nextMatch.opponent) {
         const opp = AI_TEAMS.find(t => t.name === nextMatch.opponent);
         const oppPower = getTeamPowerByName(nextMatch.opponent);
         nextInfo.innerHTML = `
+            <div class="match-stage-line">${matchLabel(nextMatch)}</div>
             <div class="teams-row">
                 <div class="team-half">
                     <h3>${gameState.teamName}</h3>
@@ -466,7 +594,9 @@ function renderDashboard() {
         `;
         playBtn.style.display = 'block';
     } else {
-        nextInfo.innerHTML = '<p class="no-match">本周无比赛或赛季结束</p>';
+        const week = gameState.schedule.find(s => s.week === gameState.currentWeek);
+        const label = week ? matchLabel(week) : '';
+        nextInfo.innerHTML = `<p class="no-match">${label || '本周无比赛'}${gameState.currentWeek >= TOTAL_WEEKS ? ' · 赛季结束' : ' · 轮空'}</p>`;
         playBtn.style.display = 'none';
     }
     const miniList = document.getElementById('team-overview-list');
@@ -529,6 +659,7 @@ function renderAgentCard(agent, isOwned) {
                         <button class="btn btn-train" onclick="trainAgent('${agent.uniqueId}')">训练 $5,000</button>
                         <button class="btn btn-basic" onclick="showAgentDetail('${agent.uniqueId}', true)">详情</button>
                         <button class="btn btn-release" onclick="releaseAgent('${agent.uniqueId}')">释放</button>
+                        <button class="btn btn-remove" onclick="removeAgent('${agent.uniqueId}')" title="直接移除，不返还资金">移除</button>
                     </div>
                 ` : `
                     <div class="price-tag">身价: <span class="price-amount">$${agent.price.toLocaleString()}</span></div>
@@ -1222,7 +1353,7 @@ function selectCustomTeam() {
     gameState.teamNamed = false;
     hideStartScreen();
     showToast('自创战队', '从零开始，打造你的王朝！', 'success');
-    if (!gameState.mail || gameState.mail.length === 0) {
+    if (!gameState.mail || !gameState.mail.some(m => m.subject === '欢迎加入 VCT')) {
         addMail('VCT 联盟', '欢迎加入 VCT', '你的战队已注册成功。先给战队起个名字，再去转会市场签下第一批特工吧。', 50000);
     }
     updateAllDisplays();
@@ -1680,7 +1811,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -2673,7 +2804,8 @@ function drawMatchBoard(round) {
     const dot = (color, x, y) => '<circle cx="' + x + '" cy="' + y + '" r="4" fill="' + color + '"/>';
     let leftDots = '', rightDots = '';
     for (let i = 0; i < 5; i++) {
-        leftDots += dot('#FF4655', 18 + Math.random() * 150, 20 + Math.random() * 140);
+        const leftColor = (gameState && gameState.shop && gameState.shop.boardColor) ? gameState.shop.boardColor : '#FF4655';
+        leftDots += dot(leftColor, 18 + Math.random() * 150, 20 + Math.random() * 140);
         rightDots += dot('#53A7E2', 232 + Math.random() * 150, 20 + Math.random() * 140);
     }
     svg.innerHTML = `
@@ -2781,3 +2913,1288 @@ async function challengeWorkshopTeam(id) {
         showToast('读取失败', e.message, 'error');
     }
 }
+
+/* ==================== v1.2.0：联赛金字塔 / 杯赛 / 升降级 / 商店 / 公告 ==================== */
+
+const LEAGUE_META = {
+    premier: { key: 'premier', name: 'VCT 顶级联赛', short: 'VCT', color: '#FF4655' },
+    challengers: { key: 'challengers', name: 'VCT Challengers 次级联赛', short: 'CH', color: '#53A7E2' }
+};
+const LEAGUE_KEYS = ['premier', 'challengers'];
+const CUP_NAMES = { masters: 'Masters 季中冠军赛', champions: 'Champions 世界冠军赛' };
+const CUP_ROUND_NAMES = ['八强赛', '半决赛', '总决赛'];
+
+function buildLeaguePools(excludeName) {
+    const teams = AI_TEAMS.filter(t => t.name !== excludeName).slice().sort((a, b) => b.power - a.power);
+    const half = Math.ceil(teams.length / 2);
+    return {
+        premier: teams.slice(0, half).map(t => t.name),
+        challengers: teams.slice(half).map(t => t.name)
+    };
+}
+
+function ensureLeaguePools() {
+    if (!gameState) return;
+    if (!gameState.leagueTeams || !Array.isArray(gameState.leagueTeams.premier) || !Array.isArray(gameState.leagueTeams.challengers)) {
+        gameState.leagueTeams = buildLeaguePools(gameState.teamName);
+        if (!LEAGUE_META[gameState.league]) gameState.league = 'challengers';
+    }
+    if (!LEAGUE_META[gameState.league]) gameState.league = 'challengers';
+    LEAGUE_KEYS.forEach(k => {
+        if (!Array.isArray(gameState.leagueTeams[k])) gameState.leagueTeams[k] = [];
+        gameState.leagueTeams[k] = gameState.leagueTeams[k].filter(n => n && n !== gameState.teamName);
+    });
+    if (!gameState.leagueTeams[gameState.league].includes(gameState.teamName)) {
+        gameState.leagueTeams[gameState.league].push(gameState.teamName);
+    }
+}
+
+function leagueTable(leagueKey) {
+    return [...gameState.standings]
+        .filter(t => t && t.league === leagueKey)
+        .sort((a, b) => (b.points - a.points) || (b.wins - a.wins) || (b.power - a.power) || a.name.localeCompare(b.name));
+}
+
+function leagueOfTeam(name) {
+    if (!gameState.leagueTeams) return gameState.league || 'challengers';
+    if (gameState.leagueTeams.premier.includes(name)) return 'premier';
+    if (gameState.leagueTeams.challengers.includes(name)) return 'challengers';
+    return gameState.league || 'challengers';
+}
+
+function setupLeagueStandings() {
+    ensureLeaguePools();
+    gameState.standings = AI_TEAMS
+        .filter(t => t.name !== gameState.teamName)
+        .map(t => ({
+            name: t.name,
+            tag: t.tag,
+            region: t.region,
+            country: t.country,
+            color: t.color,
+            power: t.power,
+            wins: 0,
+            losses: 0,
+            points: 0,
+            league: leagueOfTeam(t.name),
+            isPlayerTeam: false
+        }));
+    gameState.standings.push({
+        name: gameState.teamName,
+        tag: gameState.teamTag,
+        region: 'MY',
+        country: '🎮',
+        color: '#FF4655',
+        power: 0,
+        wins: 0,
+        losses: 0,
+        points: 0,
+        league: gameState.league,
+        isPlayerTeam: true
+    });
+}
+
+function setupAIStandings() {
+    setupLeagueStandings();
+}
+
+function setupAIStandings_override(playerTeam) {
+    const pools = buildLeaguePools(playerTeam ? playerTeam.name : gameState.teamName);
+    gameState.leagueTeams = pools;
+    const powers = AI_TEAMS.filter(t => t.name !== (playerTeam ? playerTeam.name : '')).map(t => t.power).sort((a, b) => b - a);
+    const median = powers[Math.floor(powers.length / 2)] || 75;
+    gameState.league = (playerTeam && playerTeam.power >= median) ? 'premier' : 'challengers';
+    setupLeagueStandings();
+}
+
+function getPlayerRank() {
+    if (!gameState) return 1;
+    const table = leagueTable(gameState.league);
+    const idx = table.findIndex(t => t.isPlayerTeam);
+    return idx < 0 ? table.length + 1 : idx + 1;
+}
+
+/* ---------- 赛季日历 ---------- */
+
+function buildSeasonSchedule(teamName, league, pools) {
+    const schedule = [];
+    const pool = ((pools && pools[league]) || []).filter(n => n && n !== teamName);
+    const firstHalf = shuffle(pool).slice(0, 9);
+    const secondHalf = shuffle(pool).slice(0, 9);
+    const base = { playerTeam: teamName, isHome: true, played: false, playerScore: 0, opponentScore: 0, result: null };
+    for (let w = 1; w <= 9; w++) {
+        schedule.push(Object.assign({}, base, {
+            week: w, stage: 'league', stageNo: 1, opponent: firstHalf[w - 1] || '',
+            isHome: w % 2 === 1
+        }));
+    }
+    for (let w = 10; w <= 12; w++) {
+        schedule.push(Object.assign({}, base, {
+            week: w, stage: 'masters', cupRound: w - 10, opponent: '', isHome: true
+        }));
+    }
+    for (let w = 13; w <= 21; w++) {
+        schedule.push(Object.assign({}, base, {
+            week: w, stage: 'league', stageNo: 2, opponent: secondHalf[w - 13] || '',
+            isHome: w % 2 === 0
+        }));
+    }
+    for (let w = 22; w <= 24; w++) {
+        schedule.push(Object.assign({}, base, {
+            week: w, stage: 'champions', cupRound: w - 22, opponent: '', isHome: true
+        }));
+    }
+    return schedule;
+}
+
+function generateSchedule() {
+    ensureLeaguePools();
+    gameState.schedule = buildSeasonSchedule(gameState.teamName, gameState.league, gameState.leagueTeams);
+    gameState.scheduleVersion = 2;
+    gameState.simulatedWeek = 0;
+    gameState.cups = {};
+}
+
+function matchLabel(match) {
+    if (!match) return '';
+    if (match.stage === 'masters' || match.stage === 'champions') {
+        const roundName = CUP_ROUND_NAMES[match.cupRound] || '淘汰赛';
+        return (CUP_NAMES[match.stage] || '杯赛') + ' · ' + roundName;
+    }
+    const meta = LEAGUE_META[gameState.league] || LEAGUE_META.premier;
+    return meta.name + ' · 常规赛 ' + (match.stageNo === 2 ? '第二阶段' : '第一阶段');
+}
+
+function isCupMatch(match) {
+    return !!match && (match.stage === 'masters' || match.stage === 'champions');
+}
+
+/* ---------- 每周推进与 AI 赛果 ---------- */
+
+function simulateAIResult(a, b) {
+    if (!a || !b) return;
+    const total = (a.power || 70) + (b.power || 70);
+    if (Math.random() < (a.power || 70) / total) {
+        a.wins++; b.losses++; a.points += 3;
+    } else {
+        b.wins++; a.losses++; b.points += 3;
+    }
+}
+
+function simulateLeagueRound() {
+    if (!gameState) return;
+    if (gameState.simulatedWeek === gameState.currentWeek) return;
+    gameState.simulatedWeek = gameState.currentWeek;
+    const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
+    if (!entry || isCupMatch(entry)) return;
+    LEAGUE_KEYS.forEach(key => {
+        const teams = shuffle(gameState.standings.filter(t => t.league === key && !t.isPlayerTeam && t.name !== entry.opponent));
+        for (let i = 0; i + 1 < teams.length; i += 2) simulateAIResult(teams[i], teams[i + 1]);
+    });
+}
+
+function beginWeek() {
+    if (!gameState) return;
+    simulateLeagueRound();
+    const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
+    if (entry && entry.stage === 'masters') resolveCupWeek('masters', entry.week);
+    if (entry && entry.stage === 'champions') resolveCupWeek('champions', entry.week);
+}
+
+/* ---------- 杯赛 ---------- */
+
+function ensureCupRound(cup, idx) {
+    if (!cup || idx < 0) return;
+    if (cup.rounds[idx]) return;
+    const prev = cup.rounds[idx - 1] || [];
+    const next = [];
+    for (let i = 0; i + 1 < prev.length; i += 2) {
+        next.push({ a: prev[i].winner, b: prev[i + 1].winner, sa: 0, sb: 0, winner: null });
+    }
+    cup.rounds[idx] = next;
+}
+
+function cupHasPlayer(m) {
+    return !!m && (m.a === gameState.teamName || m.b === gameState.teamName);
+}
+
+function simulateCupMatch(m) {
+    if (!m || m.winner) return;
+    if (!m.a && !m.b) { m.winner = null; return; }
+    if (!m.a || !m.b) { m.winner = m.a || m.b; return; }
+    const [sa, sb] = simulateScoreFor(getTeamPowerByName(m.a), getTeamPowerByName(m.b));
+    m.sa = sa; m.sb = sb;
+    m.winner = sa > sb ? m.a : m.b;
+}
+
+function initCup(type) {
+    const seeds = leagueTable(gameState.league).slice(0, 8).map(t => t.name);
+    while (seeds.length < 8) seeds.push('待定');
+    const order = [0, 7, 3, 4, 1, 6, 2, 5];
+    const round0 = [];
+    for (let i = 0; i < 8; i += 2) {
+        round0.push({ a: seeds[order[i]], b: seeds[order[i + 1]], sa: 0, sb: 0, winner: null });
+    }
+    const cup = { type, league: gameState.league, participants: seeds, rounds: [round0], roundIndex: 0, champion: null, done: false, awarded: false };
+    gameState.cups[type] = cup;
+    return cup;
+}
+
+function simulateCupRemaining(cup) {
+    if (!cup) return;
+    let guard = 0;
+    while (!cup.done && guard++ < 10) {
+        const idx = cup.roundIndex;
+        if (idx > 2) { cup.done = true; break; }
+        ensureCupRound(cup, idx);
+        const round = cup.rounds[idx] || [];
+        if (!round.length) { cup.done = true; break; }
+        round.forEach(m => simulateCupMatch(m));
+        if (idx === 2) {
+            cup.champion = round[0].winner || null;
+            cup.done = true;
+        } else {
+            cup.roundIndex = idx + 1;
+        }
+    }
+    if (cup.done) awardCup(cup);
+}
+
+function awardCup(cup) {
+    if (!cup || cup.awarded) return;
+    cup.awarded = true;
+    const label = CUP_NAMES[cup.type] || '杯赛';
+    const champ = cup.champion || '未知战队';
+    if (champ === gameState.teamName) {
+        const prize = cup.type === 'masters' ? 150000 : 300000;
+        gameState.money += 50000;
+        addMail('VCT 联盟', '🏆 ' + label + ' 冠军', '你率队夺得 ' + label + ' 冠军！冠军奖金已发放，另奖励 $50,000 现金。', prize);
+        showToast('🏆 ' + label + ' 冠军', '冠军奖金已发送到邮箱', 'success');
+    } else {
+        addMail('VCT 联盟', label + ' 收官', champ + ' 夺得本届 ' + label + ' 冠军。', 0);
+        showToast(label + ' 结束', champ + ' 夺冠', 'info');
+    }
+}
+
+function resolveCupWeek(type, weekNum) {
+    const entry = gameState.schedule.find(s => s.week === weekNum);
+    if (!entry) return;
+    if (!gameState.cups) gameState.cups = {};
+    let cup = gameState.cups[type];
+    if (!cup || cup.league !== gameState.league) cup = initCup(type);
+    if (cup.done) {
+        entry.opponent = '';
+        entry.bye = true;
+        return;
+    }
+    const idx = cup.roundIndex;
+    ensureCupRound(cup, idx);
+    const round = cup.rounds[idx] || [];
+    round.forEach(m => { if (m && !m.winner && !cupHasPlayer(m)) simulateCupMatch(m); });
+    const mine = round.find(m => m && !m.winner && cupHasPlayer(m));
+    if (mine) {
+        entry.opponent = mine.a === gameState.teamName ? mine.b : mine.a;
+        entry.bye = false;
+        entry.cupRound = idx;
+    } else {
+        entry.opponent = '';
+        entry.bye = true;
+        entry.cupRound = idx;
+        simulateCupRemaining(cup);
+    }
+}
+
+function applyCupPlayerResult(match, sa, sb) {
+    if (!match) return;
+    const cup = gameState.cups[match.stage];
+    if (!cup) return;
+    const idx = (typeof match.cupRound === 'number') ? match.cupRound : cup.roundIndex;
+    ensureCupRound(cup, idx);
+    const round = cup.rounds[idx] || [];
+    const mine = round.find(m => m && cupHasPlayer(m) && !m.winner);
+    if (!mine) return;
+    mine.sa = sa; mine.sb = sb;
+    mine.winner = sa > sb ? mine.a : mine.b;
+    round.forEach(m => { if (m && !m.winner) simulateCupMatch(m); });
+    cup.roundIndex = idx + 1;
+    if (mine.winner === gameState.teamName) {
+        if (idx === 2) {
+            cup.champion = gameState.teamName;
+            cup.done = true;
+            awardCup(cup);
+        } else {
+            ensureCupRound(cup, idx + 1);
+        }
+    } else {
+        simulateCupRemaining(cup);
+    }
+}
+
+/* ---------- 赛果 ---------- */
+
+function simulateScoreFor(a, b) {
+    let sa = 0, sb = 0;
+    const pa = (a || 70) / ((a || 70) + (b || 70));
+    while (sa < 13 && sb < 13) {
+        if (Math.random() < pa) sa++; else sb++;
+    }
+    return [sa, sb];
+}
+
+function recordStandingResult(opponent, didWin) {
+    const ps = gameState.standings.find(s => s && s.isPlayerTeam);
+    const os = gameState.standings.find(s => s && s.name === opponent);
+    if (!ps) return;
+    if (didWin) {
+        ps.wins++; ps.points += 3;
+        if (os) os.losses++;
+    } else {
+        ps.losses++;
+        if (os) { os.wins++; os.points += 3; }
+    }
+}
+
+function simulateMatchResult(match) {
+    if (!match || match.played || !match.opponent) return;
+    const [sa, sb] = simulateScoreFor(gameState.teamPower, getTeamPowerByName(match.opponent));
+    match.played = true;
+    match.playerScore = sa;
+    match.opponentScore = sb;
+    match.result = sa > sb ? 'win' : 'loss';
+    if (isCupMatch(match)) applyCupPlayerResult(match, sa, sb);
+    else recordStandingResult(match.opponent, sa > sb);
+    gameState.matchHistory.push({
+        week: match.week,
+        stage: match.stage || 'league',
+        label: matchLabel(match),
+        playerTeam: gameState.teamName,
+        opponent: match.opponent,
+        playerScore: sa, opponentScore: sb, didWin: sa > sb
+    });
+}
+
+function playMatch(match) {
+    const oppTeam = AI_TEAMS.find(t => t.name === match.opponent);
+    const oppPlayers = oppTeam
+        ? REAL_PRO_PLAYERS.filter(p => p.team === oppTeam.name).map(p => ({ name: p.name, role: p.role, power: p.power }))
+        : [];
+    runVisualMatch({
+        mode: 'league',
+        weekLabel: matchLabel(match),
+        leftName: gameState.teamName,
+        rightName: match.opponent + (oppTeam ? ' ' + oppTeam.country : ''),
+        leftPower: gameState.teamPower,
+        rightPower: getTeamPowerByName(match.opponent),
+        leftPlayers: gameState.roster,
+        rightPlayers: oppPlayers,
+        onFinish: (l, r) => finishMatch(match, l, r)
+    });
+}
+
+function finishMatch(match, playerScore, opponentScore) {
+    match.played = true; match.playerScore = playerScore; match.opponentScore = opponentScore;
+    const didWin = playerScore > opponentScore; match.result = didWin ? 'win' : 'loss';
+    const cup = isCupMatch(match);
+    if (cup) applyCupPlayerResult(match, playerScore, opponentScore);
+    else recordStandingResult(match.opponent, didWin);
+
+    if (didWin) {
+        document.getElementById('match-team-left').classList.add('winner');
+        document.getElementById('match-team-right').classList.add('loser');
+    } else {
+        document.getElementById('match-team-left').classList.add('loser');
+        document.getElementById('match-team-right').classList.add('winner');
+    }
+
+    const playerStats = generatePlayerStats(gameState.roster, playerScore, opponentScore, true);
+    const oppTeam = AI_TEAMS.find(t => t.name === match.opponent);
+    const oppProPlayers = oppTeam ? REAL_PRO_PLAYERS.filter(p => p.team === oppTeam.name) : [];
+    const oppStats = generatePlayerStats(oppProPlayers.length > 0 ? oppProPlayers : [], opponentScore, playerScore, false);
+
+    const allStats = [...playerStats, ...oppStats];
+    const mvp = allStats.sort((a, b) => b.performance - a.performance)[0];
+
+    playerStats.forEach(s => {
+        const player = gameState.roster.find(p => p.name === s.name || p.id === s.id);
+        if (player) {
+            player.kills = (player.kills || 0) + s.kills;
+            player.deaths = (player.deaths || 0) + s.deaths;
+            player.assists = (player.assists || 0) + s.assists;
+            player.mvps = (player.mvps || 0) + (mvp && mvp.name === player.name && mvp.isPlayerTeam ? 1 : 0);
+            player.matches = (player.matches || 0) + 1;
+        }
+    });
+
+    gameState.matchHistory.push({
+        week: match.week,
+        stage: match.stage || 'league',
+        label: matchLabel(match),
+        playerTeam: gameState.teamName,
+        opponent: match.opponent,
+        playerScore, opponentScore, didWin,
+        mvpName: mvp ? mvp.name : '',
+        playerStats: playerStats,
+    });
+
+    renderMatchStats(mvp, playerStats, oppStats);
+
+    const resultDiv = document.getElementById('match-result');
+    resultDiv.textContent = didWin ? '🏆 胜利！' : '💀 失败...';
+    resultDiv.className = 'match-result ' + (didWin ? 'win' : 'loss');
+
+    let bonus;
+    if (cup) {
+        const round = Math.min(2, Math.max(0, match.cupRound || 0));
+        bonus = didWin ? [25000, 40000, 80000][round] : [8000, 12000, 20000][round];
+        showToast(didWin ? '杯赛晋级！' : '杯赛止步', (didWin ? '晋级奖金' : '参赛补贴') + ' $' + bonus.toLocaleString(), didWin ? 'success' : 'warning');
+    } else {
+        bonus = didWin ? 15000 : 5000;
+        showToast('比赛奖金', didWin ? '胜利奖金 $15,000' : '安慰奖 $5,000', didWin ? 'success' : 'warning');
+    }
+    gameState.money += bonus;
+
+    document.getElementById('match-close-btn').style.display = 'block';
+    updateAllDisplays(); renderDashboard();
+    if (gameState.shop && gameState.shop.autoSave) saveGame();
+    if (typeof autoSyncAfterMatch === 'function') autoSyncAfterMatch();
+}
+
+function advanceWeek() {
+    if (!gameState) return;
+    if (gameState.currentWeek >= TOTAL_WEEKS) { showSeasonSummary(); return; }
+    const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
+    if (entry && entry.opponent && !entry.played) simulateMatchResult(entry);
+    const weeklyBonus = 10000 + gameState.currentWeek * 500;
+    gameState.money += weeklyBonus;
+    gameState.currentWeek++;
+    beginWeek();
+    showToast('进入第 ' + gameState.currentWeek + ' 周', '获得 $' + weeklyBonus.toLocaleString() + ' 训练津贴', 'success');
+    updateAllDisplays();
+    renderDashboard();
+}
+
+function simulateAllMatches() {
+    if (!gameState) return;
+    if (gameState.currentWeek >= TOTAL_WEEKS) { showSeasonSummary(); return; }
+    while (gameState.currentWeek <= TOTAL_WEEKS) {
+        beginWeek();
+        const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
+        if (entry && entry.opponent && !entry.played) simulateMatchResult(entry);
+        if (gameState.currentWeek >= TOTAL_WEEKS) break;
+        gameState.money += 10000 + gameState.currentWeek * 500;
+        gameState.currentWeek++;
+    }
+    beginWeek();
+    const playerStanding = gameState.standings.find(s => s && s.isPlayerTeam);
+    const finalRank = getPlayerRank();
+    const isChampion = finalRank === 1;
+    showToast(isChampion ? '🏆 联赛冠军！' : '赛季结束',
+        `战绩: ${playerStanding.wins}胜 ${playerStanding.losses}负，联赛排名 #${finalRank}`,
+        isChampion ? 'success' : 'warning');
+    updateAllDisplays();
+    renderDashboard();
+    renderStandings();
+    showSeasonSummary();
+}
+
+function closeMatchModal() {
+    const modal = document.getElementById('match-modal'); modal.classList.add('hidden');
+    document.getElementById('match-team-left').classList.remove('winner', 'loser');
+    document.getElementById('match-team-right').classList.remove('winner', 'loser');
+    const statsPanel = document.getElementById('match-stats-panel');
+    if (statsPanel) statsPanel.classList.add('hidden');
+    if (matchFinishMode === 'friendly') {
+        matchFinishMode = 'league';
+        if (typeof renderVersus === 'function') renderVersus();
+        return;
+    }
+    if (gameState.currentWeek >= TOTAL_WEEKS) {
+        showSeasonSummary();
+        return;
+    }
+    showConfirmModal('下一周', '比赛结束！要进入下一周吗？', () => {
+        const weeklyBonus = 10000 + gameState.currentWeek * 500;
+        gameState.money += weeklyBonus;
+        gameState.currentWeek++;
+        beginWeek();
+        showToast('进入第 ' + gameState.currentWeek + ' 周', '获得 $' + weeklyBonus.toLocaleString(), 'success');
+        updateAllDisplays(); renderDashboard();
+    });
+}
+
+/* ---------- 赛季结算 / 升降级 / 下赛季 ---------- */
+
+function buildSeasonSummary() {
+    const table = leagueTable(gameState.league);
+    const me = table.find(t => t.isPlayerTeam) || {};
+    const myRank = table.findIndex(t => t.isPlayerTeam) + 1;
+    const prem = leagueTable('premier');
+    const chal = leagueTable('challengers');
+    return {
+        table,
+        me,
+        myRank,
+        leader: table[0] || null,
+        masters: (gameState.cups && gameState.cups.masters) ? gameState.cups.masters : null,
+        champions: (gameState.cups && gameState.cups.champions) ? gameState.cups.champions : null,
+        promoted: chal.slice(0, 2).map(t => t.name),
+        relegated: prem.slice(-2).map(t => t.name),
+        playerPromoted: gameState.league === 'challengers' && myRank > 0 && myRank <= 2,
+        playerRelegated: gameState.league === 'premier' && table.length > 2 && myRank > table.length - 2
+    };
+}
+
+function showSeasonSummary() {
+    if (!gameState) return;
+    const s = buildSeasonSummary();
+    const over = gameState.currentWeek >= TOTAL_WEEKS;
+    if (over) gameState.seasonEnded = true;
+
+    const cupLine = (cup) => {
+        if (!cup || !cup.champion) return '进行中 / 未决出';
+        return cup.champion + (cup.champion === gameState.teamName ? ' 👈 你的战队' : '');
+    };
+    const news = [];
+    if (s.playerPromoted) news.push('🎉 恭喜！你的战队获得次级联赛前二，下赛季将升入 <b>VCT 顶级联赛</b>。');
+    if (s.playerRelegated) news.push('⚠ 你的战队位于顶级联赛末二，下赛季将降入 <b>Challengers 次级联赛</b>。');
+
+    const body = document.getElementById('modal-body');
+    body.innerHTML = `
+        <h2>${over ? '第 ' + gameState.season + ' 赛季结算' : '赛季数据总览'}</h2>
+        <p class="gh-desc" style="margin: 10px 0 18px;">
+            ${gameState.season} 赛季 · ${LEAGUE_META[gameState.league].name} ·
+            ${over ? '赛季已结束' : '第 ' + gameState.currentWeek + ' / ' + TOTAL_WEEKS + ' 周'}
+        </p>
+        <div class="season-summary-grid">
+            <div class="season-summary-item"><span>你的排名</span><b>#${s.myRank || '-'}</b></div>
+            <div class="season-summary-item"><span>战绩</span><b>${s.me.wins || 0} 胜 ${s.me.losses || 0} 负</b></div>
+            <div class="season-summary-item"><span>联赛积分</span><b>${s.me.points || 0}</b></div>
+            <div class="season-summary-item"><span>Masters 冠军</span><b>${cupLine(s.masters)}</b></div>
+            <div class="season-summary-item"><span>Champions 冠军</span><b>${cupLine(s.champions)}</b></div>
+            <div class="season-summary-item"><span>${LEAGUE_META[gameState.league].name} 第一名</span><b>${s.leader ? s.leader.name : '-'}</b></div>
+        </div>
+        <div class="season-zone-preview">
+            <div class="zone-line zone-up">↑ 次级联赛前二升级：${s.promoted.join('、') || '-'}</div>
+            <div class="zone-line zone-down">↓ 顶级联赛末二降级：${s.relegated.join('、') || '-'}</div>
+        </div>
+        ${news.length ? '<div class="season-news">' + news.join('<br>') + '</div>' : ''}
+        <div class="modal-actions">
+            ${over ? '<button class="btn btn-primary" onclick="startNextSeason()" style="flex:1;">进入第 ' + (gameState.season + 1) + ' 赛季 ▶</button>' : '<button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">继续赛季</button>'}
+        </div>
+    `;
+    openModal();
+    saveGame();
+}
+
+function applyPromotionRelegation() {
+    ensureLeaguePools();
+    const prem = leagueTable('premier');
+    const chal = leagueTable('challengers');
+    const relegated = prem.slice(-2).map(t => t.name);
+    const promoted = chal.slice(0, 2).map(t => t.name);
+    const pools = gameState.leagueTeams;
+
+    relegated.forEach(n => {
+        pools.premier = pools.premier.filter(x => x !== n);
+        if (!pools.challengers.includes(n)) pools.challengers.push(n);
+    });
+    promoted.forEach(n => {
+        pools.challengers = pools.challengers.filter(x => x !== n);
+        if (!pools.premier.includes(n)) pools.premier.push(n);
+    });
+
+    const inPrem = new Set(pools.premier);
+    const inChal = new Set(pools.challengers);
+    gameState.standings.forEach(t => {
+        if (inPrem.has(t.name)) t.league = 'premier';
+        else if (inChal.has(t.name)) t.league = 'challengers';
+    });
+    const oldLeague = gameState.league;
+    gameState.league = inPrem.has(gameState.teamName) ? 'premier' : 'challengers';
+    return { promoted, relegated, oldLeague, newLeague: gameState.league };
+}
+
+function startNextSeason() {
+    if (!gameState) return;
+    if (gameState._lastSeasonStartAt && Date.now() - gameState._lastSeasonStartAt < 3000) return;
+    gameState._lastSeasonStartAt = Date.now();
+    closeModal();
+    const champBefore = leagueTable('premier')[0];
+    const wasChamp = champBefore && champBefore.isPlayerTeam;
+    const pr = applyPromotionRelegation();
+
+    currentStandingsLeague = gameState.league;
+    gameState.season++;
+    gameState.currentWeek = 1;
+    gameState.matchHistory = [];
+    gameState.cups = {};
+    gameState.seasonEnded = false;
+    gameState.money += 200000 + (wasChamp ? 300000 : 0);
+
+    setupLeagueStandings();
+    generateMarket();
+    generateSchedule();
+    beginWeek();
+    updateTeamPower();
+    updateAllDisplays();
+    renderDashboard();
+
+    let body = '第 ' + gameState.season + ' 赛季正式开幕！联盟已发放 $200,000 运营资金。';
+    if (pr.oldLeague !== pr.newLeague) {
+        body += pr.newLeague === 'premier'
+            ? '\n🎉 你的战队已升入 VCT 顶级联赛，迎接更强的对手吧！'
+            : '\n⚠ 你的战队降入 Challengers 次级联赛，下赛季冲回顶级！';
+    }
+    if (wasChamp) body += '\n🏆 上赛季顶级联赛冠军奖金 $300,000 已发放。';
+    addMail('VCT 联盟', '第 ' + gameState.season + ' 赛季开幕', body, 50000);
+    saveGame();
+    showToast('新赛季开幕', '第 ' + gameState.season + ' 赛季 · ' + LEAGUE_META[gameState.league].name, 'success');
+}
+
+/* ---------- 赛程 / 积分榜 / 战队页面 ---------- */
+
+function renderSchedule() {
+    const container = document.getElementById('schedule-list');
+    if (!container) return;
+    const weeks = {};
+    gameState.schedule.forEach(match => {
+        if (!weeks[match.week]) weeks[match.week] = [];
+        weeks[match.week].push(match);
+    });
+    container.innerHTML = Object.keys(weeks).sort((a, b) => a - b).map(week => {
+        const matches = weeks[week];
+        const current = parseInt(week) === gameState.currentWeek;
+        return `
+        <div class="schedule-week${current ? ' current' : ''}">
+            <div class="schedule-week-header">
+                <span class="schedule-week-title">第 ${week} 周</span>
+                <span class="schedule-stage-name">${matchLabel(matches[0])}</span>
+                ${current ? '<span class="week-current-tag">▶ 当前周</span>' : ''}
+                ${matches.every(m => m.played || m.bye) ? '<span class="week-done-tag">已完成</span>' : ''}
+            </div>
+            <div class="schedule-matches">
+                ${matches.map(match => {
+                    if (!match.opponent) {
+                        return `<div class="schedule-match bye"><span class="schedule-team">${match.bye ? '轮空 / 未晋级' : '对手待定'}</span></div>`;
+                    }
+                    const opp = AI_TEAMS.find(t => t.name === match.opponent);
+                    let cls = match.isHome ? 'home' : '';
+                    if (match.played) {
+                        cls += match.result === 'win' ? ' finished win' : ' finished loss';
+                    }
+                    const result = match.played ? `<span class="schedule-result">${match.playerScore} - ${match.opponentScore}</span>` : '<span class="schedule-team" style="color: var(--valorant-muted);">VS</span>';
+                    return `
+                        <div class="schedule-match ${cls}">
+                            <span class="schedule-team">${match.isHome ? '🏠 ' : '✈️ '}${gameState.teamName}</span>
+                            ${result}
+                            <span class="schedule-team">${match.opponent} ${opp ? opp.country : ''}</span>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>`;
+    }).join('');
+}
+
+let currentStandingsLeague = '';
+
+function setStandingsLeague(key) {
+    currentStandingsLeague = key;
+    renderStandings();
+}
+
+function renderStandings() {
+    const tbody = document.getElementById('standings-body');
+    if (!tbody) return;
+    if (!LEAGUE_META[currentStandingsLeague]) currentStandingsLeague = gameState.league;
+    const table = leagueTable(currentStandingsLeague);
+    const note = document.getElementById('standings-note');
+    if (note) {
+        note.innerHTML = `${LEAGUE_META[currentStandingsLeague].name} · 第 ${gameState.season} 赛季 · 共 ${table.length} 支战队
+            ${currentStandingsLeague === 'challengers' ? '<span class="zone-line zone-up">前 2 名升级</span>' : '<span class="zone-line zone-down">末 2 名降级</span>'}`;
+    }
+    document.querySelectorAll('.league-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.league === currentStandingsLeague);
+    });
+    const size = table.length;
+    tbody.innerHTML = table.map((team, i) => {
+        const rank = i + 1;
+        const winRate = team.wins + team.losses === 0 ? '0%' : Math.round(team.wins / (team.wins + team.losses) * 100) + '%';
+        let zone = '';
+        if (currentStandingsLeague === 'challengers' && rank <= 2) zone = 'zone-up';
+        if (currentStandingsLeague === 'premier' && size > 2 && rank >= size - 1) zone = 'zone-down';
+        return `
+            <tr class="${team.isPlayerTeam ? 'my-team' : ''} ${zone}">
+                <td><span class="rank-badge rank-${rank > 3 ? '' : rank}">${rank}</span></td>
+                <td style="font-weight: 700;">
+                    <span class="team-color-dot" style="background: ${team.color || '#768079'};"></span>
+                    ${team.name}${team.isPlayerTeam ? ' 👈' : ''}
+                    ${!team.isPlayerTeam && team.country ? ` <span style="font-size: 14px;">${team.country}</span>` : ''}
+                    ${zone === 'zone-up' ? '<span class="zone-tag up">升级区</span>' : ''}
+                    ${zone === 'zone-down' ? '<span class="zone-tag down">降级区</span>' : ''}
+                </td>
+                <td style="font-size: 12px; color: var(--text-secondary);">${team.region || '-'}</td>
+                <td class="right" style="color: var(--success);">${team.wins}</td>
+                <td class="right" style="color: var(--danger);">${team.losses}</td>
+                <td class="right">${winRate}</td>
+                <td class="right"><span style="color: var(--valorant-red); font-weight: 900;">${team.points}</span></td>
+                <td class="right"><span style="color: var(--text-secondary); font-size: 12px;">⚔ ${team.power}</span></td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function renderTeams() {
+    const container = document.getElementById('teams-grid');
+    if (!container) return;
+    const cardFor = (team) => {
+        const teamPros = REAL_PRO_PLAYERS.filter(p => p.team === team.name);
+        const standing = gameState.standings.find(s => s.name === team.name);
+        return `
+            <div class="team-card">
+                <div class="team-header" style="border-left-color: ${team.color};">
+                    <div class="team-tag-badge" style="background: ${team.color};">${team.tag}</div>
+                    <div>
+                        <div class="team-name">${team.name} ${team.country}</div>
+                        <div class="team-region">${team.region} | 教练: ${team.coach}</div>
+                    </div>
+                    <div class="team-power-big">⚔ ${standing ? standing.power : team.power}</div>
+                </div>
+                <div class="team-roster-mini">
+                    ${teamPros.length > 0 ? teamPros.map(p => `
+                        <div class="team-pro-item">
+                            <span class="pro-name">${p.name}</span>
+                            <span class="pro-role">${getRoleCN(p.role)}</span>
+                            <span class="pro-power">${p.power}</span>
+                        </div>
+                    `).join('') : '<div class="team-pro-item" style="color: var(--text-secondary);">阵容未公开</div>'}
+                </div>
+            </div>`;
+    };
+    container.innerHTML = LEAGUE_KEYS.map(key => {
+        const teams = AI_TEAMS.filter(t => leagueOfTeam(t.name) === key);
+        return `<div class="team-group">
+            <h2 class="team-group-title" style="border-left-color:${LEAGUE_META[key].color};">${LEAGUE_META[key].name} <span>${teams.length} 支</span></h2>
+            <div class="teams-grid-inner">${teams.map(cardFor).join('')}</div>
+        </div>`;
+    }).join('');
+}
+
+/* ---------- 我的战队：直接移除特工（不返还资金） ---------- */
+
+function removeAgent(uniqueId) {
+    if (!gameState) return;
+    const agent = gameState.roster.find(a => a.uniqueId === uniqueId);
+    if (!agent) return;
+    showConfirmModal('移除特工', `确定要移除 ${agent.name} 吗？\n\n直接移除不会返还任何资金，阵容位会被腾出。`, () => {
+        showConfirmModal('再次确认', `${agent.name} 将永久离开你的战队，且不会获得任何补偿。\n\n真的要移除吗？`, () => {
+            gameState.roster = gameState.roster.filter(a => a.uniqueId !== uniqueId);
+            updateTeamPower();
+            renderRoster();
+            updateAllDisplays();
+            renderDashboard();
+            saveGame();
+            showToast('已移除', agent.name + ' 已离开战队，未返还资金', 'warning');
+        });
+    });
+}
+
+/* ---------- 旧存档迁移 ---------- */
+
+function migrateLeagueState(state) {
+    if (!state.leagueTeams || !Array.isArray(state.leagueTeams.premier) || !Array.isArray(state.leagueTeams.challengers)) {
+        state.leagueTeams = buildLeaguePools(state.teamName);
+        if (!LEAGUE_META[state.league]) {
+            const powers = AI_TEAMS.filter(t => t.name !== state.teamName).map(t => t.power).sort((a, b) => b - a);
+            const median = powers[Math.floor(powers.length / 2)] || 75;
+            state.league = (Number(state.teamPower) || 0) >= median ? 'premier' : 'challengers';
+        }
+    }
+    if (!LEAGUE_META[state.league]) state.league = 'challengers';
+    LEAGUE_KEYS.forEach(k => {
+        if (!Array.isArray(state.leagueTeams[k])) state.leagueTeams[k] = [];
+        state.leagueTeams[k] = state.leagueTeams[k].filter(n => n && n !== state.teamName);
+    });
+    state.leagueTeams[state.league].push(state.teamName);
+
+    const inPrem = new Set(state.leagueTeams.premier);
+    const inChal = new Set(state.leagueTeams.challengers);
+    const known = new Set(state.standings.map(t => t.name));
+    AI_TEAMS.forEach(team => {
+        if (known.has(team.name) || team.name === state.teamName) return;
+        state.standings.push({
+            name: team.name, tag: team.tag, region: team.region, country: team.country,
+            color: team.color, power: team.power, wins: 0, losses: 0, points: 0,
+            league: inPrem.has(team.name) ? 'premier' : 'challengers', isPlayerTeam: false
+        });
+    });
+    state.standings.forEach(t => {
+        if (t.isPlayerTeam) t.league = state.league;
+        else if (!LEAGUE_META[t.league]) t.league = inPrem.has(t.name) ? 'premier' : 'challengers';
+    });
+
+    if (Number(state.scheduleVersion) !== 2) {
+        const old = Array.isArray(state.schedule) ? state.schedule.slice() : [];
+        const oldByWeek = {};
+        old.forEach(m => { if (m && m.week) oldByWeek[m.week] = m; });
+        state.schedule = buildSeasonSchedule(state.teamName, state.league, state.leagueTeams);
+        state.schedule.forEach(nm => {
+            const om = oldByWeek[nm.week];
+            if (om && om.played && nm.stage === 'league' && om.opponent) {
+                nm.opponent = om.opponent;
+                nm.played = true;
+                nm.playerScore = Number(om.playerScore) || 0;
+                nm.opponentScore = Number(om.opponentScore) || 0;
+                nm.result = om.result || null;
+            }
+        });
+        state.scheduleVersion = 2;
+    }
+    state.simulatedWeek = Number(state.currentWeek) || 1;
+}
+
+function sanitizeGameState(state) {
+    if (!state || typeof state !== 'object') return false;
+    if (!Array.isArray(state.roster)) state.roster = [];
+    if (!Array.isArray(state.market)) state.market = [];
+    if (!Array.isArray(state.schedule)) state.schedule = [];
+    if (!Array.isArray(state.matchHistory)) state.matchHistory = [];
+    if (!Array.isArray(state.standings)) state.standings = [];
+
+    state.roster = state.roster.filter(p => p && typeof p === 'object' && p.name);
+    state.market = state.market.filter(p => p && typeof p === 'object' && p.name);
+    state.standings = state.standings.filter(t => t && typeof t === 'object' && t.name);
+
+    state.teamName = state.teamName || '我的战队';
+    state.teamTag = state.teamTag || 'MY';
+    state.money = Number(state.money) || 0;
+    state.season = Number(state.season) || 1;
+    state.currentWeek = Math.min(Math.max(Number(state.currentWeek) || 1, 1), TOTAL_WEEKS);
+    state.teamPower = Number(state.teamPower) || 0;
+    if (!Array.isArray(state.matchHistory)) state.matchHistory = [];
+
+    const hasPlayer = state.standings.some(t => t.isPlayerTeam);
+    if (!hasPlayer) {
+        state.standings.push({
+            name: state.teamName, tag: state.teamTag, region: 'MY', country: '🎮',
+            color: '#FF4655', power: state.teamPower, wins: 0, losses: 0, points: 0,
+            league: state.league || 'challengers', isPlayerTeam: true
+        });
+    }
+
+    initExtras(state);
+    migrateLeagueState(state);
+    return true;
+}
+
+/* ---------- 初始化 ---------- */
+
+function initGame() {
+    gameState = {
+        teamName: '我的战队', teamTag: 'MY', teamPower: 0, money: 500000,
+        season: 1, currentWeek: 1, roster: [], market: [], schedule: [],
+        standings: [], matchHistory: [], league: 'challengers', leagueTeams: null, cups: {}
+    };
+    gameState.leagueTeams = buildLeaguePools(gameState.teamName);
+    gameState.league = 'challengers';
+    setupInitialRoster();
+    setupLeagueStandings();
+    generateMarket();
+    generateSchedule();
+    initExtras(gameState);
+    beginWeek();
+    updateAllDisplays();
+    showScreen('dashboard');
+}
+
+function initGame_custom() {
+    initGame();
+    maybeAnnounceVersion();
+}
+
+function initGame_withTeam(team) {
+    const teamProPlayers = REAL_PRO_PLAYERS.filter(p => p.team === team.name);
+    const roster = teamProPlayers.map((template, i) => {
+        const agent = cloneAgent(template);
+        agent.uniqueId = 'roster_' + Date.now() + '_' + i;
+        agent.isPlayerOwned = true;
+        agent.wins = 0;
+        agent.losses = 0;
+        agent.isPro = true;
+        agent.realName = template.realName;
+        agent.nationality = template.country;
+        agent.bio = template.bio;
+        agent.proTeam = template.team;
+        return agent;
+    });
+    const avgPower = roster.length > 0
+        ? roster.reduce((sum, a) => sum + a.power, 0) / roster.length
+        : team.power;
+
+    gameState = {
+        teamName: team.name, teamTag: team.tag, teamPower: Math.round(avgPower), money: 200000,
+        season: 1, currentWeek: 1, roster: roster, market: [], schedule: [],
+        standings: [], matchHistory: [], league: '', leagueTeams: null, cups: {}
+    };
+    gameState.leagueTeams = buildLeaguePools(team.name);
+    const powers = AI_TEAMS.filter(t => t.name !== team.name).map(t => t.power).sort((a, b) => b - a);
+    const median = powers[Math.floor(powers.length / 2)] || 75;
+    gameState.league = team.power >= median ? 'premier' : 'challengers';
+    gameState.leagueTeams[gameState.league].push(team.name);
+
+    setupLeagueStandings();
+    generateMarket();
+    generateSchedule();
+    gameState.teamNamed = true;
+    initExtras(gameState);
+    beginWeek();
+    updateTeamPower();
+    updateAllDisplays();
+    showScreen('dashboard');
+    maybeAnnounceVersion();
+}
+
+function loadGameSilent() {
+    const data = localStorage.getItem('vct_manager_save');
+    if (!data) return false;
+    try {
+        const parsed = JSON.parse(data);
+        if (!sanitizeGameState(parsed)) return false;
+        gameState = parsed;
+        beginWeek();
+        updateTeamPower();
+        updateAllDisplays();
+        showScreen('dashboard');
+        maybeAnnounceVersion();
+        return true;
+    } catch (e) { return false; }
+}
+
+function adminNextSeason() {
+    if (!gameState) return showToast('请先开始游戏', '', 'warning');
+    showConfirmModal('开始下赛季?', '当前赛季将被结算，升降级生效，新赛季重新生成赛程和转会市场。', () => {
+        startNextSeason();
+        refreshAdminStats();
+    });
+}
+
+function adminWinNextMatch() {
+    if (!gameState) return showToast('请先开始游戏', '', 'warning');
+    const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
+    if (!entry || !entry.opponent) return showToast('本周没有可进行的比赛', '', 'warning');
+    if (!entry.played) simulateMatchResult(entry);
+    const ps = gameState.standings.find(s => s && s.isPlayerTeam);
+    updateAllDisplays();
+    renderDashboard();
+    refreshAdminStats();
+    showToast('已模拟本周比赛', (ps ? ps.wins + ' 胜 ' + ps.losses + ' 负' : ''), 'success');
+    saveGame();
+}
+
+function adminQuickSim(n) {
+    if (!gameState) return showToast('请先开始游戏', '', 'warning');
+    for (let i = 0; i < n; i++) {
+        if (gameState.currentWeek >= TOTAL_WEEKS) break;
+        beginWeek();
+        const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
+        if (entry && entry.opponent && !entry.played) simulateMatchResult(entry);
+        gameState.money += 10000 + gameState.currentWeek * 500;
+        gameState.currentWeek++;
+    }
+    beginWeek();
+    updateAllDisplays();
+    renderDashboard();
+    refreshAdminStats();
+    showToast('已快进 ' + n + ' 周', '当前第 ' + gameState.currentWeek + ' 周', 'success');
+    saveGame();
+}
+
+/* ---------- 完善商店：分类展示 ---------- */
+
+function renderShop() {
+    const moneyEl = document.getElementById('shop-money');
+    if (moneyEl) moneyEl.textContent = '$' + gameState.money.toLocaleString();
+    const grid = document.getElementById('shop-grid');
+    if (!grid) return;
+    const cardFor = (item) => {
+        const owned = gameState.shop.owned.indexOf(item.id) !== -1;
+        const affordable = gameState.money >= item.price;
+        return `
+            <div class="shop-card${owned ? ' owned' : ''}">
+                <div class="shop-icon">${item.icon}</div>
+                <div class="shop-body">
+                    <div class="shop-name">${item.name}</div>
+                    <div class="shop-desc">${item.desc}</div>
+                    <div class="shop-price">$${item.price.toLocaleString()}</div>
+                </div>
+                <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
+                    ${owned || !affordable ? 'disabled' : ''}
+                    onclick="buyShopItem('${item.id}')">${owned ? '已拥有' : (affordable ? '购买' : '资金不足')}</button>
+            </div>`;
+    };
+    grid.innerHTML = SHOP_CATEGORIES.map(cat => {
+        const items = SHOP_ITEMS.filter(i => i.cat === cat.key);
+        if (!items.length) return '';
+        return `<div class="shop-category">
+            <h3 class="shop-category-title">${cat.name}</h3>
+            <div class="shop-category-grid">${items.map(cardFor).join('')}</div>
+        </div>`;
+    }).join('') + '<p class="shop-note">所有道具均为外观或便利类，不会改变任何比赛数值，保证公平对局。</p>';
+}
+
+function applyShopItem(item) {
+    if (!item || !gameState) return;
+    if (!gameState.shop) gameState.shop = { owned: [], badge: '', title: '', theme: '', autoSave: false, renameCards: 0 };
+    if (item.kind === 'badge') gameState.shop.badge = item.icon;
+    if (item.kind === 'theme') gameState.shop.theme = item.color;
+    if (item.kind === 'title') gameState.shop.title = item.name;
+    if (item.kind === 'rename') gameState.shop.renameCards++;
+    if (item.kind === 'autosave') gameState.shop.autoSave = true;
+    if (item.kind === 'board') gameState.shop.boardColor = item.color;
+    if (item.kind === 'banner') gameState.shop.bannerIcon = item.icon;
+    if (item.kind === 'collect') gameState.shop.collectible = item.icon;
+}
+
+/* ---------- 游戏公告 ---------- */
+
+const GAME_ANNOUNCEMENTS = [
+    {
+        version: '1.2.0',
+        date: '2026-11-07',
+        tag: '联赛金字塔',
+        title: '联赛金字塔全面上线：顶级联赛 · Challengers · Masters · Champions',
+        content: [
+            'VCT 赛事体系重构：全部战队划分为「VCT 顶级联赛」与「Challengers 次级联赛」。',
+            '新增季中 Masters 八强单败淘汰赛：常规赛第一阶段前 8 名晋级。',
+            '新增季末 Champions 世界冠军赛：常规赛第二阶段结束后前 8 名晋级。',
+            '升降级：Challengers 前 2 名升入顶级联赛，顶级联赛末 2 名降入 Challengers。',
+            'AI 战队每周进行真实模拟比赛，积分榜会随赛程动态变化。',
+            '新赛季自动结算并发放运营资金，升降级结果写入联盟邮件。'
+        ]
+    },
+    {
+        version: '1.2.0',
+        date: '2026-11-07',
+        tag: '内容更新',
+        title: '50+ 新选手、13 支新战队、22 件商城道具',
+        content: [
+            '转会市场新增 50 余名真实风格职业选手与 13 支新战队（Heretics、FUT、Leviatán、MIBR、TALON 等）。',
+            '商城扩充至 22 件道具，分为队徽 / 主题 / 称号 / 对局外观 / 横幅 / 收藏 / 便利七大类。',
+            '「我的战队」新增「移除」：可直接移除特工，腾出阵容位，但不会返还任何资金（需二次确认）。',
+            '新增战绩分享卡片与一键复制文案，方便把你的王朝战绩分享给朋友。'
+        ]
+    }
+];
+
+function latestAnnouncement() {
+    return GAME_ANNOUNCEMENTS.length ? GAME_ANNOUNCEMENTS[0] : null;
+}
+
+function openAnnouncement() {
+    const body = document.getElementById('modal-body');
+    body.innerHTML = `
+        <h2>📢 游戏公告</h2>
+        <div class="announcement-list">
+            ${GAME_ANNOUNCEMENTS.map(a => `
+                <div class="announcement-item">
+                    <div class="announcement-head">
+                        <span class="announcement-tag">${a.tag}</span>
+                        <span class="announcement-ver">v${a.version}</span>
+                        <span class="announcement-date">${a.date}</span>
+                    </div>
+                    <h3>${a.title}</h3>
+                    <ul>${a.content.map(c => `<li>${c}</li>`).join('')}</ul>
+                </div>
+            `).join('')}
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="closeModal()" style="flex:1;">知道了</button>
+        </div>
+    `;
+    openModal();
+}
+
+function renderStartAnnouncement() {
+    const el = document.getElementById('start-announcement');
+    if (!el) return;
+    const a = latestAnnouncement();
+    if (!a) { el.classList.add('hidden'); return; }
+    el.innerHTML = `
+        <div class="start-announcement-inner" onclick="openAnnouncement()">
+            <span class="news-tag">${a.tag}</span>
+            <span class="news-text">${a.title}</span>
+            <span class="news-more">查看公告 →</span>
+        </div>`;
+    el.classList.remove('hidden');
+}
+
+function maybeAnnounceVersion() {
+    if (!gameState) return;
+    if (gameState.lastAnnouncementVersion === APP_VERSION) return;
+    gameState.lastAnnouncementVersion = APP_VERSION;
+    const a = latestAnnouncement();
+    addMail('VCT 联盟', 'v' + APP_VERSION + ' 版本公告：' + (a ? a.title : '游戏更新'),
+        (a ? a.content.join('\n') : '欢迎回到 VCT 战队经理。') + '\n\n登录奖励 $30,000 已随本邮件发放。', 30000);
+}
+
+/* ---------- 分享战绩 ---------- */
+
+function buildShareText() {
+    const standing = gameState.standings.find(s => s && s.isPlayerTeam);
+    const rank = getPlayerRank();
+    const meta = LEAGUE_META[gameState.league] || LEAGUE_META.premier;
+    const masters = gameState.cups && gameState.cups.masters && gameState.cups.masters.champion;
+    const champions = gameState.cups && gameState.cups.champions && gameState.cups.champions.champion;
+    const best = [...gameState.roster].sort((a, b) => b.power - a.power)[0];
+    return [
+        '【VCT 战队经理】' + gameState.teamName,
+        '第 ' + gameState.season + ' 赛季 · ' + meta.name,
+        '战绩：' + standing.wins + ' 胜 ' + standing.losses + ' 负 · 联赛排名 #' + rank,
+        masters ? 'Masters 冠军：' + masters : 'Masters：冲击中',
+        champions ? 'Champions 冠军：' + champions : 'Champions：冲击中',
+        best ? '核心选手：' + best.name + '（战力 ' + best.power + '）' : '',
+        '来挑战我的王朝 → https://zmzhy.github.io/sdk/'
+    ].filter(Boolean).join('\n');
+}
+
+function copyShareText() {
+    const text = buildShareText();
+    const fallback = () => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); showToast('已复制分享文案', '去粘贴给你的朋友吧', 'success'); }
+        catch (e) { showToast('复制失败', '请手动长按复制', 'warning'); }
+        document.body.removeChild(ta);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast('已复制分享文案', '去粘贴给你的朋友吧', 'success')).catch(fallback);
+    } else {
+        fallback();
+    }
+}
+
+function shareNative() {
+    const text = buildShareText();
+    if (navigator.share) {
+        navigator.share({ title: 'VCT 战队经理 · ' + gameState.teamName, text, url: 'https://zmzhy.github.io/sdk/' })
+            .catch(() => { });
+    } else {
+        copyShareText();
+    }
+}
+
+function drawShareCard() {
+    const canvas = document.getElementById('share-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const standing = gameState.standings.find(s => s && s.isPlayerTeam);
+    const rank = getPlayerRank();
+    const meta = LEAGUE_META[gameState.league] || LEAGUE_META.premier;
+    const grad = ctx.createLinearGradient(0, 0, W, H);
+    grad.addColorStop(0, '#0F1923');
+    grad.addColorStop(0.55, '#1C2B3A');
+    grad.addColorStop(1, '#0A1118');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = meta.color;
+    ctx.lineWidth = 6;
+    ctx.strokeRect(12, 12, W - 24, H - 24);
+
+    ctx.fillStyle = meta.color;
+    ctx.font = 'bold 22px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText('VCT MANAGER · SEASON ' + gameState.season, 44, 66);
+
+    ctx.fillStyle = '#ECE8E1';
+    ctx.font = 'bold 56px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText(gameState.teamName.slice(0, 12), 44, 146);
+    ctx.fillStyle = '#768079';
+    ctx.font = '24px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText(meta.name, 44, 186);
+
+    ctx.fillStyle = '#FF4655';
+    ctx.font = 'bold 96px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText('#' + rank, 44, 318);
+    ctx.fillStyle = '#768079';
+    ctx.font = '22px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText('联赛排名', 44, 350);
+
+    ctx.fillStyle = '#ECE8E1';
+    ctx.font = 'bold 40px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText((standing.wins || 0) + ' 胜  ' + (standing.losses || 0) + ' 负', 330, 300);
+    ctx.fillStyle = '#768079';
+    ctx.font = '22px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText('赛季战绩 · 积分 ' + (standing.points || 0), 330, 340);
+
+    const masters = gameState.cups && gameState.cups.masters && gameState.cups.masters.champion;
+    const champions = gameState.cups && gameState.cups.champions && gameState.cups.champions.champion;
+    ctx.strokeStyle = '#2B3A4A';
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 2; i++) ctx.strokeRect(44, 400 + i * 78, W - 88, 62);
+    ctx.fillStyle = '#768079';
+    ctx.font = '20px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText('Masters 冠军', 64, 438);
+    ctx.fillText('Champions 冠军', 64, 516);
+    ctx.fillStyle = masters ? '#F7B500' : '#ECE8E1';
+    ctx.font = 'bold 22px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText(masters || '冲击中', 300, 438);
+    ctx.fillStyle = champions ? '#F7B500' : '#ECE8E1';
+    ctx.fillText(champions || '冲击中', 300, 516);
+
+    ctx.fillStyle = '#ECE8E1';
+    ctx.font = 'bold 26px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText('首发阵容', 44, 610);
+    const roster = gameState.roster.slice(0, 5);
+    roster.forEach((p, i) => {
+        ctx.fillStyle = i === 0 ? '#FF4655' : '#768079';
+        ctx.font = '20px "Segoe UI", "Microsoft YaHei", sans-serif';
+        ctx.fillText((i + 1) + '. ' + p.name + '  ' + getRoleCN(p.role) + '  ⚔' + p.power, 44 + (i % 2) * 300, 650 + Math.floor(i / 2) * 34);
+    });
+
+    ctx.fillStyle = meta.color;
+    ctx.font = 'bold 20px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText('https://zmzhy.github.io/sdk/', 44, H - 52);
+    ctx.fillStyle = '#768079';
+    ctx.font = '18px "Segoe UI", "Microsoft YaHei", sans-serif';
+    ctx.fillText('Build Your Championship Dynasty', 44, H - 24);
+}
+
+function openShareCard() {
+    const body = document.getElementById('modal-body');
+    body.innerHTML = `
+        <h2>📤 分享战绩</h2>
+        <div class="share-canvas-wrap"><canvas id="share-canvas" width="640" height="800"></canvas></div>
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="copyShareText()" style="flex:1;">复制文案</button>
+            <button class="btn btn-ghost" onclick="shareNative()">系统分享</button>
+            <button class="btn btn-ghost" onclick="downloadShareCard()">下载卡片</button>
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-basic" onclick="closeModal()" style="flex:1;">关闭</button>
+        </div>
+    `;
+    openModal();
+    setTimeout(drawShareCard, 20);
+}
+
+function downloadShareCard() {
+    const canvas = document.getElementById('share-canvas');
+    if (!canvas) return;
+    try {
+        const link = document.createElement('a');
+        link.download = 'vct-' + gameState.teamName + '-season' + gameState.season + '.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        showToast('卡片已导出', '已保存为 PNG 图片', 'success');
+    } catch (e) {
+        showToast('导出失败', '请尝试截图保存', 'warning');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (typeof renderStartAnnouncement === 'function') renderStartAnnouncement();
+});
