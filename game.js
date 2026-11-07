@@ -267,33 +267,88 @@ const SHOP_CATEGORIES = [
     { key: 'title', name: '称号' },
     { key: 'board', name: '对局外观' },
     { key: 'banner', name: '战队横幅' },
+    { key: 'avatar', name: '管理头像' },
+    { key: 'frame', name: '名片框' },
+    { key: 'effect', name: '庆典特效' },
+    { key: 'base', name: '基地装饰' },
+    { key: 'sticker', name: '表情贴纸' },
     { key: 'collect', name: '收藏品' },
+    { key: 'analysis', name: '情报分析' },
     { key: 'util', name: '便利道具' }
 ];
 
 const SHOP_ITEMS = [
-    { id: 'badge_phoenix', kind: 'badge', cat: 'badge', name: '凤凰队徽', icon: '🔥', price: 40000, desc: '控制台队徽位展示，纯外观。' },
-    { id: 'badge_dragon', kind: 'badge', cat: 'badge', name: '龙纹队徽', icon: '🐉', price: 120000, desc: '控制台队徽位展示，纯外观。' },
-    { id: 'badge_wolf', kind: 'badge', cat: 'badge', name: '孤狼队徽', icon: '🐺', price: 80000, desc: '控制台队徽位展示，纯外观。' },
-    { id: 'badge_skull', kind: 'badge', cat: 'badge', name: '骷髅队徽', icon: '💀', price: 160000, desc: '控制台队徽位展示，纯外观。' },
-    { id: 'badge_lightning', kind: 'badge', cat: 'badge', name: '闪电队徽', icon: '⚡', price: 60000, desc: '控制台队徽位展示，纯外观。' },
-    { id: 'theme_ice', kind: 'theme', cat: 'theme', name: '冰霜主题', icon: '❄', price: 90000, desc: '把界面强调色换成冰蓝，不影响对局。', color: '#53A7E2' },
-    { id: 'theme_gold', kind: 'theme', cat: 'theme', name: '黄金主题', icon: '🏅', price: 150000, desc: '把界面强调色换成金色，不影响对局。', color: '#F7B500' },
-    { id: 'theme_emerald', kind: 'theme', cat: 'theme', name: '翡翠主题', icon: '💚', price: 120000, desc: '把界面强调色换成翡翠绿，不影响对局。', color: '#00E5A0' },
-    { id: 'theme_violet', kind: 'theme', cat: 'theme', name: '霓虹紫主题', icon: '💜', price: 180000, desc: '把界面强调色换成霓虹紫，不影响对局。', color: '#A855F7' },
-    { id: 'theme_sakura', kind: 'theme', cat: 'theme', name: '樱花主题', icon: '🌸', price: 140000, desc: '把界面强调色换成樱花粉，不影响对局。', color: '#FF7BAC' },
-    { id: 'title_champion', kind: 'title', cat: 'title', name: '「冠军教头」称号', icon: '👑', price: 70000, desc: '显示在队名下方，纯外观。' },
-    { id: 'title_godfather', kind: 'title', cat: 'title', name: '「战队教父」称号', icon: '🎩', price: 200000, desc: '显示在队名下方，纯外观。' },
-    { id: 'title_tactician', kind: 'title', cat: 'title', name: '「战术大师」称号', icon: '🧠', price: 180000, desc: '显示在队名下方，纯外观。' },
-    { id: 'title_rookie', kind: 'title', cat: 'title', name: '「菜鸟起飞」称号', icon: '🐣', price: 30000, desc: '显示在队名下方，纯外观。' },
-    { id: 'board_gold', kind: 'board', cat: 'board', name: '黄金战术板', icon: '🟨', price: 150000, desc: '可视化对局的己方点位变成金色，不影响战力。', color: '#F7B500' },
-    { id: 'board_neon', kind: 'board', cat: 'board', name: '霓虹战术板', icon: '🟩', price: 150000, desc: '可视化对局的己方点位变成霓虹绿，不影响战力。', color: '#00E5A0' },
-    { id: 'banner_crown', kind: 'banner', cat: 'banner', name: '王者横幅', icon: '♛', price: 220000, desc: '控制台大横幅背景装饰，纯外观。' },
-    { id: 'banner_flame', kind: 'banner', cat: 'banner', name: '烈焰横幅', icon: '✦', price: 100000, desc: '控制台大横幅背景装饰，纯外观。' },
-    { id: 'collect_tenz', kind: 'collect', cat: 'collect', name: 'TenZ 签名卡', icon: '🖊', price: 300000, desc: '收藏品，展示在队名旁，纯外观。' },
-    { id: 'collect_trophy', kind: 'collect', cat: 'collect', name: 'Champions 复刻奖杯', icon: '🏆', price: 250000, desc: '收藏品，展示在队名旁，纯外观。' },
-    { id: 'card_rename', kind: 'rename', cat: 'util', name: '改名卡', icon: '🔄', price: 25000, desc: '改名时自动消耗，省下 $20,000 改名费用。' },
-    { id: 'card_autosave', kind: 'autosave', cat: 'util', name: '自动存档卡', icon: '💾', price: 60000, desc: '每场比赛结束后自动保存本地存档，纯便利。' }
+    /* ---------- 队徽 ---------- */
+    { id: 'badge_phoenix', kind: 'badge', cat: 'badge', name: '凤凰队徽', icon: '🔥', price: 40000, desc: '浴火重生的凤凰图腾，象征永不熄灭的斗志。装备后在控制台队名左侧展示，纯外观不影响比赛。' },
+    { id: 'badge_dragon', kind: 'badge', cat: 'badge', name: '龙纹队徽', icon: '🐉', price: 120000, desc: '东方巨龙盘绕的威严徽记，传说能带来连胜运势。装备后在控制台队名左侧展示，纯外观不影响比赛。' },
+    { id: 'badge_wolf', kind: 'badge', cat: 'badge', name: '孤狼队徽', icon: '🐺', price: 80000, desc: '独狼啸月的冷峻徽记，适合单兵作战风格的经理。装备后在控制台队名左侧展示，纯外观不影响比赛。' },
+    { id: 'badge_skull', kind: 'badge', cat: 'badge', name: '骷髅队徽', icon: '💀', price: 160000, desc: '死亡凝视的骷髅徽记，让对手未战先怯三分。装备后在控制台队名左侧展示，纯外观不影响比赛。' },
+    { id: 'badge_lightning', kind: 'badge', cat: 'badge', name: '闪电队徽', icon: '⚡', price: 60000, desc: '雷霆万钧的闪电徽记，代表快攻闪电战的战术哲学。装备后在控制台队名左侧展示，纯外观不影响比赛。' },
+
+    /* ---------- 界面主题 ---------- */
+    { id: 'theme_ice', kind: 'theme', cat: 'theme', name: '冰霜主题', icon: '❄', price: 90000, desc: '将整个界面的强调色替换为冷峻的冰蓝色，如同冻结赛场。仅改变视觉风格，不影响任何对局数值。', color: '#53A7E2' },
+    { id: 'theme_gold', kind: 'theme', cat: 'theme', name: '黄金主题', icon: '🏅', price: 150000, desc: '把界面强调色换成耀眼的金色，彰显冠军底蕴。仅改变视觉风格，不影响任何对局数值。', color: '#F7B500' },
+    { id: 'theme_emerald', kind: 'theme', cat: 'theme', name: '翡翠主题', icon: '💚', price: 120000, desc: '将界面强调色替换为翡翠绿，带来丛林般的生机感。仅改变视觉风格，不影响任何对局数值。', color: '#00E5A0' },
+    { id: 'theme_violet', kind: 'theme', cat: 'theme', name: '霓虹紫主题', icon: '💜', price: 180000, desc: '赛博朋克风的霓虹紫强调色，让界面充满未来科技感。仅改变视觉风格，不影响任何对局数值。', color: '#A855F7' },
+    { id: 'theme_sakura', kind: 'theme', cat: 'theme', name: '樱花主题', icon: '🌸', price: 140000, desc: '浪漫的樱花粉强调色，为紧张的赛场增添一抹温柔。仅改变视觉风格，不影响任何对局数值。', color: '#FF7BAC' },
+
+    /* ---------- 称号 ---------- */
+    { id: 'title_champion', kind: 'title', cat: 'title', name: '「冠军教头」称号', icon: '👑', price: 70000, desc: '为夺冠而生的荣耀称号，证明你是天生的赢家。显示在队名下方的标语位，纯外观不影响比赛。' },
+    { id: 'title_godfather', kind: 'title', cat: 'title', name: '「战队教父」称号', icon: '🎩', price: 200000, desc: '俱乐部奠基人般的尊贵称号，象征你缔造了一个王朝。显示在队名下方的标语位，纯外观不影响比赛。' },
+    { id: 'title_tactician', kind: 'title', cat: 'title', name: '「战术大师」称号', icon: '🧠', price: 180000, desc: '运筹帷幄的战术大师称号，每一步都深思熟虑。显示在队名下方的标语位，纯外观不影响比赛。' },
+    { id: 'title_rookie', kind: 'title', cat: 'title', name: '「菜鸟起飞」称号', icon: '🐣', price: 30000, desc: '初出茅庐却朝气蓬勃的称号，萌新也能闪耀赛场。显示在队名下方的标语位，纯外观不影响比赛。' },
+
+    /* ---------- 对局外观 ---------- */
+    { id: 'board_gold', kind: 'board', cat: 'board', name: '黄金战术板', icon: '🟨', price: 150000, desc: '可视化对局中己方点位将以金色高亮，显得贵气十足。仅改变点位颜色，不影响任何战力与判定。', color: '#F7B500' },
+    { id: 'board_neon', kind: 'board', cat: 'board', name: '霓虹战术板', icon: '🟩', price: 150000, desc: '可视化对局中己方点位变为霓虹绿，科技感拉满。仅改变点位颜色，不影响任何战力与判定。', color: '#00E5A0' },
+
+    /* ---------- 战队横幅 ---------- */
+    { id: 'banner_crown', kind: 'banner', cat: 'banner', name: '王者横幅', icon: '♛', price: 220000, desc: '控制台大横幅的背景装饰，皇冠图标彰显王者气度。纯外观装饰，不影响比赛。' },
+    { id: 'banner_flame', kind: 'banner', cat: 'banner', name: '烈焰横幅', icon: '✦', price: 100000, desc: '控制台大横幅的背景装饰，烈焰星芒点燃赛场热情。纯外观装饰，不影响比赛。' },
+
+    /* ---------- 管理头像 ---------- */
+    { id: 'avatar_eagle', kind: 'avatar', cat: 'avatar', name: '雄鹰头像', icon: '🦅', price: 50000, desc: '锐利如鹰的眼神，俯瞰整个赛场的指挥者。作为经理头像展示在控制台英雄区，纯外观。' },
+    { id: 'avatar_lion', kind: 'avatar', cat: 'avatar', name: '雄狮头像', icon: '🦁', price: 90000, desc: '百兽之王的威严，坐镇中军的王者风范。作为经理头像展示在控制台英雄区，纯外观。' },
+    { id: 'avatar_owl', kind: 'avatar', cat: 'avatar', name: '智者猫头鹰头像', icon: '🦉', price: 70000, desc: '智慧与谋略的化身，冷静分析每一场对局。作为经理头像展示在控制台英雄区，纯外观。' },
+    { id: 'avatar_fox', kind: 'avatar', cat: 'avatar', name: '狡黠狐狸头像', icon: '🦊', price: 60000, desc: '诡计多端的狐狸，总能找到对手的破绽。作为经理头像展示在控制台英雄区，纯外观。' },
+    { id: 'avatar_panda', kind: 'avatar', cat: 'avatar', name: '萌系熊猫头像', icon: '🐼', price: 45000, desc: '人畜无害的熊猫外表下藏着一颗冠军的心。作为经理头像展示在控制台英雄区，纯外观。' },
+
+    /* ---------- 名片框 ---------- */
+    { id: 'frame_gold', kind: 'frame', cat: 'frame', name: '黄金名片框', icon: '🟨', price: 100000, desc: '为经理头像镶嵌一圈金色边框，贵气逼人。仅装饰头像边框，不影响比赛。', color: '#F7B500' },
+    { id: 'frame_crimson', kind: 'frame', cat: 'frame', name: '绯红名片框', icon: '🟥', price: 80000, desc: '炽热的绯红边框，彰显战斗的血性与激情。仅装饰头像边框，不影响比赛。', color: '#FF4655' },
+    { id: 'frame_ocean', kind: 'frame', cat: 'frame', name: '海洋名片框', icon: '🟦', price: 80000, desc: '深邃的海洋蓝边框，带来沉稳冷静的气场。仅装饰头像边框，不影响比赛。', color: '#53A7E2' },
+    { id: 'frame_forest', kind: 'frame', cat: 'frame', name: '森林名片框', icon: '🟩', price: 80000, desc: '生机盎然的森林绿边框，象征队伍的生命力。仅装饰头像边框，不影响比赛。', color: '#00E5A0' },
+
+    /* ---------- 庆典特效 ---------- */
+    { id: 'effect_confetti', kind: 'effect', cat: 'effect', name: '彩带庆典', icon: '🎉', price: 60000, desc: '每场胜利后撒落漫天彩带，庆祝你的每一次凯旋。仅在胜利结算界面播放，纯外观。' },
+    { id: 'effect_fireworks', kind: 'effect', cat: 'effect', name: '烟花盛典', icon: '🎆', price: 120000, desc: '胜利时刻绽放绚丽烟花，为冠军之夜增添仪式感。仅在胜利结算界面播放，纯外观。' },
+    { id: 'effect_trophy', kind: 'effect', cat: 'effect', name: '奖杯高光', icon: '🏆', price: 180000, desc: '胜利结算时奖杯高光闪耀，冠军风采尽收眼底。仅在胜利结算界面播放，纯外观。' },
+    { id: 'effect_crown', kind: 'effect', cat: 'effect', name: '加冕特效', icon: '👑', price: 220000, desc: '胜利瞬间虚拟皇冠加身，仿佛加冕联赛之王。仅在胜利结算界面播放，纯外观。' },
+
+    /* ---------- 基地装饰 ---------- */
+    { id: 'base_arena', kind: 'base', cat: 'base', name: '豪华竞技馆', icon: '🏟️', price: 130000, desc: '将战队基地升级为万人竞技馆，气势恢宏。展示在控制台装饰位，纯外观不影响训练。' },
+    { id: 'base_lab', kind: 'base', cat: 'base', name: '高科技实验室', icon: '🔬', price: 150000, desc: '充满未来感的高科技基地，彰显科技战队底蕴。展示在控制台装饰位，纯外观不影响训练。' },
+    { id: 'base_gym', kind: 'base', cat: 'base', name: '专业训练馆', icon: '🏋️', price: 90000, desc: '配备顶级器材的训练基地，选手们的第二个家。展示在控制台装饰位，纯外观不影响训练。' },
+    { id: 'base_mansion', kind: 'base', cat: 'base', name: '古堡庄园', icon: '🏰', price: 200000, desc: '中世纪古堡风格的战队庄园，神秘而尊贵。展示在控制台装饰位，纯外观不影响训练。' },
+
+    /* ---------- 表情贴纸 ---------- */
+    { id: 'sticker_gg', kind: 'sticker', cat: 'sticker', name: 'GG 握手贴纸', icon: '🤝', price: 20000, desc: '经典的 GG 握手表情，体现体育精神。收集后展示在控制台装饰位，纯外观。' },
+    { id: 'sticker_clap', kind: 'sticker', cat: 'sticker', name: '鼓掌贴纸', icon: '👏', price: 20000, desc: '为精彩对局鼓掌喝彩的表情贴纸。收集后展示在控制台装饰位，纯外观。' },
+    { id: 'sticker_pog', kind: 'sticker', cat: 'sticker', name: 'POG 墨镜贴纸', icon: '😎', price: 25000, desc: '酷到没朋友的墨镜表情，POG 时刻必备。收集后展示在控制台装饰位，纯外观。' },
+    { id: 'sticker_sad', kind: 'sticker', cat: 'sticker', name: '心碎贴纸', icon: '😢', price: 15000, desc: '惜败时的无奈表情，胜败乃兵家常事。收集后展示在控制台装饰位，纯外观。' },
+    { id: 'sticker_rage', kind: 'sticker', cat: 'sticker', name: '抓狂贴纸', icon: '😤', price: 15000, desc: '被对手翻盘时的抓狂表情，懂的都懂。收集后展示在控制台装饰位，纯外观。' },
+
+    /* ---------- 收藏品 ---------- */
+    { id: 'collect_tenz', kind: 'collect', cat: 'collect', name: 'TenZ 签名卡', icon: '🖊', price: 300000, desc: '传奇选手 TenZ 的亲笔签名卡，电竞收藏界的硬通货。展示在队名右侧，纯外观不影响比赛。' },
+    { id: 'collect_trophy', kind: 'collect', cat: 'collect', name: 'Champions 复刻奖杯', icon: '🏆', price: 250000, desc: 'VCT Champions 世界冠军奖杯的等比例复刻品。展示在队名右侧，纯外观不影响比赛。' },
+
+    /* ---------- 情报分析（便利） ---------- */
+    { id: 'analysis_scout', kind: 'analysis', cat: 'analysis', name: '赛前情报包', icon: '🔍', price: 80000, desc: '解锁赛程中对手战队的战力数值，便于制定针对性战术。仅揭示已有数据，不改变任何比赛结果。' },
+    { id: 'analysis_replay', kind: 'analysis', cat: 'analysis', name: '录像复盘服务', icon: '📹', price: 140000, desc: '解锁赛程中对手的近期胜率数据，洞察对手状态起伏。仅揭示已有数据，不改变任何比赛结果。' },
+
+    /* ---------- 便利道具 ---------- */
+    { id: 'card_rename', kind: 'rename', cat: 'util', name: '改名卡', icon: '🔄', price: 25000, desc: '修改战队名称时自动消耗一张，可抵扣 $20,000 改名费用。纯便利道具，不影响比赛。' },
+    { id: 'card_autosave', kind: 'autosave', cat: 'util', name: '自动存档卡', icon: '💾', price: 60000, desc: '每场比赛结束后自动保存本地存档，再也不怕忘记存档。纯便利道具，不影响比赛。' }
 ];
 
 function initExtras(state) {
@@ -309,6 +364,13 @@ function initExtras(state) {
     state.shop.boardColor = state.shop.boardColor || '';
     state.shop.bannerIcon = state.shop.bannerIcon || '';
     state.shop.collectible = state.shop.collectible || '';
+    state.shop.managerAvatar = state.shop.managerAvatar || '';
+    state.shop.avatarFrame = state.shop.avatarFrame || '';
+    state.shop.winEffect = state.shop.winEffect || '';
+    state.shop.baseDeco = state.shop.baseDeco || '';
+    if (!Array.isArray(state.shop.stickers)) state.shop.stickers = [];
+    state.shop.scoutUnlocked = !!state.shop.scoutUnlocked;
+    state.shop.replayUnlocked = !!state.shop.replayUnlocked;
 
     if (!Array.isArray(state.mail)) state.mail = [];
     if (!Array.isArray(state.friendlyHistory)) state.friendlyHistory = [];
@@ -539,8 +601,33 @@ function applyShopTheme() {
     else app.style.removeProperty('--valorant-red');
     const deco = document.querySelector('.hero-decoration');
     if (deco) {
-        const banner = gameState && gameState.shop ? gameState.shop.bannerIcon : '';
-        deco.textContent = banner ? (banner + ' ' + banner + ' ' + banner) : '◤ ◥ ◣ ◢';
+        const shop = gameState && gameState.shop ? gameState.shop : {};
+        const banner = shop.bannerIcon || '';
+        const base = shop.baseDeco || '';
+        const stickers = Array.isArray(shop.stickers) ? shop.stickers.join(' ') : '';
+        const parts = [];
+        if (banner) parts.push(banner + ' ' + banner + ' ' + banner);
+        else parts.push('◤ ◥ ◣ ◢');
+        if (base) parts.push(base);
+        if (stickers) parts.push(stickers);
+        deco.textContent = parts.join('   ');
+    }
+    const avatarEl = document.getElementById('manager-avatar');
+    if (avatarEl) {
+        const shop = gameState && gameState.shop ? gameState.shop : {};
+        if (shop.managerAvatar) {
+            avatarEl.textContent = shop.managerAvatar;
+            avatarEl.style.display = 'inline-flex';
+            avatarEl.style.border = '3px solid ' + (shop.avatarFrame || 'transparent');
+            avatarEl.style.borderRadius = '50%';
+            avatarEl.style.padding = '4px 6px';
+            avatarEl.style.fontSize = '28px';
+            avatarEl.style.lineHeight = '1';
+            avatarEl.style.marginRight = '10px';
+            avatarEl.style.background = 'rgba(0,0,0,0.25)';
+        } else {
+            avatarEl.style.display = 'none';
+        }
     }
 }
 
@@ -1811,7 +1898,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.2.0';
+const APP_VERSION = '1.2.1';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -3339,7 +3426,8 @@ function finishMatch(match, playerScore, opponentScore) {
     renderMatchStats(mvp, playerStats, oppStats);
 
     const resultDiv = document.getElementById('match-result');
-    resultDiv.textContent = didWin ? '🏆 胜利！' : '💀 失败...';
+    const winFx = (gameState.shop && gameState.shop.winEffect) ? gameState.shop.winEffect + ' ' : '';
+    resultDiv.textContent = didWin ? (winFx + '🏆 胜利！') : '💀 失败...';
     resultDiv.className = 'match-result ' + (didWin ? 'win' : 'loss');
 
     let bonus;
@@ -3583,11 +3671,21 @@ function renderSchedule() {
                         cls += match.result === 'win' ? ' finished win' : ' finished loss';
                     }
                     const result = match.played ? `<span class="schedule-result">${match.playerScore} - ${match.opponentScore}</span>` : '<span class="schedule-team" style="color: var(--valorant-muted);">VS</span>';
+                    const oppStanding = gameState.standings.find(s => s.name === match.opponent);
+                    let oppInfo = opp ? opp.country : '';
+                    if (!match.played && gameState.shop) {
+                        if (gameState.shop.scoutUnlocked && opp) oppInfo += ' · ⚔' + opp.power;
+                        if (gameState.shop.replayUnlocked && oppStanding) {
+                            const total = (oppStanding.wins || 0) + (oppStanding.losses || 0);
+                            const wr = total ? Math.round((oppStanding.wins || 0) / total * 100) : 0;
+                            oppInfo += ' · ' + wr + '%胜率';
+                        }
+                    }
                     return `
                         <div class="schedule-match ${cls}">
                             <span class="schedule-team">${match.isHome ? '🏠 ' : '✈️ '}${gameState.teamName}</span>
                             ${result}
-                            <span class="schedule-team">${match.opponent} ${opp ? opp.country : ''}</span>
+                            <span class="schedule-team">${match.opponent} ${oppInfo}</span>
                         </div>
                     `;
                 }).join('')}
@@ -3953,6 +4051,18 @@ function applyShopItem(item) {
     if (item.kind === 'board') gameState.shop.boardColor = item.color;
     if (item.kind === 'banner') gameState.shop.bannerIcon = item.icon;
     if (item.kind === 'collect') gameState.shop.collectible = item.icon;
+    if (item.kind === 'avatar') gameState.shop.managerAvatar = item.icon;
+    if (item.kind === 'frame') gameState.shop.avatarFrame = item.color;
+    if (item.kind === 'effect') gameState.shop.winEffect = item.icon;
+    if (item.kind === 'base') gameState.shop.baseDeco = item.icon;
+    if (item.kind === 'sticker') {
+        if (!Array.isArray(gameState.shop.stickers)) gameState.shop.stickers = [];
+        if (gameState.shop.stickers.indexOf(item.icon) === -1) gameState.shop.stickers.push(item.icon);
+    }
+    if (item.kind === 'analysis') {
+        if (item.id === 'analysis_scout') gameState.shop.scoutUnlocked = true;
+        if (item.id === 'analysis_replay') gameState.shop.replayUnlocked = true;
+    }
 }
 
 /* ---------- 游戏公告 ---------- */
