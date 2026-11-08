@@ -1,0 +1,2 @@
+# 依赖目录（通过 package-lock.json 还原）
+node_modules/

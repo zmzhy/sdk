@@ -1,0 +1,103 @@
+{
+  "orders": {
+    "VCTMW6HQ4P44O2IXY": {
+      "outTradeNo": "VCTMW6HQ4P44O2IXY",
+      "userId": "expand_01",
+      "productId": "ultimate_pack",
+      "productName": "终极全收集包",
+      "totalAmount": "328.00",
+      "entitlements": [
+        "badge_tempest",
+        "badge_void",
+        "badge_sun",
+        "banner_dragon",
+        "banner_lightning",
+        "base_sky",
+        "base_beach",
+        "sticker_heart",
+        "sticker_crown",
+        "title_legend",
+        "title_recruiter",
+        "board_crimson"
+      ],
+      "status": "PAID",
+      "createdAt": 1794061214536,
+      "tradeNo": "MOCKVCTMW6HQ4P44O2IXY",
+      "paidAt": 1794061214560,
+      "paidAmount": "328.00"
+    }
+  },
+  "notifyEvents": {
+    "mock-VCTMW6HQ4P44O2IXY": {
+      "notifyId": "mock-VCTMW6HQ4P44O2IXY",
+      "tradeNo": "MOCKVCTMW6HQ4P44O2IXY",
+      "outTradeNo": "VCTMW6HQ4P44O2IXY",
+      "tradeStatus": "TRADE_SUCCESS",
+      "at": 1794061214553
+    }
+  },
+  "entitlements": {
+    "expand_01": {
+      "badge_tempest": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "badge_void": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "badge_sun": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "banner_dragon": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "banner_lightning": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "base_sky": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "base_beach": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "sticker_heart": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "sticker_crown": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "title_legend": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "title_recruiter": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      },
+      "board_crimson": {
+        "productId": "ultimate_pack",
+        "outTradeNo": "VCTMW6HQ4P44O2IXY",
+        "at": 1794061214560
+      }
+    }
+  }
+}
