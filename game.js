@@ -428,6 +428,331 @@ const PAID_ITEMS = [
     { id: 'paid_champions_bundle', kind: 'effect', cat: 'bundle', name: 'Champions 庆典礼包', icon: '🎆', credits: 480, desc: '赛后胜利庆典特效，胜利结算时播放主题烟花。纯外观，不影响比赛结果。' }
 ];
 
+/* ---------- v1.5.0：赞助商 / 董事会 / 转会窗 / 国际邀请赛 ---------- */
+const SPONSOR_BRANDS = [
+    { id: 'redbull', name: 'Red Bull', icon: '🐂', weekly: 10000, bonus: 90000, targetRank: 6, color: '#1E41FF', desc: '能量饮料巨头，为整支战队提供能量补给，赞助门槛较低。' },
+    { id: 'hyperx', name: 'HyperX', icon: '🎧', weekly: 12000, bonus: 140000, targetRank: 4, color: '#FF0000', desc: '电竞外设品牌，赞助训练设备，要求战队稳定在联赛上半区。' },
+    { id: 'monster', name: 'Monster Energy', icon: '🦖', weekly: 11000, bonus: 110000, targetRank: 5, color: '#00FF00', desc: '能量饮品品牌，偏爱有冲劲的年轻战队。' },
+    { id: 'nike', name: 'Nike Esports', icon: '👟', weekly: 16000, bonus: 200000, targetRank: 3, color: '#FFFFFF', desc: '运动巨头，只为联赛前三的强队提供顶级赞助。' },
+    { id: 'vctbank', name: 'VCT Bank', icon: '🏦', weekly: 13000, bonus: 160000, targetRank: 4, color: '#F7B500', desc: '联盟官方合作银行，资金流稳定，目标要求前四。' },
+    { id: 'logitech', name: 'Logitech G', icon: '🖱', weekly: 8000, bonus: 60000, targetRank: 8, color: '#00B8FC', desc: '外设品牌，几乎不设门槛，适合起步阶段的战队。' }
+];
+const TRANSFER_WINDOW_WEEKS = [1, 2, 3, 4, 13, 14, 15, 16];
+
+function isTransferWindowOpen() {
+    return !!gameState && TRANSFER_WINDOW_WEEKS.includes(Number(gameState.currentWeek));
+}
+
+function updateTransferWindowBadge() {
+    const badge = document.getElementById('transfer-window-badge');
+    if (!badge || !gameState) return;
+    if (isTransferWindowOpen()) {
+        badge.className = 'transfer-badge open';
+        badge.textContent = '🟢 转会窗开放 · 正常身价';
+    } else {
+        badge.className = 'transfer-badge closed';
+        badge.textContent = '🔴 转会窗关闭 · 职业选手 +25% 买断费';
+    }
+}
+
+function sponsorWeeklyIncome() {
+    const sp = gameState && gameState.sponsors;
+    if (!sp || !sp.active) return 0;
+    return Number(sp.active.weekly) || 0;
+}
+
+function weeklyTransitionIncome() {
+    return 10000 + gameState.currentWeek * 500 + sponsorWeeklyIncome();
+}
+
+function rollSponsorOffers(state) {
+    const conf = (state.board && Number(state.board.confidence)) || 60;
+    const confMult = 0.9 + (conf / 100) * 0.2;
+    const leagueMult = state.league === 'premier' ? 1.15 : 0.9;
+    const pool = SPONSOR_BRANDS.slice();
+    const offers = [];
+    const count = Math.min(3, pool.length);
+    for (let i = 0; i < count; i++) {
+        const idx = Math.floor(Math.random() * pool.length);
+        const brand = pool.splice(idx, 1)[0];
+        offers.push({
+            id: brand.id + '_s' + (state.season || 1),
+            brandId: brand.id,
+            name: brand.name,
+            icon: brand.icon,
+            color: brand.color,
+            desc: brand.desc,
+            weekly: Math.round(brand.weekly * confMult * leagueMult),
+            bonus: Math.round(brand.bonus * confMult * leagueMult),
+            targetRank: Math.min(brand.targetRank, state.league === 'premier' ? 8 : 5)
+        });
+    }
+    return offers;
+}
+
+function ensureSponsorBoardState(state) {
+    if (!state) return;
+    if (!state.sponsors || typeof state.sponsors !== 'object') {
+        state.sponsors = { season: 0, active: null, offers: [], payoutSeason: 0 };
+    }
+    const sp = state.sponsors;
+    if (!Array.isArray(sp.offers)) sp.offers = [];
+    if (typeof sp.payoutSeason !== 'number') sp.payoutSeason = 0;
+    if (!sp.season || sp.season !== state.season) {
+        sp.season = state.season;
+        sp.active = null;
+        sp.offers = rollSponsorOffers(state);
+        sp.payoutSeason = 0;
+    }
+    if (!state.board || typeof state.board !== 'object') {
+        state.board = { season: 0, targetRank: 0, reward: 0, confidence: 60, evaluated: false };
+    }
+    const b = state.board;
+    if (typeof b.confidence !== 'number') b.confidence = 60;
+    b.confidence = Math.max(0, Math.min(100, b.confidence));
+    if (!b.season || b.season !== state.season) {
+        b.season = state.season;
+        b.targetRank = state.league === 'premier' ? 4 : 2;
+        b.reward = state.league === 'premier' ? 250000 : 150000;
+        b.evaluated = false;
+    }
+}
+
+function openSponsorOffers() {
+    if (!gameState) return showToast('请先开始游戏', '进入战队后才能签约赞助', 'warning');
+    const sp = gameState.sponsors;
+    const body = document.getElementById('modal-body');
+    if (!sp) return;
+    if (sp.active) {
+        const a = sp.active;
+        body.innerHTML = `
+            <h2>${a.icon} ${a.name} · 赞助合约</h2>
+            <p class="gh-desc" style="margin:10px 0 16px;">${a.desc}</p>
+            <div class="season-summary-grid">
+                <div class="season-summary-item"><span>每周赞助</span><b>$${a.weekly.toLocaleString()}</b></div>
+                <div class="season-summary-item"><span>赛季奖金</span><b>$${a.bonus.toLocaleString()}</b></div>
+                <div class="season-summary-item"><span>目标</span><b>联赛前 ${a.targetRank}</b></div>
+                <div class="season-summary-item"><span>当前排名</span><b>#${getPlayerRank()}</b></div>
+            </div>
+            <p class="gh-desc" style="margin-top:14px;">合约持续到本赛季结束，赛季末按联赛排名结算奖金。</p>
+            <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">关闭</button></div>
+        `;
+        openModal();
+        return;
+    }
+    if (!Array.isArray(sp.offers) || !sp.offers.length) sp.offers = rollSponsorOffers(gameState);
+    body.innerHTML = `
+        <h2>选择主赞助商</h2>
+        <p class="gh-desc" style="margin:10px 0 16px;">本赛季有 ${sp.offers.length} 家品牌向你抛出橄榄枝，只能选择一家。每周自动到账，赛季末达成联赛排名目标可领取奖金。</p>
+        <div class="sponsor-grid">
+            ${sp.offers.map((o, i) => `
+                <div class="sponsor-card" style="border-left-color:${o.color};">
+                    <div class="sponsor-head"><span class="sponsor-icon">${o.icon}</span><span class="sponsor-name">${o.name}</span></div>
+                    <p class="sponsor-desc">${o.desc}</p>
+                    <div class="sponsor-meta">每周 +$${o.weekly.toLocaleString()} · 达标奖金 $${o.bonus.toLocaleString()}</div>
+                    <div class="sponsor-goal">目标：联赛前 ${o.targetRank}</div>
+                    <button class="btn btn-primary btn-sm" onclick="selectSponsorOffer(${i})">签约</button>
+                </div>
+            `).join('')}
+        </div>
+        <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">稍后再选</button></div>
+    `;
+    openModal();
+}
+
+function selectSponsorOffer(index) {
+    if (!gameState || !gameState.sponsors) return;
+    const offer = gameState.sponsors.offers[index];
+    if (!offer) return;
+    gameState.sponsors.active = offer;
+    gameState.sponsors.offers = [];
+    closeModal();
+    addMail('赞助商 ' + offer.name, '赞助合约生效', offer.name + ' 成为战队主赞助商，每周赞助 $' + offer.weekly.toLocaleString() + '，联赛前 ' + offer.targetRank + ' 可获 $' + offer.bonus.toLocaleString() + ' 奖金。', 0);
+    renderDashboard();
+    updateAllDisplays();
+    saveGame();
+    showToast('赞助签约', offer.name + ' 成为战队主赞助商', 'success');
+}
+
+function renderBoardPanel() {
+    const el = document.getElementById('board-panel');
+    if (!el || !gameState) return;
+    const b = gameState.board || {};
+    const sp = gameState.sponsors || {};
+    const rank = getPlayerRank();
+    const target = Number(b.targetRank) || 0;
+    const ok = target > 0 && rank > 0 && rank <= target;
+    const conf = Number(b.confidence);
+    const confValue = isNaN(conf) ? 60 : conf;
+    el.innerHTML = `
+        <div class="board-cell">
+            <div class="board-cell-title">🏛 董事会目标</div>
+            <div class="board-cell-desc">本赛季联赛进入前 <b>${target || '-'}</b> · 奖励 <b>$${(Number(b.reward) || 0).toLocaleString()}</b></div>
+            <div class="board-cell-status ${ok ? 'ok' : 'warn'}">当前排名 #${rank || '-'} · ${ok ? '目标进行中' : '暂未达标'}</div>
+        </div>
+        <div class="board-cell">
+            <div class="board-cell-title">🤝 主赞助商</div>
+            ${sp.active ? `
+                <div class="board-cell-desc">${sp.active.icon} <b>${sp.active.name}</b> · 每周 +$${sp.active.weekly.toLocaleString()}</div>
+                <div class="board-cell-status ok">目标：联赛前 ${sp.active.targetRank} · 奖金 $${sp.active.bonus.toLocaleString()}</div>
+            ` : `
+                <div class="board-cell-desc">尚未签约，每周白白损失赞助收入</div>
+                <div class="board-cell-status warn">可选的品牌正在等待你的答复</div>
+            `}
+            <button class="btn btn-sm ${sp.active ? 'btn-ghost' : 'btn-primary'}" onclick="openSponsorOffers()">${sp.active ? '查看合约' : '选择赞助商'}</button>
+        </div>
+        <div class="board-cell">
+            <div class="board-cell-title">📈 董事会信心</div>
+            <div class="board-cell-desc">信心越高，赞助报价越优厚</div>
+            <div class="confidence-bar"><div class="confidence-fill" style="width:${confValue}%;background:${confValue >= 60 ? '#00E5A0' : confValue >= 30 ? '#F7B500' : '#FF4655'};"></div></div>
+            <div class="board-cell-status">${confValue} / 100</div>
+        </div>
+    `;
+}
+
+function dismissOnboarding() {
+    if (!gameState) return;
+    gameState.onboarding = gameState.onboarding || {};
+    gameState.onboarding.dismissed = true;
+    renderDashboard();
+    saveGame();
+}
+
+function renderOnboarding() {
+    const el = document.getElementById('onboarding-card');
+    if (!el || !gameState) return;
+    const ob = gameState.onboarding || {};
+    if (ob.dismissed) { el.classList.add('hidden'); return; }
+    const steps = [
+        { done: gameState.teamName !== '我的战队' && gameState.teamNamed !== false, text: '给战队起一个名字' },
+        { done: gameState.roster.length >= 5, text: '签下至少 5 名队员（' + gameState.roster.length + '/5）' },
+        { done: gameState.roster.some(p => Number(p.trainedWeek) > 0), text: '完成一次专项训练' },
+        { done: gameState.matchHistory.length > 0, text: '完成第一场比赛' }
+    ];
+    if (steps.every(s => s.done)) { el.classList.add('hidden'); return; }
+    el.classList.remove('hidden');
+    const doneCount = steps.filter(s => s.done).length;
+    el.innerHTML = `
+        <div class="onboarding-head">
+            <span class="onboarding-title">🚀 新经理指引</span>
+            <span class="onboarding-progress">${doneCount}/${steps.length}</span>
+            <button class="onboarding-close" onclick="dismissOnboarding()" title="不再显示">✕</button>
+        </div>
+        <div class="onboarding-steps">
+            ${steps.map(s => `<div class="onboarding-step ${s.done ? 'done' : ''}">${s.done ? '✅' : '○'} ${s.text}</div>`).join('')}
+        </div>
+    `;
+}
+
+function renderSeasonProgress() {
+    const el = document.getElementById('season-progress');
+    if (!el || !gameState) return;
+    const stages = [
+        { from: 1, to: 3, name: 'Kickoff', color: '#F7B500' },
+        { from: 4, to: 9, name: 'Stage 1', color: '#FF4655' },
+        { from: 10, to: 12, name: 'Masters 1', color: '#A855F7' },
+        { from: 13, to: 18, name: 'Stage 2', color: '#53A7E2' },
+        { from: 19, to: 21, name: 'Masters 2', color: '#00E5A0' },
+        { from: 22, to: 24, name: 'Champions', color: '#FFD700' }
+    ];
+    el.innerHTML = stages.map(st => {
+        const cells = [];
+        for (let w = st.from; w <= st.to; w++) {
+            const m = gameState.schedule.find(x => x.week === w);
+            const done = !!(m && (m.played || m.bye));
+            const now = w === gameState.currentWeek;
+            cells.push(`<span class="sp-cell${now ? ' now' : ''}${done ? ' done' : ''}" title="第 ${w} 周">${w}</span>`);
+        }
+        return `<div class="sp-stage"><span class="sp-stage-name" style="color:${st.color}">${st.name}</span><div class="sp-cells">${cells.join('')}</div></div>`;
+    }).join('');
+}
+
+function renderWorldRanking() {
+    const el = document.getElementById('world-ranking');
+    if (!el || !gameState) return;
+    const all = AI_TEAMS.map(t => ({ name: t.name, tag: t.tag, power: t.power, region: t.region, me: false }));
+    all.push({ name: gameState.teamName, tag: gameState.teamTag, power: gameState.teamPower || 0, region: gameState.region, me: true });
+    all.sort((a, b) => (b.power - a.power) || a.name.localeCompare(b.name));
+    el.innerHTML = `
+        <h2 class="leaderboard-title">🌍 全球战力榜（跨赛区）</h2>
+        <p class="world-ranking-note">综合四大赛区全部战队战力，展示世界范围内的顶级强队。</p>
+        <div class="world-ranking-list">
+            ${all.slice(0, 12).map((t, i) => `
+                <div class="world-row${t.me ? ' me' : ''}">
+                    <span class="world-rank">${i + 1}</span>
+                    <span class="world-team">${t.name}${t.me ? ' 👈' : ''}</span>
+                    <span class="world-region" style="color:${(REGION_META[t.region] || {}).color || '#768079'};">${(REGION_META[t.region] || {}).flag || ''} ${regionName(t.region)}</span>
+                    <span class="world-power">⚔ ${t.power}</span>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function compareWithOnlinePlayer(index) {
+    if (!onlineLastData || !Array.isArray(onlineLastData.entries)) return;
+    const e = onlineLastData.entries[index];
+    if (!e) return;
+    const me = myRecord();
+    if (!me) return showToast('暂无战绩', '先开始游戏再对比', 'warning');
+    const row = (label, mine, theirs) => `<div class="compare-row"><span>${label}</span><b>${mine}</b><b>${theirs}</b></div>`;
+    const rate = (r) => (r.wins + r.losses) ? Math.round(r.wins / (r.wins + r.losses) * 100) + '%' : '—';
+    const body = document.getElementById('modal-body');
+    body.innerHTML = `
+        <h2>⚔ 战绩对比</h2>
+        <p class="gh-desc" style="margin:8px 0 16px;">与全球榜第 ${index + 1} 名进行对比。</p>
+        <div class="compare-table">
+            <div class="compare-row head"><span>项目</span><b>${escapeHtml(me.name)}</b><b>${escapeHtml(e.name)}</b></div>
+            ${row('胜场', me.wins, e.wins)}
+            ${row('负场', me.losses, e.losses)}
+            ${row('胜率', rate(me), rate(e))}
+            ${row('战力', me.power, e.power)}
+            ${row('赛季', 'S' + me.season, 'S' + e.season)}
+            ${row('冠军数', me.championships || 0, e.championships || 0)}
+        </div>
+        <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">关闭</button></div>
+    `;
+    openModal();
+}
+
+function regionChampionName(region) {
+    if (!gameState) return '';
+    if (region === gameState.region) {
+        const champ = leagueTable('premier')[0];
+        return champ ? champ.name : '';
+    }
+    const teams = AI_TEAMS.filter(t => t.region === region);
+    teams.sort((a, b) => b.power - a.power);
+    return teams.length ? teams[0].name : '';
+}
+
+function simulateInvitational() {
+    if (!gameState) return null;
+    if (gameState._invSeason === gameState.season && gameState._inv) return gameState._inv;
+    const names = REGION_KEYS.map(regionChampionName).filter(n => !!n);
+    if (!names.length) return null;
+    const powerOf = (n) => n === gameState.teamName
+        ? (gameState.teamPower || 70)
+        : ((AI_TEAMS.find(t => t.name === n) || {}).power || 70);
+    const matches = [];
+    let list = names.slice(0, 4);
+    while (list.length > 1) {
+        const next = [];
+        for (let i = 0; i < list.length; i += 2) {
+            const a = list[i], b = list[i + 1];
+            if (!b) { next.push(a); continue; }
+            const [sa, sb] = simulateScoreFor(powerOf(a), powerOf(b));
+            matches.push({ a, b, sa, sb, winner: sa >= sb ? a : b });
+            next.push(sa >= sb ? a : b);
+        }
+        list = next;
+    }
+    const result = { matches, champion: list[0] || null };
+    gameState._invSeason = gameState.season;
+    gameState._inv = result;
+    return result;
+}
+
 function initExtras(state) {
     if (!state.shop || typeof state.shop !== 'object') {
         state.shop = { owned: [], badge: '', title: '', theme: '', autoSave: false, renameCards: 0 };
@@ -473,6 +798,10 @@ function initExtras(state) {
     if (typeof state.scheduleVersion !== 'number') state.scheduleVersion = 1;
     state.lastAnnouncementVersion = state.lastAnnouncementVersion || '';
     state.seasonEnded = !!state.seasonEnded;
+
+    if (!state.onboarding || typeof state.onboarding !== 'object') state.onboarding = { dismissed: false };
+    state.onboarding.dismissed = !!state.onboarding.dismissed;
+    if (!Array.isArray(state.friendlyHistory)) state.friendlyHistory = [];
     return state;
 }
 
@@ -699,6 +1028,7 @@ function updateAllDisplays() {
     document.getElementById('stat-money').textContent = '$' + gameState.money.toLocaleString();
     document.getElementById('stat-season').textContent = '第 ' + gameState.season + ' 赛季';
     document.getElementById('stat-day').textContent = '第 ' + gameState.currentWeek + ' 周';
+    updateTransferWindowBadge();
     document.getElementById('team-name-display').textContent = (gameState.shop && gameState.shop.badge ? gameState.shop.badge + ' ' : '') + gameState.teamName + (gameState.shop && gameState.shop.collectible ? ' ' + gameState.shop.collectible : '');
     const leagueName = (typeof LEAGUE_META !== 'undefined' && gameState.league) ? LEAGUE_META[gameState.league].name : '';
     const regionLabel = regionName(gameState.region);
@@ -836,6 +1166,8 @@ function renderDashboard() {
             </div>
         </div>
     `).join('');
+    renderBoardPanel();
+    renderOnboarding();
 }
 
 function renderRoster() {
@@ -903,6 +1235,8 @@ function renderAgentCard(agent, isOwned) {
 }
 
 function renderMarket() {
+    if (!gameState) return;
+    updateTransferWindowBadge();
     const grid = document.getElementById('market-grid');
     const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
     const search = (document.getElementById('market-search')?.value || '').toLowerCase();
@@ -1096,15 +1430,18 @@ function signAgent(uniqueId) {
     const agent = gameState.market.find(a => a.uniqueId === uniqueId);
     if (!agent) return;
     if (gameState.roster.length >= MAX_ROSTER) { showToast('战队已满员', '最多只能有 ' + MAX_ROSTER + ' 名队员', 'error'); return; }
-    if (gameState.money < agent.price) { showToast('资金不足', '还需要 $' + (agent.price - gameState.money).toLocaleString(), 'error'); return; }
-    gameState.money -= agent.price;
+    const windowOpen = isTransferWindowOpen();
+    const finalPrice = (agent.isPro && !windowOpen) ? Math.round(agent.price * 1.25) : agent.price;
+    if (gameState.money < finalPrice) { showToast('资金不足', '还需要 $' + (finalPrice - gameState.money).toLocaleString(), 'error'); return; }
+    gameState.money -= finalPrice;
     agent.isPlayerOwned = true;
     agent.wins = 0; agent.losses = 0;
     agent.morale = 70; agent.trainedWeek = 0;
     gameState.roster.push(agent);
     gameState.market = gameState.market.filter(a => a.uniqueId !== uniqueId);
     const tag = agent.isPro ? 'VCT 巨星加入！' : '签约成功';
-    showToast(tag, agent.name + ' 已加入你的战队！', 'success');
+    const windowNote = (agent.isPro && !windowOpen) ? '（转会窗关闭，支付 25% 买断费）' : '';
+    showToast(tag, agent.name + ' 已加入你的战队！' + windowNote, 'success');
     updateTeamPower();
     renderMarket();
     updateAllDisplays();
@@ -2074,7 +2411,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.4.0';
+const APP_VERSION = '1.5.0';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -2310,6 +2647,7 @@ async function loadOnlineLeaderboard(force) {
                     <div class="online-champ">${e.championships ? '🏆 ' + e.championships : ''}</div>
                     <div class="online-winrate">${(e.wins + e.losses) ? Math.round(e.wins / (e.wins + e.losses) * 100) + '%' : '—'}</div>
                 </div>
+                ${isMe ? '' : `<button class="btn btn-ghost btn-sm online-compare" onclick="compareWithOnlinePlayer(${i})">对比</button>`}
             </div>`;
         }).join('');
         if (data.updatedAt) {
@@ -2321,7 +2659,7 @@ async function loadOnlineLeaderboard(force) {
 }
 
 async function submitMyScore(ev) {
-    if (!gameState) return showToast('请先开始游戏', 'warning');
+    if (!gameState) return showToast('请先开始游戏', '进入战队后才能提交战绩', 'warning');
     if (!GHBackend.canWrite()) return showToast('无法提交', '需要令牌才能写入排行榜', 'error');
     const btn = ev && ev.target;
     if (btn) { btn.disabled = true; btn.textContent = '提交中…'; }
@@ -3689,27 +4027,33 @@ function finishMatch(match, playerScore, opponentScore) {
 
 function advanceWeek() {
     if (!gameState) return;
-    if (gameState.currentWeek >= TOTAL_WEEKS) { showSeasonSummary(); return; }
+    if (gameState.currentWeek >= TOTAL_WEEKS) {
+        const lastEntry = gameState.schedule.find(s => s.week === gameState.currentWeek);
+        if (lastEntry && lastEntry.opponent && !lastEntry.played) simulateMatchResult(lastEntry);
+        showSeasonSummary();
+        return;
+    }
     const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
     if (entry && entry.opponent && !entry.played) simulateMatchResult(entry);
-    const weeklyBonus = 10000 + gameState.currentWeek * 500;
+    const weeklyBonus = weeklyTransitionIncome();
     gameState.money += weeklyBonus;
     gameState.currentWeek++;
     beginWeek();
-    showToast('进入第 ' + gameState.currentWeek + ' 周', '获得 $' + weeklyBonus.toLocaleString() + ' 训练津贴', 'success');
+    const sponsorPart = sponsorWeeklyIncome() > 0 ? '（含赞助 $' + sponsorWeeklyIncome().toLocaleString() + '）' : '';
+    showToast('进入第 ' + gameState.currentWeek + ' 周', '获得 $' + weeklyBonus.toLocaleString() + ' 运营收入' + sponsorPart, 'success');
     updateAllDisplays();
     renderDashboard();
 }
 
 function simulateAllMatches() {
     if (!gameState) return;
-    if (gameState.currentWeek >= TOTAL_WEEKS) { showSeasonSummary(); return; }
+    if (gameState.seasonEnded) { showSeasonSummary(); return; }
     while (gameState.currentWeek <= TOTAL_WEEKS) {
         beginWeek();
         const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
         if (entry && entry.opponent && !entry.played) simulateMatchResult(entry);
         if (gameState.currentWeek >= TOTAL_WEEKS) break;
-        gameState.money += 10000 + gameState.currentWeek * 500;
+        gameState.money += weeklyTransitionIncome();
         gameState.currentWeek++;
     }
     beginWeek();
@@ -3741,11 +4085,11 @@ function closeMatchModal() {
         return;
     }
     showConfirmModal('下一周', '比赛结束！要进入下一周吗？', () => {
-        const weeklyBonus = 10000 + gameState.currentWeek * 500;
+        const weeklyBonus = weeklyTransitionIncome();
         gameState.money += weeklyBonus;
         gameState.currentWeek++;
         beginWeek();
-        showToast('进入第 ' + gameState.currentWeek + ' 周', '获得 $' + weeklyBonus.toLocaleString(), 'success');
+        showToast('进入第 ' + gameState.currentWeek + ' 周', '获得 $' + weeklyBonus.toLocaleString() + ' 运营收入', 'success');
         updateAllDisplays(); renderDashboard();
     });
 }
@@ -3810,6 +4154,7 @@ function buildSeasonSummary() {
     const over = gameState.currentWeek >= TOTAL_WEEKS;
     const playoff = over ? simulateLeaguePlayoff(gameState.league) : null;
     const circuits = over ? getSeasonCircuits() : { ascension: null, gamechangers: null };
+    const invitational = over ? simulateInvitational() : null;
     return {
         table,
         me,
@@ -3817,6 +4162,7 @@ function buildSeasonSummary() {
         leader: table[0] || null,
         playoff,
         circuits,
+        invitational,
         cups: gameState.cups || {},
         promoted: chal.slice(0, 2).map(t => t.name),
         relegated: prem.slice(-2).map(t => t.name),
@@ -3834,8 +4180,12 @@ function showSeasonSummary() {
     if (over && s.playoff && gameState._playoffSeason !== gameState.season) {
         gameState._playoffSeason = gameState.season;
         const champ = s.playoff.champion;
-        gameState.money += 80000;
-        addMail('🏆 联赛季后赛', champ + ' 赢得了 ' + LEAGUE_META[gameState.league].name + ' 季后赛冠军，获得 $80,000 奖金！' + (champ === gameState.teamName ? ' 恭喜你的战队夺冠！' : ''), 'info');
+        if (champ === gameState.teamName) {
+            gameState.money += 80000;
+            addMail('🏆 联赛季后赛', '你的战队赢得 ' + LEAGUE_META[gameState.league].name + ' 季后赛冠军，获得 $80,000 奖金！', 0);
+        } else {
+            addMail('🏆 联赛季后赛', champ + ' 赢得了 ' + LEAGUE_META[gameState.league].name + ' 季后赛冠军。', 0);
+        }
     }
 
     const cupLine = (cup) => {
@@ -3857,6 +4207,41 @@ function showSeasonSummary() {
         news.push('🚀 恭喜！你的战队夺得 Ascension 晋升赛冠军，奖励 $100,000。');
     }
 
+    if (over && gameState.sponsors && gameState.sponsors.active && gameState.sponsors.payoutSeason !== gameState.season) {
+        gameState.sponsors.payoutSeason = gameState.season;
+        const sp = gameState.sponsors.active;
+        if (s.myRank > 0 && s.myRank <= sp.targetRank) {
+            gameState.money += sp.bonus;
+            addMail('赞助商 ' + sp.name, '赞助目标达成', '你在 ' + LEAGUE_META[gameState.league].name + ' 取得第 ' + s.myRank + ' 名，达成联赛前 ' + sp.targetRank + ' 的目标，获得 $' + sp.bonus.toLocaleString() + ' 奖金。', 0);
+            news.push('🤝 ' + sp.name + ' 赞助目标达成，奖励 $' + sp.bonus.toLocaleString() + '。');
+        } else {
+            addMail('赞助商 ' + sp.name, '赞助目标未达成', '本赛季联赛排名第 ' + (s.myRank || '-') + '，未达到前 ' + sp.targetRank + ' 的目标，赞助奖金未能发放。', 0);
+            news.push('🤝 赞助目标未达成（第 ' + (s.myRank || '-') + ' 名），本赛季没有赞助奖金。');
+        }
+    }
+
+    if (over && gameState.board && !gameState.board.evaluated) {
+        gameState.board.evaluated = true;
+        const b = gameState.board;
+        if (s.myRank > 0 && s.myRank <= b.targetRank) {
+            gameState.money += b.reward;
+            b.confidence = Math.min(100, b.confidence + 12);
+            addMail('董事会', '赛季目标达成', '董事会目标：联赛前 ' + b.targetRank + '。你以第 ' + s.myRank + ' 名完成目标，奖励 $' + b.reward.toLocaleString() + '，董事会信心提升。', 0);
+            news.push('🏛 董事会目标达成！奖励 $' + b.reward.toLocaleString() + '，信心 +12。');
+        } else {
+            b.confidence = Math.max(0, b.confidence - 15);
+            addMail('董事会', '赛季目标未达成', '董事会目标：联赛前 ' + b.targetRank + '。本赛季排名第 ' + (s.myRank || '-') + '，未能完成目标，董事会信心下降。', 0);
+            news.push('🏛 董事会目标未达成（第 ' + (s.myRank || '-') + ' 名），董事会信心 -15。');
+        }
+    }
+
+    if (over && s.invitational && s.invitational.champion === gameState.teamName && gameState._invAwardSeason !== gameState.season) {
+        gameState._invAwardSeason = gameState.season;
+        gameState.money += 200000;
+        addMail('VCT 国际邀请赛', '🌍 国际邀请赛冠军', '你的战队在跨赛区国际邀请赛中击败各赛区冠军夺冠！奖励 $200,000。', 0);
+        news.push('🌍 恭喜！你的战队夺得跨赛区国际邀请赛冠军，奖励 $200,000。');
+    }
+
     const playoffHtml = s.playoff ? `
         <div class="playoff-bracket">
             <h3 style="margin: 18px 0 10px;">联赛季后赛</h3>
@@ -3871,6 +4256,17 @@ function showSeasonSummary() {
         </div>
     ` : '';
 
+    const invitationalHtml = s.invitational ? `
+        <div class="invitational-box">
+            <h3 style="margin: 18px 0 10px;">🌍 跨赛区国际邀请赛</h3>
+            <div class="invitational-round">
+                ${s.invitational.matches.map(m => `
+                    <div class="playoff-match"><span>${m.a}</span><b>${m.sa}</b> - <b>${m.sb}</b><span>${m.b}</span></div>
+                `).join('')}
+            </div>
+            <div class="playoff-champion">🏆 世界冠军：<b>${s.invitational.champion || '-'}</b>${s.invitational.champion === gameState.teamName ? ' 👈 你的战队' : ''}</div>
+        </div>
+    ` : '';
     const body = document.getElementById('modal-body');
     body.innerHTML = `
         <h2>${over ? '第 ' + gameState.season + ' 赛季结算' : '赛季数据总览'}</h2>
@@ -3886,11 +4282,15 @@ function showSeasonSummary() {
             <div class="season-summary-item"><span>Masters 1 冠军</span><b>${cupLine(s.cups.masters1)}</b></div>
             <div class="season-summary-item"><span>Masters 2 冠军</span><b>${cupLine(s.cups.masters2)}</b></div>
             <div class="season-summary-item"><span>Champions 冠军</span><b>${cupLine(s.cups.champions)}</b></div>
+            <div class="season-summary-item"><span>国际邀请赛冠军</span><b>${s.invitational ? circLine(s.invitational.champion) : '进行中 / 未决出'}</b></div>
+            <div class="season-summary-item"><span>主赞助商</span><b>${gameState.sponsors && gameState.sponsors.active ? gameState.sponsors.active.icon + ' ' + gameState.sponsors.active.name : '未签约'}</b></div>
+            <div class="season-summary-item"><span>董事会目标</span><b>联赛前 ${gameState.board ? gameState.board.targetRank : '-'}${gameState.board && gameState.board.evaluated ? (s.myRank <= gameState.board.targetRank ? ' ✅' : ' ❌') : ''}</b></div>
             <div class="season-summary-item"><span>Ascension 冠军</span><b>${circLine(s.circuits.ascension)}</b></div>
             <div class="season-summary-item"><span>Game Changers 冠军</span><b>${circLine(s.circuits.gamechangers)}</b></div>
             <div class="season-summary-item"><span>${LEAGUE_META[gameState.league].name} 第一名</span><b>${s.leader ? s.leader.name : '-'}</b></div>
         </div>
         ${playoffHtml}
+        ${invitationalHtml}
         <div class="season-zone-preview">
             <div class="zone-line zone-up">↑ 次级联赛前二升级：${s.promoted.join('、') || '-'}</div>
             <div class="zone-line zone-down">↓ 顶级联赛末二降级：${s.relegated.join('、') || '-'}</div>
@@ -3948,8 +4348,14 @@ function startNextSeason() {
     gameState.cups = {};
     gameState.seasonEnded = false;
     gameState.money += 200000 + (wasChamp ? 300000 : 0);
+    gameState._playoffSeason = 0;
+    gameState._ascensionAwardSeason = 0;
+    gameState._invAwardSeason = 0;
+    gameState._invSeason = 0;
+    gameState._inv = null;
 
     setupLeagueStandings();
+    ensureSponsorBoardState(gameState);
     generateMarket();
     generateSchedule();
     beginWeek();
@@ -4022,6 +4428,7 @@ function renderSchedule() {
             </div>
         </div>`;
     }).join('');
+    renderSeasonProgress();
 }
 
 let currentStandingsLeague = '';
@@ -4070,6 +4477,7 @@ function renderStandings() {
             </tr>
         `;
     }).join('');
+    renderWorldRanking();
 }
 
 function renderTeams() {
@@ -4232,6 +4640,7 @@ function sanitizeGameState(state) {
 
     initExtras(state);
     migrateLeagueState(state);
+    ensureSponsorBoardState(state);
     return true;
 }
 
@@ -4253,6 +4662,7 @@ function initGame() {
     generateMarket();
     generateSchedule();
     initExtras(gameState);
+    ensureSponsorBoardState(gameState);
     updateTeamPower();
     beginWeek();
     updateAllDisplays();
@@ -4300,6 +4710,7 @@ function initGame_withTeam(team) {
     generateSchedule();
     gameState.teamNamed = true;
     initExtras(gameState);
+    ensureSponsorBoardState(gameState);
     updateTeamPower();
     beginWeek();
     updateTeamPower();
@@ -4512,6 +4923,22 @@ function applyShopItem(item) {
 /* ---------- 游戏公告 ---------- */
 
 const GAME_ANNOUNCEMENTS = [
+    {
+        version: '1.5.0',
+        date: '2026-11-08',
+        tag: '赞助 · 董事会 · 国际赛 · 体验优化',
+        title: 'v1.5.0 王朝时代：赞助商 · 董事会目标 · 国际邀请赛 · 转会窗',
+        content: [
+            '新增赞助商系统：每赛季三家品牌报价，签约后每周自动到账，赛季末达成联赛排名目标还能领取奖金。',
+            '新增董事会目标与信心：赛季开始时董事会设定联赛排名目标，达成可得高额奖金，未达成会降低董事会信心（影响下赛季赞助报价）。',
+            '新增跨赛区国际邀请赛：赛季末四大赛区冠军进行单败淘汰，冠军可获得 $200,000 世界冠军奖金。',
+            '新增转会窗机制：W1-4 与 W13-16 为开放期，其余时间签下职业选手需支付 25% 买断费，转会市场顶部实时显示窗口状态。',
+            '新增全球战力榜：积分榜页面展示四大赛区全部战队的跨赛区战力排名。',
+            '新增新手经理指引：控制台展示起名、签约、训练、首战四项任务，完成后自动隐藏。',
+            '赛程页新增赛季进度条，24 周各阶段与当前周一目了然；全球榜新增玩家战绩对比，移动端导航与布局同步优化。',
+            '修复：季后赛奖金不再在玩家未夺冠时误发；快速模拟现在会正确结算第 24 周；修复全球榜提交提示文案。'
+        ]
+    },
     {
         version: '1.4.0',
         date: '2026-11-07',
