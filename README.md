@@ -7,7 +7,7 @@ Kickoff / Masters 1 / Masters 2 / Champions / Ascension / Game Changers 全杯�
 比赛 MVP 与选手数据统计，并支持基于 GitHub 仓库的云存档、全球排行榜、创意工坊、
 站内邮箱、玩家对战（阵容码友谊赛 / 同屏双人）与战绩分享。
 
-- 版本：**v1.7.0**
+- 版本：**v1.8.0**
 - 渠道：正式版 `/` · 内测版 `/beta/` · 测试版 `/alpha/`
 - 技术栈：HTML + CSS + 原生 JavaScript（零依赖、零构建）
 - 后端：GitHub 仓库（GitHub Pages 托管 + GitHub Contents API 存储）
@@ -196,6 +196,13 @@ data/
 ---
 
 ## 版本记录
+
+### v1.8.0
+- 赛程页面改为 VCT 官网式布局：队列概览、战绩统计、按周时间轴与比赛卡片
+- 每场比赛展示真实战队队标、主客场、阶段、BO3、比分与胜负状态，当前周高亮
+- 新增 `assets/teams/` 本地队标资源（50+ 支现实战队），未收录战队自动回退为矢量字母徽标
+- 新增 `assets/sponsors/` 赞助商品牌图标，赞助列表更换为 Red Bull、HyperX、Monster Energy、Nike、Razer、Corsair、Intel
+- 队标与赞助商仅作视觉展示，不影响比赛数值
 
 ### v1.7.0
 - 自创战队取消预设特工：随机生成 5 名青训选手，全员战力低于 70
