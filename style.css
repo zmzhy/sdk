@@ -3060,6 +3060,37 @@ body {
     border-color: #53A7E2;
 }
 
+/* v1.10.0 四大赛区切换 */
+.region-switch {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.standings-region-tab,
+.teams-region-tab {
+    padding: 9px 16px;
+    background: var(--valorant-bg2);
+    border: 1px solid var(--valorant-bg3);
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.standings-region-tab:hover,
+.teams-region-tab:hover { color: var(--text-primary); }
+
+.standings-region-tab.active,
+.teams-region-tab.active {
+    color: #fff;
+    background: #1f6feb;
+    border-color: #1f6feb;
+}
+
 .standings-controls {
     display: flex;
     align-items: center;

@@ -80,7 +80,14 @@ const EXPORT_SNIPPET = `
     marketEventsHTML,
     PLAYER_EVENT_TYPES,
     MAX_ROSTER,
-    TRANSFER_WINDOW_WEEKS
+    TRANSFER_WINDOW_WEEKS,
+    standingsForRegion,
+    internationalQualifiers,
+    setupLeagueStandings,
+    initCup,
+    REGION_KEYS,
+    LEAGUE_META,
+    TOTAL_WEEKS
 };`;
 
 const gameCode = fs.readFileSync(GAME_PATH, 'utf8');
