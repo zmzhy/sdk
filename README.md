@@ -1,13 +1,16 @@
 # VCT 战队经理 · Valorant Manager
 
-一款纯前端的《无畏契约》战队经营模拟游戏。包含 53 支 VCT 战队、170 名职业选手、
-完整联赛金字塔（顶级联赛 / Challengers 次级联赛 / Masters / Champions）、24 周赛季、
+一款纯前端的《无畏契约》战队经营模拟游戏。包含 60 支 VCT 战队、170 名职业选手、
+四大赛区（美洲 / EMEA / 太平洋 / 中国）、完整联赛金字塔（顶级联赛 / Challengers 次级联赛）、
+Kickoff / Masters 1 / Masters 2 / Champions / Ascension / Game Changers 全杯赛、24 周赛季、
 比赛 MVP 与选手数据统计，并支持基于 GitHub 仓库的云存档、全球排行榜、创意工坊、
 站内邮箱、玩家对战（阵容码友谊赛 / 同屏双人）与战绩分享。
 
-- 版本：**v1.3.0**
+- 版本：**v1.4.0**
+- 渠道：正式版 `/` · 内测版 `/beta/` · 测试版 `/alpha/`
 - 技术栈：HTML + CSS + 原生 JavaScript（零依赖、零构建）
 - 后端：GitHub 仓库（GitHub Pages 托管 + GitHub Contents API 存储）
+- 付费内容：模拟内购（点券礼包与限定外观），仅影响外观，不影响任何比赛数值
 
 [![宣传海报](promo/vct-manager-poster.jpg)](promo/vct-manager-poster.jpg)
 
@@ -30,6 +33,22 @@ npx serve .
 浏览器打开 `http://localhost:8080`。
 
 > 直接双击 `index.html` 也能玩，但本地文件协议下云端功能可能受浏览器安全策略限制，建议用本地服务器。
+
+### 发行渠道
+
+| 渠道 | 入口 | 说明 |
+| --- | --- | --- |
+| 正式版 | `/` | 稳定发布版本，隐藏管理员调试控制台 |
+| 内测版 | `/beta/` | 新功能灰度测试，保留管理员控制台（Ctrl+Shift+A） |
+| 测试版 | `/alpha/` | 实验性功能预览，保留管理员控制台（Ctrl+Shift+A） |
+
+三个渠道共用同一套 `game.js` / `style.css` / `github-backend.js`，通过 `window.__CHANNEL__` 区分渠道。
+
+### 赛区与杯赛
+
+- 自创战队时可选择赛区：中国、美洲、EMEA、太平洋。联赛对手、积分榜、杯赛名额均按赛区划分。
+- 24 周赛历：W1-3 Kickoff → W4-9 Stage 1 → W10-12 Masters 1 → W13-18 Stage 2 → W19-21 Masters 2 → W22-24 Champions。
+- 赛季末额外结算 Ascension 晋升赛与 Game Changers 女子赛。
 
 ### 部署到 GitHub Pages
 

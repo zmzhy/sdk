@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VCT 战队经理 | Valorant Manager</title>
-    <link rel="stylesheet" href="style.css?v=1.3.0">
+    <link rel="stylesheet" href="style.css?v=1.4.0">
     <meta name="description" content="VCT 战队经理 —— 一款免费的《无畏契约》战队经营模拟游戏，支持云存档、全球排行榜与创意工坊。">
     <meta name="theme-color" content="#0f1923">
 </head>
@@ -23,6 +23,17 @@
             <div id="mode-pick-section" class="start-section">
                 <h2 class="start-section-title">选择你的战队</h2>
                 <p class="start-section-desc">作为新任经理，你想如何开始？</p>
+
+                <div class="start-region-pick">
+                    <label for="start-region">选择赛区</label>
+                    <select id="start-region">
+                        <option value="China" selected>🇨🇳 中国赛区 (China)</option>
+                        <option value="Americas">🌎 美洲赛区 (Americas)</option>
+                        <option value="EMEA">🌍 EMEA 赛区</option>
+                        <option value="Pacific">🌏 太平洋赛区 (Pacific)</option>
+                    </select>
+                    <span class="start-region-note">赛区决定你的联赛对手、积分榜与杯赛名额</span>
+                </div>
 
                 <div class="start-options">
                     <button class="start-option-card" id="btn-custom-team" onclick="selectCustomTeam()">
@@ -57,7 +68,7 @@
                 <button class="btn btn-ghost" onclick="openGhSettings()">☁ 云端设置</button>
                 <a class="btn btn-ghost" href="promo/vct-manager-poster.jpg" target="_blank" rel="noopener">🖼 宣传海报</a>
             </div>
-            <div class="start-version">v<span id="app-version">1.0</span> · 正式版</div>
+            <div class="start-version">v<span id="app-version">1.0</span> · <span id="app-channel">正式版</span></div>
         </div>
     </div>
 
@@ -81,7 +92,7 @@
                     <span class="stat-value" id="stat-day">第 1 周</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-label">联赛</span>
+                    <span class="stat-label">赛区 / 联赛</span>
                     <span class="stat-value league-stat" id="stat-league">VCT 顶级联赛</span>
                 </div>
             </div>
@@ -124,7 +135,7 @@
             <button class="nav-btn admin-toggle-btn" onclick="openGhSettings()" title="云端设置 (GitHub)">
                 <span class="nav-icon">☁</span>
             </button>
-            <button class="nav-btn admin-toggle-btn" onclick="toggleAdmin()" title="管理员控制台 (Ctrl+Shift+A)">
+            <button class="nav-btn admin-toggle-btn" id="admin-nav-btn" onclick="toggleAdmin()" title="管理员控制台 (Ctrl+Shift+A)">
                 <span class="nav-icon">⚙</span>
             </button>
         </nav>
@@ -476,7 +487,7 @@
         <div class="modal-content gh-modal-content">
             <button class="modal-close" onclick="closeShop()">✕</button>
             <h2 class="gh-title">🛒 战队商城</h2>
-            <p class="gh-desc">所有商品均为外观或便利道具，<b>不会改变任何比赛数值</b>。当前资金：<span id="shop-money">$0</span></p>
+            <p class="gh-desc">所有商品均为外观或便利道具，<b>不会改变任何比赛数值</b>。当前资金：<span id="shop-money">$0</span> · 点券：<span id="shop-credits">0</span></p>
             <div id="shop-grid" class="shop-grid"></div>
             <div id="shop-result" class="gh-result"></div>
         </div>
@@ -695,7 +706,7 @@
         </div>
     </div>
 
-    <script src="github-backend.js?v=1.3.0"></script>
-    <script src="game.js?v=1.3.0"></script>
+    <script src="github-backend.js?v=1.4.0"></script>
+    <script src="game.js?v=1.4.0"></script>
 </body>
 </html>

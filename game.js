@@ -294,6 +294,25 @@ const AI_TEAMS = [
 const TOTAL_WEEKS = 24;
 const MAX_ROSTER = 8;
 
+/* ---------- 发行渠道：正式版 / 内测版 / 测试版 ---------- */
+const CHANNEL = (window.__CHANNEL__ === 'beta' || window.__CHANNEL__ === 'alpha') ? window.__CHANNEL__ : 'stable';
+const CHANNEL_META = {
+    stable: { key: 'stable', label: '正式版', desc: '稳定发布版本' },
+    beta: { key: 'beta', label: '内测版', desc: '新功能灰度测试' },
+    alpha: { key: 'alpha', label: '测试版', desc: '实验性功能预览' }
+};
+function isStableChannel() { return CHANNEL === 'stable'; }
+
+/* ---------- 赛区划分 ---------- */
+const REGION_META = {
+    Americas: { key: 'Americas', name: '美洲赛区', short: 'AMER', color: '#53A7E2', flag: '🌎' },
+    EMEA: { key: 'EMEA', name: 'EMEA 赛区', short: 'EMEA', color: '#A855F7', flag: '🌍' },
+    Pacific: { key: 'Pacific', name: '太平洋赛区', short: 'APAC', color: '#00E5A0', flag: '🌏' },
+    China: { key: 'China', name: '中国赛区', short: 'CN', color: '#FF4655', flag: '🇨🇳' }
+};
+const REGION_KEYS = ['Americas', 'EMEA', 'Pacific', 'China'];
+function regionName(key) { return (REGION_META[key] || {}).name || 'VCT 赛区'; }
+
 /* 商城道具：全部为外观或便利类，绝不修改任何比赛数值 */
 const SHOP_CATEGORIES = [
     { key: 'badge', name: '队徽' },
@@ -385,11 +404,36 @@ const SHOP_ITEMS = [
     { id: 'card_autosave', kind: 'autosave', cat: 'util', name: '自动存档卡', icon: '💾', price: 60000, desc: '每场比赛结束后自动保存本地存档，再也不怕忘记存档。纯便利道具，不影响比赛。' }
 ];
 
+/* ---------- 付费内容：点券礼包 + 限定外观（模拟内购，不影响对局数值） ---------- */
+const PAID_PACKS = [
+    { id: 'credits_60', name: '60 点券', icon: '💠', price: 6, credits: 60, tag: '新手', desc: '入门档点券，适合兑换一件小型限定外观。' },
+    { id: 'credits_300', name: '300 点券', icon: '💠', price: 30, credits: 300, tag: '热销', desc: '最受欢迎的档位，可兑换多数限定队徽与贴纸。' },
+    { id: 'credits_680', name: '680 点券', icon: '💎', price: 68, credits: 680, tag: '超值', desc: '额外赠送 20 点券，适合收藏限定横幅与称号。' },
+    { id: 'credits_3280', name: '3280 点券', icon: '👑', price: 328, credits: 3280, tag: '豪华', desc: '豪华档位，一次拿下整套限定珍藏。' }
+];
+
+const PAID_CATEGORIES = [
+    { key: 'limited', name: '限定珍藏' },
+    { key: 'bundle', name: '尊享礼包' }
+];
+
+const PAID_ITEMS = [
+    { id: 'paid_gc_badge', kind: 'badge', cat: 'limited', name: 'Game Changers 限定队徽', icon: '💜', credits: 180, desc: 'Game Changers 女子赛限定队徽，装备后显示在队名左侧。纯外观，不影响比赛。' },
+    { id: 'paid_ascension_frame', kind: 'frame', cat: 'limited', name: 'Ascension 限定名片框', icon: '⬢', credits: 260, color: '#F7B500', desc: 'Ascension 晋级赛限定名片框，金色边框彰显晋级荣耀。纯外观，不影响比赛。' },
+    { id: 'paid_champions_banner', kind: 'banner', cat: 'limited', name: 'Champions 限定横幅', icon: '🏆', credits: 420, desc: 'Champions 世界冠军赛主题横幅，展示在控制台装饰位。纯外观，不影响比赛。' },
+    { id: 'paid_radiant_title', kind: 'title', cat: 'limited', name: '「无畏契约」限定称号', icon: '🔥', credits: 360, desc: '限定称号「无畏契约」，显示在队名下方的标语位。纯外观，不影响比赛。' },
+    { id: 'paid_neon_board', kind: 'board', cat: 'limited', name: '霓虹紫战术板', icon: '🟪', credits: 300, color: '#A855F7', desc: '可视化对局中的己方点位显示为霓虹紫。仅改变点位颜色，不影响战力与判定。' },
+    { id: 'paid_vct_avatar', kind: 'avatar', cat: 'limited', name: 'VCT 冠军管理头像', icon: '🎧', credits: 220, desc: '限定管理头像，显示在控制台战队名旁。纯外观，不影响比赛。' },
+    { id: 'paid_starter_bundle', kind: 'sticker', cat: 'bundle', name: '新赛季启动礼包', icon: '🎁', credits: 120, desc: '内含新赛季主题贴纸，收集后展示在控制台装饰位。纯外观，不影响比赛。' },
+    { id: 'paid_champions_bundle', kind: 'effect', cat: 'bundle', name: 'Champions 庆典礼包', icon: '🎆', credits: 480, desc: '赛后胜利庆典特效，胜利结算时播放主题烟花。纯外观，不影响比赛结果。' }
+];
+
 function initExtras(state) {
     if (!state.shop || typeof state.shop !== 'object') {
         state.shop = { owned: [], badge: '', title: '', theme: '', autoSave: false, renameCards: 0 };
     }
     if (!Array.isArray(state.shop.owned)) state.shop.owned = [];
+    if (!Array.isArray(state.shop.paidOwned)) state.shop.paidOwned = [];
     state.shop.badge = state.shop.badge || '';
     state.shop.title = state.shop.title || '';
     state.shop.theme = state.shop.theme || '';
@@ -405,6 +449,9 @@ function initExtras(state) {
     if (!Array.isArray(state.shop.stickers)) state.shop.stickers = [];
     state.shop.scoutUnlocked = !!state.shop.scoutUnlocked;
     state.shop.replayUnlocked = !!state.shop.replayUnlocked;
+
+    state.credits = Number(state.credits) || 0;
+    if (!REGION_META[state.region]) state.region = 'China';
 
     state.tactic = state.tactic || 'balanced';
     if (!Array.isArray(state.roster)) state.roster = [];
@@ -654,11 +701,12 @@ function updateAllDisplays() {
     document.getElementById('stat-day').textContent = '第 ' + gameState.currentWeek + ' 周';
     document.getElementById('team-name-display').textContent = (gameState.shop && gameState.shop.badge ? gameState.shop.badge + ' ' : '') + gameState.teamName + (gameState.shop && gameState.shop.collectible ? ' ' + gameState.shop.collectible : '');
     const leagueName = (typeof LEAGUE_META !== 'undefined' && gameState.league) ? LEAGUE_META[gameState.league].name : '';
+    const regionLabel = regionName(gameState.region);
     const leagueEl = document.getElementById('stat-league');
-    if (leagueEl) leagueEl.textContent = leagueName || 'VCT';
+    if (leagueEl) leagueEl.textContent = regionLabel + ' · ' + (leagueName || 'VCT');
     const heroLeague = document.getElementById('hero-league');
     if (heroLeague) {
-        heroLeague.textContent = leagueName || 'VCT';
+        heroLeague.textContent = regionLabel + ' · ' + (leagueName || 'VCT');
         heroLeague.className = 'hero-league league-' + (gameState.league || 'premier');
     }
     if (gameState.shop && gameState.shop.title) {
@@ -1751,6 +1799,7 @@ function setupAIStandings_override(playerTeam) {
 let adminVisible = false;
 
 document.addEventListener('keydown', (e) => {
+    if (isStableChannel()) return;
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
         toggleAdmin();
@@ -1761,6 +1810,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 function toggleAdmin() {
+    if (isStableChannel()) return;
     adminVisible = !adminVisible;
     const panel = document.getElementById('admin-panel');
     if (panel) {
@@ -2024,7 +2074,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.3.0';
+const APP_VERSION = '1.4.0';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -2402,6 +2452,7 @@ function startFromWorkshop(item) {
     gameState.teamTag = item.tag || 'WS';
     gameState.teamColor = item.color;
     gameState.teamRegion = item.region;
+    gameState.region = REGION_META[item.region] ? item.region : 'China';
     gameState.roster = (item.roster || []).map((p, i) => ({
         uniqueId: 'ws_' + Date.now() + '_' + i,
         id: 'ws_' + i,
@@ -2414,8 +2465,12 @@ function startFromWorkshop(item) {
         isPlayerOwned: true, isPro: false,
         wins: 0, losses: 0, kills: 0, deaths: 0, assists: 0, mvps: 0, matches: 0
     }));
-    setupAIStandings();
+    gameState.leagueTeams = buildLeaguePools(gameState.teamName, gameState.region);
+    gameState.league = 'challengers';
+    setupLeagueStandings();
+    generateSchedule();
     updateTeamPower();
+    beginWeek();
     updateAllDisplays();
     showScreen('dashboard');
     saveGame();
@@ -2450,6 +2505,16 @@ function autoSyncAfterMatch() {
 
 const versionEl = document.getElementById('app-version');
 if (versionEl) versionEl.textContent = APP_VERSION;
+const channelEl = document.getElementById('app-channel');
+if (channelEl) channelEl.textContent = CHANNEL_META[CHANNEL].label;
+
+(function applyChannelUi() {
+    if (!isStableChannel()) return;
+    const adminBtn = document.getElementById('admin-nav-btn');
+    if (adminBtn) adminBtn.style.display = 'none';
+    const adminPanel = document.getElementById('admin-panel');
+    if (adminPanel) adminPanel.style.display = 'none';
+})();
 
 /* ==================== v1.1.0：起名 / 商城 / 邮箱 / 玩家对战 / 可视化对局 ==================== */
 
@@ -3134,11 +3199,22 @@ const LEAGUE_META = {
     challengers: { key: 'challengers', name: 'VCT Challengers 次级联赛', short: 'CH', color: '#53A7E2' }
 };
 const LEAGUE_KEYS = ['premier', 'challengers'];
-const CUP_NAMES = { masters: 'Masters 季中冠军赛', champions: 'Champions 世界冠军赛' };
+const CUP_NAMES = {
+    kickoff: 'Kickoff 开赛杯',
+    masters1: 'Masters 1 季中冠军赛',
+    masters2: 'Masters 2 季中冠军赛',
+    champions: 'Champions 世界冠军赛',
+    ascension: 'Ascension 晋升赛',
+    gamechangers: 'Game Changers 女子赛'
+};
+const CUP_SCHEDULE_STAGES = ['kickoff', 'masters1', 'masters2', 'champions'];
 const CUP_ROUND_NAMES = ['八强赛', '半决赛', '总决赛'];
 
-function buildLeaguePools(excludeName) {
-    const teams = AI_TEAMS.filter(t => t.name !== excludeName).slice().sort((a, b) => b.power - a.power);
+function buildLeaguePools(excludeName, region) {
+    const scope = REGION_KEYS.includes(region) ? region : 'China';
+    const teams = AI_TEAMS
+        .filter(t => t.region === scope && t.name !== excludeName)
+        .slice().sort((a, b) => b.power - a.power);
     const half = Math.ceil(teams.length / 2);
     return {
         premier: teams.slice(0, half).map(t => t.name),
@@ -3148,8 +3224,9 @@ function buildLeaguePools(excludeName) {
 
 function ensureLeaguePools() {
     if (!gameState) return;
+    if (!REGION_META[gameState.region]) gameState.region = 'China';
     if (!gameState.leagueTeams || !Array.isArray(gameState.leagueTeams.premier) || !Array.isArray(gameState.leagueTeams.challengers)) {
-        gameState.leagueTeams = buildLeaguePools(gameState.teamName);
+        gameState.leagueTeams = buildLeaguePools(gameState.teamName, gameState.region);
         if (!LEAGUE_META[gameState.league]) gameState.league = 'challengers';
     }
     if (!LEAGUE_META[gameState.league]) gameState.league = 'challengers';
@@ -3164,7 +3241,14 @@ function ensureLeaguePools() {
 
 function leagueTable(leagueKey) {
     return [...gameState.standings]
-        .filter(t => t && t.league === leagueKey)
+        .filter(t => t && t.league === leagueKey && (t.isPlayerTeam || t.region === gameState.region))
+        .sort((a, b) => (b.points - a.points) || (b.wins - a.wins) || (b.power - a.power) || a.name.localeCompare(b.name));
+}
+
+function regionTable() {
+    if (!gameState) return [];
+    return [...gameState.standings]
+        .filter(t => t && (t.isPlayerTeam || t.region === gameState.region))
         .sort((a, b) => (b.points - a.points) || (b.wins - a.wins) || (b.power - a.power) || a.name.localeCompare(b.name));
 }
 
@@ -3178,7 +3262,7 @@ function leagueOfTeam(name) {
 function setupLeagueStandings() {
     ensureLeaguePools();
     gameState.standings = AI_TEAMS
-        .filter(t => t.name !== gameState.teamName)
+        .filter(t => t.name !== gameState.teamName && t.region === gameState.region)
         .map(t => ({
             name: t.name,
             tag: t.tag,
@@ -3195,8 +3279,8 @@ function setupLeagueStandings() {
     gameState.standings.push({
         name: gameState.teamName,
         tag: gameState.teamTag,
-        region: 'MY',
-        country: '🎮',
+        region: gameState.region,
+        country: (REGION_META[gameState.region] || {}).flag || '🎮',
         color: '#FF4655',
         power: 0,
         wins: 0,
@@ -3212,9 +3296,11 @@ function setupAIStandings() {
 }
 
 function setupAIStandings_override(playerTeam) {
-    const pools = buildLeaguePools(playerTeam ? playerTeam.name : gameState.teamName);
+    const region = (playerTeam && REGION_META[playerTeam.region]) ? playerTeam.region : gameState.region;
+    gameState.region = region;
+    const pools = buildLeaguePools(playerTeam ? playerTeam.name : gameState.teamName, region);
     gameState.leagueTeams = pools;
-    const powers = AI_TEAMS.filter(t => t.name !== (playerTeam ? playerTeam.name : '')).map(t => t.power).sort((a, b) => b - a);
+    const powers = AI_TEAMS.filter(t => t.region === region && t.name !== (playerTeam ? playerTeam.name : '')).map(t => t.power).sort((a, b) => b - a);
     const median = powers[Math.floor(powers.length / 2)] || 75;
     gameState.league = (playerTeam && playerTeam.power >= median) ? 'premier' : 'challengers';
     setupLeagueStandings();
@@ -3229,33 +3315,49 @@ function getPlayerRank() {
 
 /* ---------- 赛季日历 ---------- */
 
+function pickOpponents(pool, count) {
+    const list = shuffle(pool.filter(n => n));
+    const out = [];
+    if (!list.length) return out;
+    for (let i = 0; i < count; i++) out.push(list[i % list.length]);
+    return out;
+}
+
 function buildSeasonSchedule(teamName, league, pools) {
     const schedule = [];
     const pool = ((pools && pools[league]) || []).filter(n => n && n !== teamName);
-    const firstHalf = shuffle(pool).slice(0, 9);
-    const secondHalf = shuffle(pool).slice(0, 9);
+    const stage1Pool = pickOpponents(pool, 6);
+    const stage2Pool = pickOpponents(pool, 6);
     const base = { playerTeam: teamName, isHome: true, played: false, playerScore: 0, opponentScore: 0, result: null };
-    for (let w = 1; w <= 9; w++) {
-        schedule.push(Object.assign({}, base, {
-            week: w, stage: 'league', stageNo: 1, opponent: firstHalf[w - 1] || '',
-            isHome: w % 2 === 1
-        }));
+    // W1-3：Kickoff 开赛杯
+    for (let w = 1; w <= 3; w++) {
+        schedule.push(Object.assign({}, base, { week: w, stage: 'kickoff', cupRound: w - 1, opponent: '', isHome: true }));
     }
-    for (let w = 10; w <= 12; w++) {
+    // W4-9：Stage 1 常规赛（6 场）
+    for (let w = 4; w <= 9; w++) {
         schedule.push(Object.assign({}, base, {
-            week: w, stage: 'masters', cupRound: w - 10, opponent: '', isHome: true
-        }));
-    }
-    for (let w = 13; w <= 21; w++) {
-        schedule.push(Object.assign({}, base, {
-            week: w, stage: 'league', stageNo: 2, opponent: secondHalf[w - 13] || '',
+            week: w, stage: 'league', stageNo: 1, opponent: stage1Pool[w - 4] || '',
             isHome: w % 2 === 0
         }));
     }
-    for (let w = 22; w <= 24; w++) {
+    // W10-12：Masters 1
+    for (let w = 10; w <= 12; w++) {
+        schedule.push(Object.assign({}, base, { week: w, stage: 'masters1', cupRound: w - 10, opponent: '', isHome: true }));
+    }
+    // W13-18：Stage 2 常规赛（6 场）
+    for (let w = 13; w <= 18; w++) {
         schedule.push(Object.assign({}, base, {
-            week: w, stage: 'champions', cupRound: w - 22, opponent: '', isHome: true
+            week: w, stage: 'league', stageNo: 2, opponent: stage2Pool[w - 13] || '',
+            isHome: w % 2 === 1
         }));
+    }
+    // W19-21：Masters 2
+    for (let w = 19; w <= 21; w++) {
+        schedule.push(Object.assign({}, base, { week: w, stage: 'masters2', cupRound: w - 19, opponent: '', isHome: true }));
+    }
+    // W22-24：Champions
+    for (let w = 22; w <= 24; w++) {
+        schedule.push(Object.assign({}, base, { week: w, stage: 'champions', cupRound: w - 22, opponent: '', isHome: true }));
     }
     return schedule;
 }
@@ -3263,23 +3365,23 @@ function buildSeasonSchedule(teamName, league, pools) {
 function generateSchedule() {
     ensureLeaguePools();
     gameState.schedule = buildSeasonSchedule(gameState.teamName, gameState.league, gameState.leagueTeams);
-    gameState.scheduleVersion = 2;
+    gameState.scheduleVersion = 3;
     gameState.simulatedWeek = 0;
     gameState.cups = {};
 }
 
 function matchLabel(match) {
     if (!match) return '';
-    if (match.stage === 'masters' || match.stage === 'champions') {
+    if (CUP_SCHEDULE_STAGES.includes(match.stage)) {
         const roundName = CUP_ROUND_NAMES[match.cupRound] || '淘汰赛';
         return (CUP_NAMES[match.stage] || '杯赛') + ' · ' + roundName;
     }
     const meta = LEAGUE_META[gameState.league] || LEAGUE_META.premier;
-    return meta.name + ' · 常规赛 ' + (match.stageNo === 2 ? '第二阶段' : '第一阶段');
+    return meta.name + ' · ' + (match.stageNo === 2 ? 'Stage 2' : 'Stage 1');
 }
 
 function isCupMatch(match) {
-    return !!match && (match.stage === 'masters' || match.stage === 'champions');
+    return !!match && CUP_SCHEDULE_STAGES.includes(match.stage);
 }
 
 /* ---------- 每周推进与 AI 赛果 ---------- */
@@ -3310,8 +3412,7 @@ function beginWeek() {
     if (!gameState) return;
     simulateLeagueRound();
     const entry = gameState.schedule.find(s => s.week === gameState.currentWeek);
-    if (entry && entry.stage === 'masters') resolveCupWeek('masters', entry.week);
-    if (entry && entry.stage === 'champions') resolveCupWeek('champions', entry.week);
+    if (entry && CUP_SCHEDULE_STAGES.includes(entry.stage)) resolveCupWeek(entry.stage, entry.week);
 }
 
 /* ---------- 杯赛 ---------- */
@@ -3341,14 +3442,18 @@ function simulateCupMatch(m) {
 }
 
 function initCup(type) {
-    const seeds = leagueTable(gameState.league).slice(0, 8).map(t => t.name);
+    const table = regionTable();
+    const ordered = type === 'kickoff'
+        ? [...table].sort((a, b) => (b.power - a.power) || a.name.localeCompare(b.name))
+        : table;
+    const seeds = ordered.slice(0, 8).map(t => t.name);
     while (seeds.length < 8) seeds.push('待定');
     const order = [0, 7, 3, 4, 1, 6, 2, 5];
     const round0 = [];
     for (let i = 0; i < 8; i += 2) {
         round0.push({ a: seeds[order[i]], b: seeds[order[i + 1]], sa: 0, sb: 0, winner: null });
     }
-    const cup = { type, league: gameState.league, participants: seeds, rounds: [round0], roundIndex: 0, champion: null, done: false, awarded: false };
+    const cup = { type, region: gameState.region, participants: seeds, rounds: [round0], roundIndex: 0, champion: null, done: false, awarded: false };
     gameState.cups[type] = cup;
     return cup;
 }
@@ -3379,7 +3484,8 @@ function awardCup(cup) {
     const label = CUP_NAMES[cup.type] || '杯赛';
     const champ = cup.champion || '未知战队';
     if (champ === gameState.teamName) {
-        const prize = cup.type === 'masters' ? 150000 : 300000;
+        const prizes = { kickoff: 100000, masters1: 150000, masters2: 200000, champions: 300000 };
+        const prize = prizes[cup.type] || 100000;
         gameState.money += 50000;
         addMail('VCT 联盟', '🏆 ' + label + ' 冠军', '你率队夺得 ' + label + ' 冠军！冠军奖金已发放，另奖励 $50,000 现金。', prize);
         showToast('🏆 ' + label + ' 冠军', '冠军奖金已发送到邮箱', 'success');
@@ -3394,7 +3500,7 @@ function resolveCupWeek(type, weekNum) {
     if (!entry) return;
     if (!gameState.cups) gameState.cups = {};
     let cup = gameState.cups[type];
-    if (!cup || cup.league !== gameState.league) cup = initCup(type);
+    if (!cup || cup.region !== gameState.region) cup = initCup(type);
     if (cup.done) {
         entry.opponent = '';
         entry.bye = true;
@@ -3662,6 +3768,39 @@ function simulateLeaguePlayoff(leagueKey) {
     return { semifinal1: sf1, semifinal2: sf2, final, champion: final.winner };
 }
 
+function simulateBracketChampion(names) {
+    let list = names.slice(0, 8).filter(Boolean);
+    while (list.length % 2 !== 0) list.pop();
+    if (!list.length) return null;
+    if (list.length === 1) return list[0];
+    while (list.length > 1) {
+        const next = [];
+        for (let i = 0; i < list.length; i += 2) {
+            if (i + 1 >= list.length) { next.push(list[i]); continue; }
+            const [sa, sb] = simulateScoreFor(getTeamPowerByName(list[i]), getTeamPowerByName(list[i + 1]));
+            next.push(sa >= sb ? list[i] : list[i + 1]);
+        }
+        list = next;
+    }
+    return list[0] || null;
+}
+
+/* Ascension / Game Changers：赛季末模拟的独立赛事，结果仅用于展示与奖励 */
+function getSeasonCircuits() {
+    if (!gameState) return { ascension: null, gamechangers: null };
+    if (gameState._circuitsSeason === gameState.season && gameState._circuits) return gameState._circuits;
+    const table = regionTable();
+    const challengers = table.filter(t => t.league === 'challengers').slice(0, 8).map(t => t.name);
+    const gcPool = shuffle(table.filter(t => !t.isPlayerTeam).map(t => t.name)).slice(0, 8);
+    const result = {
+        ascension: simulateBracketChampion(challengers),
+        gamechangers: simulateBracketChampion(gcPool)
+    };
+    gameState._circuitsSeason = gameState.season;
+    gameState._circuits = result;
+    return result;
+}
+
 function buildSeasonSummary() {
     const table = leagueTable(gameState.league);
     const me = table.find(t => t.isPlayerTeam) || {};
@@ -3670,14 +3809,15 @@ function buildSeasonSummary() {
     const chal = leagueTable('challengers');
     const over = gameState.currentWeek >= TOTAL_WEEKS;
     const playoff = over ? simulateLeaguePlayoff(gameState.league) : null;
+    const circuits = over ? getSeasonCircuits() : { ascension: null, gamechangers: null };
     return {
         table,
         me,
         myRank,
         leader: table[0] || null,
         playoff,
-        masters: (gameState.cups && gameState.cups.masters) ? gameState.cups.masters : null,
-        champions: (gameState.cups && gameState.cups.champions) ? gameState.cups.champions : null,
+        circuits,
+        cups: gameState.cups || {},
         promoted: chal.slice(0, 2).map(t => t.name),
         relegated: prem.slice(-2).map(t => t.name),
         playerPromoted: gameState.league === 'challengers' && myRank > 0 && myRank <= 2,
@@ -3702,10 +3842,20 @@ function showSeasonSummary() {
         if (!cup || !cup.champion) return '进行中 / 未决出';
         return cup.champion + (cup.champion === gameState.teamName ? ' 👈 你的战队' : '');
     };
+    const circLine = (name) => {
+        if (!name) return '进行中 / 未决出';
+        return name + (name === gameState.teamName ? ' 👈 你的战队' : '');
+    };
     const news = [];
     if (s.playerPromoted) news.push('🎉 恭喜！你的战队获得次级联赛前二，下赛季将升入 <b>VCT 顶级联赛</b>。');
     if (s.playerRelegated) news.push('⚠ 你的战队位于顶级联赛末二，下赛季将降入 <b>Challengers 次级联赛</b>。');
     if (over && s.playoff && s.playoff.champion === gameState.teamName) news.push('🏆 恭喜！你的战队夺得联赛季后赛冠军！');
+    if (over && s.circuits && s.circuits.ascension === gameState.teamName && gameState._ascensionAwardSeason !== gameState.season) {
+        gameState._ascensionAwardSeason = gameState.season;
+        gameState.money += 100000;
+        addMail('VCT 联盟', '🚀 Ascension 冠军', '你的战队赢下 Ascension 晋升赛！奖励 $100,000 现金。', 0);
+        news.push('🚀 恭喜！你的战队夺得 Ascension 晋升赛冠军，奖励 $100,000。');
+    }
 
     const playoffHtml = s.playoff ? `
         <div class="playoff-bracket">
@@ -3732,8 +3882,12 @@ function showSeasonSummary() {
             <div class="season-summary-item"><span>你的排名</span><b>#${s.myRank || '-'}</b></div>
             <div class="season-summary-item"><span>战绩</span><b>${s.me.wins || 0} 胜 ${s.me.losses || 0} 负</b></div>
             <div class="season-summary-item"><span>联赛积分</span><b>${s.me.points || 0}</b></div>
-            <div class="season-summary-item"><span>Masters 冠军</span><b>${cupLine(s.masters)}</b></div>
-            <div class="season-summary-item"><span>Champions 冠军</span><b>${cupLine(s.champions)}</b></div>
+            <div class="season-summary-item"><span>Kickoff 冠军</span><b>${cupLine(s.cups.kickoff)}</b></div>
+            <div class="season-summary-item"><span>Masters 1 冠军</span><b>${cupLine(s.cups.masters1)}</b></div>
+            <div class="season-summary-item"><span>Masters 2 冠军</span><b>${cupLine(s.cups.masters2)}</b></div>
+            <div class="season-summary-item"><span>Champions 冠军</span><b>${cupLine(s.cups.champions)}</b></div>
+            <div class="season-summary-item"><span>Ascension 冠军</span><b>${circLine(s.circuits.ascension)}</b></div>
+            <div class="season-summary-item"><span>Game Changers 冠军</span><b>${circLine(s.circuits.gamechangers)}</b></div>
             <div class="season-summary-item"><span>${LEAGUE_META[gameState.league].name} 第一名</span><b>${s.leader ? s.leader.name : '-'}</b></div>
         </div>
         ${playoffHtml}
@@ -3884,7 +4038,7 @@ function renderStandings() {
     const table = leagueTable(currentStandingsLeague);
     const note = document.getElementById('standings-note');
     if (note) {
-        note.innerHTML = `${LEAGUE_META[currentStandingsLeague].name} · 第 ${gameState.season} 赛季 · 共 ${table.length} 支战队
+        note.innerHTML = `${regionName(gameState.region)} · ${LEAGUE_META[currentStandingsLeague].name} · 第 ${gameState.season} 赛季 · 共 ${table.length} 支战队
             ${currentStandingsLeague === 'challengers' ? '<span class="zone-line zone-up">前 2 名升级</span>' : '<span class="zone-line zone-down">末 2 名降级</span>'}`;
     }
     document.querySelectorAll('.league-tab').forEach(b => {
@@ -3946,9 +4100,9 @@ function renderTeams() {
             </div>`;
     };
     container.innerHTML = LEAGUE_KEYS.map(key => {
-        const teams = AI_TEAMS.filter(t => leagueOfTeam(t.name) === key);
+        const teams = AI_TEAMS.filter(t => t.region === gameState.region && leagueOfTeam(t.name) === key);
         return `<div class="team-group">
-            <h2 class="team-group-title" style="border-left-color:${LEAGUE_META[key].color};">${LEAGUE_META[key].name} <span>${teams.length} 支</span></h2>
+            <h2 class="team-group-title" style="border-left-color:${LEAGUE_META[key].color};">${regionName(gameState.region)} · ${LEAGUE_META[key].name} <span>${teams.length} 支</span></h2>
             <div class="teams-grid-inner">${teams.map(cardFor).join('')}</div>
         </div>`;
     }).join('');
@@ -3976,10 +4130,19 @@ function removeAgent(uniqueId) {
 /* ---------- 旧存档迁移 ---------- */
 
 function migrateLeagueState(state) {
-    if (!state.leagueTeams || !Array.isArray(state.leagueTeams.premier) || !Array.isArray(state.leagueTeams.challengers)) {
-        state.leagueTeams = buildLeaguePools(state.teamName);
+    if (!REGION_META[state.region]) {
+        const team = AI_TEAMS.find(t => t.name === state.teamName);
+        state.region = (team && REGION_META[team.region]) ? team.region : 'China';
+    }
+    const legacyRegion = Number(state.regionVersion) !== 1;
+    if (legacyRegion || !state.leagueTeams || !Array.isArray(state.leagueTeams.premier) || !Array.isArray(state.leagueTeams.challengers)) {
+        state.leagueTeams = buildLeaguePools(state.teamName, state.region);
+        if (legacyRegion) {
+            state.cups = {};
+            state.standings = (Array.isArray(state.standings) ? state.standings : []).filter(t => t.isPlayerTeam || t.region === state.region);
+        }
         if (!LEAGUE_META[state.league]) {
-            const powers = AI_TEAMS.filter(t => t.name !== state.teamName).map(t => t.power).sort((a, b) => b - a);
+            const powers = AI_TEAMS.filter(t => t.region === state.region && t.name !== state.teamName).map(t => t.power).sort((a, b) => b - a);
             const median = powers[Math.floor(powers.length / 2)] || 75;
             state.league = (Number(state.teamPower) || 0) >= median ? 'premier' : 'challengers';
         }
@@ -3995,7 +4158,7 @@ function migrateLeagueState(state) {
     const inChal = new Set(state.leagueTeams.challengers);
     const known = new Set(state.standings.map(t => t.name));
     AI_TEAMS.forEach(team => {
-        if (known.has(team.name) || team.name === state.teamName) return;
+        if (team.region !== state.region || known.has(team.name) || team.name === state.teamName) return;
         state.standings.push({
             name: team.name, tag: team.tag, region: team.region, country: team.country,
             color: team.color, power: team.power, wins: 0, losses: 0, points: 0,
@@ -4003,11 +4166,16 @@ function migrateLeagueState(state) {
         });
     });
     state.standings.forEach(t => {
-        if (t.isPlayerTeam) t.league = state.league;
-        else if (!LEAGUE_META[t.league]) t.league = inPrem.has(t.name) ? 'premier' : 'challengers';
+        if (t.isPlayerTeam) {
+            t.region = state.region;
+            t.league = state.league;
+            t.country = (REGION_META[state.region] || {}).flag || '🎮';
+        } else if (!LEAGUE_META[t.league]) {
+            t.league = inPrem.has(t.name) ? 'premier' : 'challengers';
+        }
     });
 
-    if (Number(state.scheduleVersion) !== 2) {
+    if (Number(state.scheduleVersion) !== 3) {
         const old = Array.isArray(state.schedule) ? state.schedule.slice() : [];
         const oldByWeek = {};
         old.forEach(m => { if (m && m.week) oldByWeek[m.week] = m; });
@@ -4022,8 +4190,9 @@ function migrateLeagueState(state) {
                 nm.result = om.result || null;
             }
         });
-        state.scheduleVersion = 2;
+        state.scheduleVersion = 3;
     }
+    state.regionVersion = 1;
     state.simulatedWeek = Number(state.currentWeek) || 1;
 }
 
@@ -4045,12 +4214,17 @@ function sanitizeGameState(state) {
     state.season = Number(state.season) || 1;
     state.currentWeek = Math.min(Math.max(Number(state.currentWeek) || 1, 1), TOTAL_WEEKS);
     state.teamPower = Number(state.teamPower) || 0;
+    if (!REGION_META[state.region]) {
+        const team = AI_TEAMS.find(t => t.name === state.teamName);
+        state.region = (team && REGION_META[team.region]) ? team.region : 'China';
+    }
     if (!Array.isArray(state.matchHistory)) state.matchHistory = [];
 
     const hasPlayer = state.standings.some(t => t.isPlayerTeam);
     if (!hasPlayer) {
         state.standings.push({
-            name: state.teamName, tag: state.teamTag, region: 'MY', country: '🎮',
+            name: state.teamName, tag: state.teamTag, region: state.region,
+            country: (REGION_META[state.region] || {}).flag || '🎮',
             color: '#FF4655', power: state.teamPower, wins: 0, losses: 0, points: 0,
             league: state.league || 'challengers', isPlayerTeam: true
         });
@@ -4064,18 +4238,22 @@ function sanitizeGameState(state) {
 /* ---------- 初始化 ---------- */
 
 function initGame() {
+    const regionSelect = document.getElementById('start-region');
+    const region = (regionSelect && REGION_META[regionSelect.value]) ? regionSelect.value : 'China';
     gameState = {
         teamName: '我的战队', teamTag: 'MY', teamPower: 0, money: 500000,
         season: 1, currentWeek: 1, roster: [], market: [], schedule: [],
-        standings: [], matchHistory: [], league: 'challengers', leagueTeams: null, cups: {}
+        standings: [], matchHistory: [], league: 'challengers', leagueTeams: null, cups: {},
+        region: region, credits: 0
     };
-    gameState.leagueTeams = buildLeaguePools(gameState.teamName);
+    gameState.leagueTeams = buildLeaguePools(gameState.teamName, gameState.region);
     gameState.league = 'challengers';
     setupInitialRoster();
     setupLeagueStandings();
     generateMarket();
     generateSchedule();
     initExtras(gameState);
+    updateTeamPower();
     beginWeek();
     updateAllDisplays();
     showScreen('dashboard');
@@ -4108,10 +4286,11 @@ function initGame_withTeam(team) {
     gameState = {
         teamName: team.name, teamTag: team.tag, teamPower: Math.round(avgPower), money: 200000,
         season: 1, currentWeek: 1, roster: roster, market: [], schedule: [],
-        standings: [], matchHistory: [], league: '', leagueTeams: null, cups: {}
+        standings: [], matchHistory: [], league: '', leagueTeams: null, cups: {},
+        region: (REGION_META[team.region] ? team.region : 'China'), credits: 0
     };
-    gameState.leagueTeams = buildLeaguePools(team.name);
-    const powers = AI_TEAMS.filter(t => t.name !== team.name).map(t => t.power).sort((a, b) => b - a);
+    gameState.leagueTeams = buildLeaguePools(team.name, gameState.region);
+    const powers = AI_TEAMS.filter(t => t.region === gameState.region && t.name !== team.name).map(t => t.power).sort((a, b) => b - a);
     const median = powers[Math.floor(powers.length / 2)] || 75;
     gameState.league = team.power >= median ? 'premier' : 'challengers';
     gameState.leagueTeams[gameState.league].push(team.name);
@@ -4121,6 +4300,7 @@ function initGame_withTeam(team) {
     generateSchedule();
     gameState.teamNamed = true;
     initExtras(gameState);
+    updateTeamPower();
     beginWeek();
     updateTeamPower();
     updateAllDisplays();
@@ -4188,8 +4368,12 @@ function adminQuickSim(n) {
 function renderShop() {
     const moneyEl = document.getElementById('shop-money');
     if (moneyEl) moneyEl.textContent = '$' + gameState.money.toLocaleString();
+    const creditsEl = document.getElementById('shop-credits');
+    if (creditsEl) creditsEl.textContent = Number(gameState.credits || 0).toLocaleString();
     const grid = document.getElementById('shop-grid');
     if (!grid) return;
+    if (!Array.isArray(gameState.shop.paidOwned)) gameState.shop.paidOwned = [];
+
     const cardFor = (item) => {
         const owned = gameState.shop.owned.indexOf(item.id) !== -1;
         const affordable = gameState.money >= item.price;
@@ -4206,14 +4390,98 @@ function renderShop() {
                     onclick="buyShopItem('${item.id}')">${owned ? '已拥有' : (affordable ? '购买' : '资金不足')}</button>
             </div>`;
     };
-    grid.innerHTML = SHOP_CATEGORIES.map(cat => {
+    const paidCardFor = (item) => {
+        const owned = gameState.shop.paidOwned.indexOf(item.id) !== -1;
+        const affordable = Number(gameState.credits || 0) >= item.credits;
+        return `
+            <div class="shop-card paid${owned ? ' owned' : ''}">
+                <div class="shop-icon">${item.icon}</div>
+                <div class="shop-body">
+                    <div class="shop-name">${item.name}<span class="paid-tag">限定</span></div>
+                    <div class="shop-desc">${item.desc}</div>
+                    <div class="shop-price shop-credits-price">💠 ${item.credits.toLocaleString()} 点券</div>
+                </div>
+                <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
+                    ${owned || !affordable ? 'disabled' : ''}
+                    onclick="buyPaidItem('${item.id}')">${owned ? '已拥有' : (affordable ? '兑换' : '点券不足')}</button>
+            </div>`;
+    };
+    const packCardFor = (pack) => `
+        <div class="shop-card paid">
+            <div class="shop-icon">${pack.icon}</div>
+            <div class="shop-body">
+                <div class="shop-name">${pack.name}<span class="paid-tag">${pack.tag}</span></div>
+                <div class="shop-desc">${pack.desc}</div>
+                <div class="shop-price shop-credits-price">¥ ${pack.price} · 💠 ${pack.credits.toLocaleString()}</div>
+            </div>
+            <button class="btn btn-sm btn-primary" onclick="buyCreditsPack('${pack.id}')">模拟支付</button>
+        </div>`;
+
+    const wallet = `
+        <div class="shop-wallet">
+            <span>游戏资金：<b>$${gameState.money.toLocaleString()}</b></span>
+            <span>VCT 点券：<b>💠 ${Number(gameState.credits || 0).toLocaleString()}</b></span>
+            <span class="shop-wallet-note">模拟内购演示，不会产生真实扣款</span>
+        </div>`;
+    const recharge = `<div class="shop-category">
+        <h3 class="shop-category-title">💠 点券充值（模拟支付）</h3>
+        <div class="shop-category-grid">${PAID_PACKS.map(packCardFor).join('')}</div>
+    </div>`;
+    const paidSections = PAID_CATEGORIES.map(cat => {
+        const items = PAID_ITEMS.filter(i => i.cat === cat.key);
+        if (!items.length) return '';
+        return `<div class="shop-category">
+            <h3 class="shop-category-title">✨ ${cat.name}</h3>
+            <div class="shop-category-grid">${items.map(paidCardFor).join('')}</div>
+        </div>`;
+    }).join('');
+    const normalSections = SHOP_CATEGORIES.map(cat => {
         const items = SHOP_ITEMS.filter(i => i.cat === cat.key);
         if (!items.length) return '';
         return `<div class="shop-category">
             <h3 class="shop-category-title">${cat.name}</h3>
             <div class="shop-category-grid">${items.map(cardFor).join('')}</div>
         </div>`;
-    }).join('') + '<p class="shop-note">所有道具均为外观或便利类，不会改变任何比赛数值，保证公平对局。</p>';
+    }).join('');
+    grid.innerHTML = wallet + recharge + paidSections + normalSections +
+        '<p class="shop-note">所有道具均为外观或便利类，付费内容同样不会改变任何比赛数值，保证公平对局。</p>';
+}
+
+function buyCreditsPack(id) {
+    if (!gameState) return;
+    const pack = PAID_PACKS.find(p => p.id === id);
+    if (!pack) return;
+    showConfirmModal('模拟支付',
+        `即将模拟支付 ¥${pack.price} 购买「${pack.name}」，到账 💠 ${pack.credits.toLocaleString()} 点券。\n\n本游戏为演示项目，不会产生任何真实扣款。`,
+        () => {
+            gameState.credits = Number(gameState.credits || 0) + pack.credits;
+            addMail('战队商城', '充值成功：' + pack.name, '已到账 💠 ' + pack.credits.toLocaleString() + ' 点券（模拟支付，无真实扣款）。', 0);
+            updateAllDisplays();
+            renderShop();
+            saveGame();
+            showToast('充值成功', '💠 ' + pack.credits.toLocaleString() + ' 点券已到账', 'success');
+        });
+}
+
+function buyPaidItem(id) {
+    if (!gameState) return;
+    const item = PAID_ITEMS.find(i => i.id === id);
+    if (!item) return;
+    if (!Array.isArray(gameState.shop.paidOwned)) gameState.shop.paidOwned = [];
+    if (gameState.shop.paidOwned.indexOf(id) !== -1) return;
+    const credits = Number(gameState.credits || 0);
+    if (credits < item.credits) return showToast('点券不足', '还差 💠 ' + (item.credits - credits).toLocaleString() + ' 点券', 'error');
+    gameState.credits = credits - item.credits;
+    gameState.shop.paidOwned.push(id);
+    applyShopItem(item);
+    addMail('战队商城', '兑换成功：' + item.name, '已扣除 💠 ' + item.credits.toLocaleString() + ' 点券，该限定道具不影响比赛数值。', 0);
+    const resultEl = document.getElementById('shop-result');
+    if (resultEl) resultEl.innerHTML = '已兑换：' + item.name;
+    updateAllDisplays();
+    renderDashboard();
+    renderShop();
+    saveGame();
+    showToast('兑换成功', item.name + '（限定外观，不影响对局）', 'success');
 }
 
 function applyShopItem(item) {
@@ -4244,6 +4512,20 @@ function applyShopItem(item) {
 /* ---------- 游戏公告 ---------- */
 
 const GAME_ANNOUNCEMENTS = [
+    {
+        version: '1.4.0',
+        date: '2026-11-07',
+        tag: '赛区 · 全杯赛 · 付费内容',
+        title: 'v1.4.0 大型更新：四大赛区 · 完整 VCT 杯赛 · 内测/测试渠道 · 模拟内购',
+        content: [
+            '新增四大赛区：美洲、EMEA、太平洋、中国。自创战队时可选择赛区，联赛、积分榜、杯赛与战队巡礼均按赛区划分。',
+            '新增完整 VCT 杯赛体系：Kickoff 开赛杯、Masters 1、Masters 2、Champions，以及赛季末的 Ascension 与 Game Changers。',
+            '24 周赛历重构：W1-3 Kickoff，W4-9 Stage 1，W10-12 Masters 1，W13-18 Stage 2，W19-21 Masters 2，W22-24 Champions。',
+            '新增内测版与测试版独立入口：/beta/ 与 /alpha/，可提前体验新功能；正式版隐藏管理员调试控制台。',
+            '新增模拟内购：点券礼包与限定外观（限定队徽、横幅、称号、名片框等），仅影响外观，不影响任何比赛数值。',
+            '存档兼容：旧存档会自动迁移到赛区体系并重建赛程。'
+        ]
+    },
     {
         version: '1.3.0',
         date: '2026-11-07',
@@ -4343,14 +4625,16 @@ function buildShareText() {
     const standing = gameState.standings.find(s => s && s.isPlayerTeam);
     const rank = getPlayerRank();
     const meta = LEAGUE_META[gameState.league] || LEAGUE_META.premier;
-    const masters = gameState.cups && gameState.cups.masters && gameState.cups.masters.champion;
+    const masters1 = gameState.cups && gameState.cups.masters1 && gameState.cups.masters1.champion;
+    const masters2 = gameState.cups && gameState.cups.masters2 && gameState.cups.masters2.champion;
     const champions = gameState.cups && gameState.cups.champions && gameState.cups.champions.champion;
     const best = [...gameState.roster].sort((a, b) => b.power - a.power)[0];
     return [
         '【VCT 战队经理】' + gameState.teamName,
-        '第 ' + gameState.season + ' 赛季 · ' + meta.name,
+        '第 ' + gameState.season + ' 赛季 · ' + regionName(gameState.region) + ' · ' + meta.name,
         '战绩：' + standing.wins + ' 胜 ' + standing.losses + ' 负 · 联赛排名 #' + rank,
-        masters ? 'Masters 冠军：' + masters : 'Masters：冲击中',
+        masters1 ? 'Masters 1 冠军：' + masters1 : 'Masters 1：冲击中',
+        masters2 ? 'Masters 2 冠军：' + masters2 : 'Masters 2：冲击中',
         champions ? 'Champions 冠军：' + champions : 'Champions：冲击中',
         best ? '核心选手：' + best.name + '（战力 ' + best.power + '）' : '',
         '来挑战我的王朝 → https://zmzhy.github.io/sdk/'
@@ -4430,14 +4714,14 @@ function drawShareCard() {
     ctx.font = '22px "Segoe UI", "Microsoft YaHei", sans-serif';
     ctx.fillText('赛季战绩 · 积分 ' + (standing.points || 0), 330, 340);
 
-    const masters = gameState.cups && gameState.cups.masters && gameState.cups.masters.champion;
+    const masters = gameState.cups && gameState.cups.masters1 && gameState.cups.masters1.champion;
     const champions = gameState.cups && gameState.cups.champions && gameState.cups.champions.champion;
     ctx.strokeStyle = '#2B3A4A';
     ctx.lineWidth = 2;
     for (let i = 0; i < 2; i++) ctx.strokeRect(44, 400 + i * 78, W - 88, 62);
     ctx.fillStyle = '#768079';
     ctx.font = '20px "Segoe UI", "Microsoft YaHei", sans-serif';
-    ctx.fillText('Masters 冠军', 64, 438);
+    ctx.fillText('Masters 1 冠军', 64, 438);
     ctx.fillText('Champions 冠军', 64, 516);
     ctx.fillStyle = masters ? '#F7B500' : '#ECE8E1';
     ctx.font = 'bold 22px "Segoe UI", "Microsoft YaHei", sans-serif';
