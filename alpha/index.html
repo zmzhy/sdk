@@ -5,7 +5,7 @@
     <base href="../">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VCT 战队经理 · 测试版 | Valorant Manager Alpha</title>
-    <link rel="stylesheet" href="style.css?v=1.5.0">
+    <link rel="stylesheet" href="style.css?v=1.7.0">
     <meta name="description" content="VCT 战队经理 —— 一款免费的《无畏契约》战队经营模拟游戏，支持云存档、全球排行榜与创意工坊。">
     <meta name="theme-color" content="#0f1923">
 </head>
@@ -115,11 +115,20 @@
             <button class="nav-btn" data-screen="market">
                 <span class="nav-icon">◇</span> 转会市场
             </button>
+            <button class="nav-btn" data-screen="shop">
+                <span class="nav-icon">🛒</span> 商店
+            </button>
+            <button class="nav-btn" data-screen="inventory">
+                <span class="nav-icon">🎒</span> 背包
+            </button>
             <button class="nav-btn" data-screen="schedule">
                 <span class="nav-icon">◉</span> 赛程
             </button>
             <button class="nav-btn" data-screen="standings">
                 <span class="nav-icon">◐</span> 积分榜
+            </button>
+            <button class="nav-btn" data-screen="honors">
+                <span class="nav-icon">🏅</span> 荣誉室
             </button>
             <button class="nav-btn" data-screen="teams">
                 <span class="nav-icon">🏆</span> VCT 战队
@@ -224,6 +233,11 @@
                         <h2 class="panel-title">★ 队员概览</h2>
                         <div id="team-overview-list" class="agent-mini-list"></div>
                     </div>
+
+                    <div class="panel weekly-tasks">
+                        <h2 class="panel-title">🎯 本周任务</h2>
+                        <div id="weekly-tasks-list" class="weekly-task-list"></div>
+                    </div>
                 </div>
 
                 <div class="action-bar">
@@ -242,6 +256,7 @@
                     <p>管理你的队员，训练精英特工</p>
                 </div>
                 <div id="roster-grid" class="agent-grid"></div>
+                <div id="player-stats" class="player-stats"></div>
             </section>
 
             <section id="screen-market" class="screen">
@@ -261,6 +276,23 @@
                     </div>
                 </div>
                 <div id="market-grid" class="agent-grid"></div>
+            </section>
+
+            <section id="screen-shop" class="screen">
+                <div class="screen-header">
+                    <h1>战队商店</h1>
+                    <p>外观与便利道具专区 · 不改变任何比赛数值</p>
+                </div>
+                <div id="shop-page-grid" class="shop-page-grid"></div>
+                <div id="shop-page-result" class="gh-result"></div>
+            </section>
+
+            <section id="screen-inventory" class="screen">
+                <div class="screen-header">
+                    <h1>背包</h1>
+                    <p>已购买的外观、收藏与便利道具都会保存在这里</p>
+                </div>
+                <div id="inventory-content" class="inventory-content"></div>
             </section>
 
             <section id="screen-schedule" class="screen">
@@ -326,6 +358,14 @@
                     </div>
                     <div id="leaderboard-list" class="leaderboard-list"></div>
                 </div>
+            </section>
+
+            <section id="screen-honors" class="screen">
+                <div class="screen-header">
+                    <h1>荣誉室</h1>
+                    <p>奖杯陈列、赛季历史与成就墙</p>
+                </div>
+                <div id="honors-content"></div>
             </section>
 
             <section id="screen-teams" class="screen">
@@ -715,7 +755,7 @@
     </div>
 
     <script>window.__CHANNEL__ = 'alpha';</script>
-    <script src="github-backend.js?v=1.5.0"></script>
-    <script src="game.js?v=1.5.0"></script>
+    <script src="github-backend.js?v=1.7.0"></script>
+    <script src="game.js?v=1.7.0"></script>
 </body>
 </html>
