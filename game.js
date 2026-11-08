@@ -2823,7 +2823,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.8.0';
+const APP_VERSION = '1.9.0';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -5401,6 +5401,19 @@ function applyShopItem(item) {
 
 const GAME_ANNOUNCEMENTS = [
     {
+        version: '1.9.0',
+        date: '2026-11-08',
+        tag: '号角赛程 · VCT联盟',
+        title: 'v1.9.0 赛程改版：号角赛事日历 · VCT联盟',
+        content: [
+            '赛程页标题改为「VCT联盟」，副标题为「赛事日历 · 赛程与赛果」。',
+            '赛程外观参照号角赛事日历：深色卡片、热门赛事横滑区、赛事日历周标签条与比赛行。',
+            '新增「全部 / W01–W24」周筛选，点击周标签可只看该周赛程。',
+            '比赛行展示时间、BO3、赛事阶段、双方队标、比分/VS、胜负或待赛状态与主客场。',
+            '新增本季胜/负/胜率概览，当前周标签以蓝色高亮。'
+        ]
+    },
+    {
         version: '1.8.0',
         date: '2026-11-08',
         tag: '赛程重制 · 真实队标 · 赞助商',
@@ -6115,42 +6128,104 @@ function renderShop() {
         '<p class="shop-note">所有道具均为外观或便利类，付费内容同样不会改变任何比赛数值，保证公平对局。购买后可在背包中查看。</p>';
 }
 
-/* ---------- 赛程视觉重构：VCT 官网式赛程 ---------- */
+/* ---------- 赛程视觉重构：号角赛事日历式布局 ---------- */
+let scheduleWeekFilter = 'all';
+
+function setScheduleWeekFilter(week) {
+    scheduleWeekFilter = String(week);
+    renderSchedule();
+}
+
+const STAGE_VISUAL = {
+    kickoff: { icon: '🚀', label: 'Kickoff' },
+    league: { icon: '🏆', label: 'VCT 联赛' },
+    masters1: { icon: '🌍', label: 'Masters 1' },
+    masters2: { icon: '🌍', label: 'Masters 2' },
+    champions: { icon: '👑', label: 'Champions' }
+};
+
 function renderSchedule() {
     const container = document.getElementById('schedule-list');
     if (!container || !gameState) return;
 
+    const schedule = gameState.schedule || [];
+    if (!schedule.length) {
+        container.innerHTML = '<div class="hj-empty">暂无赛程安排</div>';
+        return;
+    }
+
     const weeks = {};
-    (gameState.schedule || []).forEach(match => {
+    schedule.forEach(match => {
         if (!weeks[match.week]) weeks[match.week] = [];
         weeks[match.week].push(match);
     });
+    const weekKeys = Object.keys(weeks).sort((a, b) => a - b);
 
-    const playedMatches = (gameState.schedule || []).filter(m => m.played);
+    const playedMatches = schedule.filter(m => m.played);
     const wins = playedMatches.filter(m => m.result === 'win' || Number(m.playerScore) > Number(m.opponentScore)).length;
     const losses = playedMatches.length - wins;
     const winRate = playedMatches.length ? Math.round(wins / playedMatches.length * 100) : 0;
     const leagueMeta = LEAGUE_META[gameState.league] || LEAGUE_META.premier;
 
-    const weekHTML = Object.keys(weeks).sort((a, b) => a - b).map(week => {
+    const selectedWeek = scheduleWeekFilter === 'all' ? null : Number(scheduleWeekFilter);
+    const visibleWeeks = selectedWeek ? weekKeys.filter(w => Number(w) === selectedWeek) : weekKeys;
+
+    /* 热门赛事 */
+    const stageRows = [];
+    const seenStages = {};
+    schedule.forEach(match => {
+        const key = match.stage || 'league';
+        if (seenStages[key]) { seenStages[key].count++; return; }
+        seenStages[key] = { key, count: 1, firstWeek: match.week };
+        stageRows.push(seenStages[key]);
+    });
+    const stageHTML = stageRows.map(stage => {
+        const visual = STAGE_VISUAL[stage.key] || { icon: '🏁', label: matchLabel(weeks[stage.firstWeek][0]) };
+        const stageWeekList = schedule.filter(m => (m.stage || 'league') === stage.key).map(m => m.week);
+        const active = stageWeekList.indexOf(gameState.currentWeek) !== -1;
+        return `<div class="hj-hot-card${active ? ' is-active' : ''}">
+            <span class="hj-hot-icon">${visual.icon}</span>
+            <div>
+                <b>${visual.label}</b>
+                <span>${stage.count} 场 · 第 ${stage.firstWeek} 周起</span>
+            </div>
+        </div>`;
+    }).join('');
+
+    /* 周筛选条 */
+    const weekTabs = `<button class="hj-week-tab${scheduleWeekFilter === 'all' ? ' active' : ''}" onclick="setScheduleWeekFilter('all')">
+            <b>全部</b><span>赛程</span>
+        </button>` + weekKeys.map(week => {
+        const current = Number(week) === gameState.currentWeek;
+        const active = Number(week) === selectedWeek;
+        return `<button class="hj-week-tab${active ? ' active' : ''}${current ? ' is-current' : ''}" onclick="setScheduleWeekFilter('${week}')">
+            <b>W${String(week).padStart(2, '0')}</b><span>第 ${week} 周</span>
+        </button>`;
+    }).join('');
+
+    /* 比赛日 */
+    const daysHTML = visibleWeeks.map(week => {
         const matches = weeks[week];
         const current = Number(week) === gameState.currentWeek;
         const allDone = matches.every(m => m.played || m.bye);
         const statusText = allDone ? '已结束' : (current ? '进行中' : '未开始');
         const statusClass = allDone ? 'done' : (current ? 'live' : 'pending');
 
-        const cards = matches.map(match => {
+        const rows = matches.map((match, idx) => {
+            const timeSlots = ['17:00', '19:00', '21:00'];
+            const time = timeSlots[idx % timeSlots.length];
             if (!match.opponent) {
-                return `<div class="vct-bye">
-                    <span class="vct-bye-icon">⏸</span>
-                    <div><b>${match.bye ? '轮空 / 未晋级' : '对手待定'}</b><span>本周没有安排正式比赛</span></div>
+                return `<div class="hj-match is-bye">
+                    <div class="hj-match-time"><b>—</b><span>(BO3)</span></div>
+                    <div class="hj-match-body"><div class="hj-no-match">${match.bye ? '本周轮空 / 未晋级' : '本周无比赛'}</div></div>
+                    <div class="hj-match-status"><span class="hj-match-side">BYE</span></div>
                 </div>`;
             }
             const opp = AI_TEAMS.find(t => t.name === match.opponent);
             const oppStanding = (gameState.standings || []).find(s => s.name === match.opponent);
             const oppRank = (gameState.standings || []).findIndex(s => s.name === match.opponent) + 1;
             const infoParts = [];
-            if (opp) infoParts.push(opp.country, opp.region);
+            if (opp) infoParts.push(opp.country);
             if (oppRank > 0) infoParts.push('#' + oppRank);
             if (!match.played && gameState.shop) {
                 if (gameState.shop.scoutUnlocked && opp) infoParts.push('⚔' + opp.power);
@@ -6160,90 +6235,76 @@ function renderSchedule() {
                     infoParts.push(wr + '% 胜率');
                 }
             }
-            const oppInfo = infoParts.filter(Boolean).join(' · ');
+            const extra = infoParts.filter(Boolean).join(' · ');
             const won = match.played && ((match.result === 'win') || (Number(match.playerScore) > Number(match.opponentScore)));
             const lost = match.played && !won;
             const resultClass = won ? 'win' : (lost ? 'loss' : '');
             const stateClass = match.played ? 'final' : (current ? 'live' : 'upcoming');
-            const statusLabel = match.played ? '已结束' : (current ? '本周开赛' : '待开赛');
-            const playerScoreClass = won ? 'score-win' : (lost ? 'score-loss' : '');
-            const oppScoreClass = lost ? 'score-win' : (won ? 'score-loss' : '');
+            const playerScoreClass = won ? 'is-win' : (lost ? 'is-loss' : '');
+            const oppScoreClass = lost ? 'is-win' : (won ? 'is-loss' : '');
 
-            return `<article class="vct-match ${stateClass} ${resultClass}">
-                <div class="vct-match-meta">
-                    <span class="vct-match-stage">${matchLabel(match)}</span>
-                    <span class="vct-match-bo">BO3</span>
-                    <span class="vct-match-status ${resultClass}">${statusLabel}</span>
-                </div>
-                <div class="vct-match-grid">
-                    <div class="vct-team-row ${won ? 'is-winner' : ''}">
-                        ${teamLogoHTML(gameState.teamName, 'md')}
-                        <div class="vct-team-copy">
+            return `<div class="hj-match ${stateClass} ${resultClass}">
+                <div class="hj-match-time"><b>${time}</b><span>(BO3)</span></div>
+                <div class="hj-match-body">
+                    <div class="hj-match-event">
+                        <span>${matchLabel(match)}</span>
+                        ${extra ? `<em>${extra}</em>` : ''}
+                    </div>
+                    <div class="hj-match-teams">
+                        <div class="hj-team">
+                            ${teamLogoHTML(gameState.teamName, 'sm')}
                             <b>${gameState.teamName}</b>
-                            <span>${match.isHome ? '🏠 主场' : '✈️ 客场'}</span>
                         </div>
-                    </div>
-                    <div class="vct-score-box">
-                        ${match.played
-                            ? `<b class="${playerScoreClass}">${match.playerScore}</b><i>:</i><b class="${oppScoreClass}">${match.opponentScore}</b>`
-                            : '<span class="vct-vs">VS</span>'}
-                    </div>
-                    <div class="vct-team-row right ${lost ? 'is-winner' : ''}">
-                        <div class="vct-team-copy right">
+                        <div class="hj-score">
+                            ${match.played
+                                ? `<span class="${playerScoreClass}">${match.playerScore}</span><i>:</i><span class="${oppScoreClass}">${match.opponentScore}</span>`
+                                : '<i>VS</i>'}
+                        </div>
+                        <div class="hj-team right">
+                            ${teamLogoHTML(match.opponent, 'sm')}
                             <b>${match.opponent}</b>
-                            <span>${oppInfo}</span>
                         </div>
-                        ${teamLogoHTML(match.opponent, 'md')}
                     </div>
                 </div>
-                <div class="vct-match-foot">
-                    <span>${match.played ? (won ? '拿下比赛' : '惜败对手') : '赛程待定 · 关注战队公告'}</span>
-                    <span class="vct-match-side">${match.isHome ? 'HOME' : 'AWAY'}</span>
+                <div class="hj-match-status">
+                    <span class="hj-status-pill ${match.played ? resultClass : (current ? 'live' : 'pending')}">${match.played ? (won ? '胜利' : '失利') : (current ? '本周' : '待赛')}</span>
+                    <span class="hj-match-side">${match.isHome ? 'HOME' : 'AWAY'}</span>
                 </div>
-            </article>`;
+            </div>`;
         }).join('');
 
-        return `<section class="vct-week-row${current ? ' is-current' : ''}">
-            <aside class="vct-week-rail">
-                <span class="vct-week-node"></span>
-                <div class="vct-week-label">
-                    <b>W${String(week).padStart(2, '0')}</b>
-                    <span>${statusText}</span>
-                </div>
-            </aside>
-            <div class="vct-week-panel">
-                <header class="vct-week-panel-head">
-                    <div>
-                        <span class="vct-week-stage">${matchLabel(matches[0])}</span>
-                        <span class="vct-week-count">${matches.length} 场比赛</span>
-                    </div>
-                    <span class="vct-week-pill ${statusClass}">${statusText}</span>
-                </header>
-                <div class="vct-week-matches">${cards}</div>
-            </div>
+        return `<section class="hj-day${current ? ' is-current' : ''}">
+            <header class="hj-day-head">
+                <div class="hj-day-date"><b>W${String(week).padStart(2, '0')}</b><span>第 ${week} 周</span></div>
+                <div class="hj-day-stage">${matchLabel(matches[0])}</div>
+                <span class="hj-day-pill ${statusClass}">${statusText}</span>
+            </header>
+            <div class="hj-day-list">${rows}</div>
         </section>`;
     }).join('');
 
     container.innerHTML = `
-        <div class="vct-sched-hero">
-            <div class="vct-sched-hero-main">
-                <span class="vct-sched-kicker">VALORANT CHAMPIONS TOUR</span>
-                <h2>${gameState.season} 赛季赛程</h2>
-                <p>${leagueMeta.name} · 第 ${gameState.currentWeek} / ${TOTAL_WEEKS} 周</p>
-            </div>
-            <div class="vct-sched-stats">
-                <div class="vct-stat"><b>${wins}</b><span>胜场</span></div>
-                <div class="vct-stat"><b>${losses}</b><span>负场</span></div>
-                <div class="vct-stat accent"><b>${winRate}%</b><span>胜率</span></div>
-            </div>
-        </div>
-        <div class="vct-sched-legend">
-            <span><i class="vct-dot done"></i>已结束</span>
-            <span><i class="vct-dot live"></i>当前周</span>
-            <span><i class="vct-dot pending"></i>未开始</span>
-            <span class="vct-sched-legend-note">主客场与赛果会自动同步</span>
-        </div>
-        <div class="vct-sched-weeks">${weekHTML}</div>`;
+        <div class="hj-page">
+            <section class="hj-card hj-hot">
+                <div class="hj-section-head"><h3>热门赛事</h3><span>${gameState.season} VCT 赛季</span></div>
+                <div class="hj-hot-row">${stageHTML}</div>
+            </section>
+            <section class="hj-card hj-calendar">
+                <div class="hj-cal-top">
+                    <div>
+                        <h3>赛事日历</h3>
+                        <span class="hj-cal-sub">${leagueMeta.name} · 共 ${weekKeys.length} 周</span>
+                    </div>
+                    <div class="hj-record">
+                        <span>本季战绩</span>
+                        <b>${wins}W</b><i>—</i><b>${losses}L</b>
+                        <em>${winRate}%</em>
+                    </div>
+                </div>
+                <div class="hj-week-strip">${weekTabs}</div>
+                <div class="hj-days">${daysHTML}</div>
+            </section>
+        </div>`;
     renderSeasonProgress();
 }
 
