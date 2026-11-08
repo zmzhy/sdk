@@ -2770,11 +2770,34 @@ body {
 
 .shop-card {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
     padding: 12px;
     background: var(--valorant-bg3);
     border: 1px solid transparent;
+}
+
+.shop-card-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.shop-card-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.shop-card-actions .btn {
+    flex: 1;
+    width: 100%;
+    justify-content: center;
+    display: flex;
+    align-items: center;
 }
 
 .shop-card.owned {
@@ -4654,5 +4677,150 @@ body {
     .hj-team .team-logo { width: 26px; height: 26px; font-size: 9px; }
     .hj-score { font-size: 15px; }
 }
+
+/* ==================== v1.11.0：支付 / 赞助分级 / 球探 / 签到 / 粉丝 / 赛季目标 / 图鉴 ==================== */
+
+.shop-pay-settings-btn { margin-top: 10px; }
+
+.sponsor-tier {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    border: 1px solid var(--st-color);
+    color: var(--st-color);
+    font-size: 12px;
+    font-weight: 900;
+    line-height: 1.2;
+    border-radius: 3px;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+}
+.sponsor-tier em {
+    font-style: normal;
+    font-size: 9px;
+    font-weight: 600;
+    opacity: 0.85;
+    letter-spacing: 1px;
+}
+.sponsor-card.sponsor-tier-S { background: linear-gradient(120deg, rgba(255, 70, 85, 0.12), var(--valorant-bg2)); }
+.sponsor-card.sponsor-tier-A { background: linear-gradient(120deg, rgba(247, 181, 0, 0.09), var(--valorant-bg2)); }
+.sponsor-card.sponsor-tier-B { background: linear-gradient(120deg, rgba(168, 85, 247, 0.09), var(--valorant-bg2)); }
+
+.scout-panel { margin-bottom: 18px; }
+.scout-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+    background: linear-gradient(120deg, rgba(255, 70, 85, 0.08), var(--valorant-bg2));
+    border: 1px solid var(--valorant-bg3);
+    border-left: 4px solid var(--valorant-red);
+}
+.scout-main { flex: 1; min-width: 220px; }
+.scout-title { font-size: 15px; font-weight: 800; letter-spacing: 1px; margin-bottom: 6px; }
+.scout-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.scout-meta { margin-top: 8px; font-size: 12px; color: var(--text-secondary); }
+.scout-meta b { color: var(--valorant-red); }
+.scout-action { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.scout-cost { font-size: 12px; color: var(--warning); font-weight: 700; }
+.scout-recent { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 2px 0; }
+.scout-recent-title { font-size: 11px; color: var(--text-secondary); letter-spacing: 1px; }
+.scout-chip {
+    font-size: 11px;
+    padding: 4px 10px;
+    background: var(--valorant-bg3);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.daily-panel-body { display: flex; flex-direction: column; gap: 10px; }
+.daily-head { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-secondary); }
+.daily-streak b { color: var(--valorant-red); font-size: 16px; }
+.daily-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.daily-day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 7px 4px;
+    background: var(--valorant-bg3);
+    border: 1px solid transparent;
+    font-size: 10px;
+    text-align: center;
+}
+.daily-day-num { color: var(--text-secondary); }
+.daily-day-reward { color: var(--warning); font-weight: 700; font-size: 10px; }
+.daily-day.done { border-color: rgba(125, 221, 145, 0.4); opacity: 0.75; }
+.daily-day.current { border-color: var(--valorant-red); background: rgba(255, 70, 85, 0.1); }
+.btn-block { width: 100%; display: flex; justify-content: center; }
+
+.fans-head { display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+.fans-count { font-size: 26px; font-weight: 900; color: var(--valorant-red); }
+.fans-label { font-size: 12px; color: var(--text-secondary); letter-spacing: 1px; }
+.fans-bar { height: 8px; background: rgba(255, 255, 255, 0.08); overflow: hidden; margin-bottom: 8px; }
+.fans-bar-fill { height: 100%; background: linear-gradient(90deg, var(--valorant-red), var(--warning)); transition: width 0.3s ease; }
+.fans-meta { font-size: 12px; color: var(--text-secondary); display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+.fans-meta b.up { color: var(--success); }
+.fans-meta b.down { color: var(--valorant-red); }
+.fans-note { font-size: 11px; color: var(--text-secondary); line-height: 1.5; }
+.fans-note b { color: var(--warning); }
+
+.season-goal-list { display: flex; flex-direction: column; gap: 12px; }
+.season-goal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--valorant-bg2);
+    border-left: 3px solid var(--valorant-red);
+}
+.season-goal.done { border-left-color: var(--success); background: rgba(125, 221, 145, 0.06); }
+.season-goal.claimed { opacity: 0.55; }
+.season-goal-main { flex: 1; min-width: 0; }
+.season-goal-label { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.season-goal-meta { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+
+.collection-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    background: var(--valorant-bg2);
+    border: 1px solid var(--valorant-bg3);
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+.collection-summary b { color: var(--valorant-red); }
+.collection-group { margin-bottom: 20px; }
+.collection-group h3 { font-size: 13px; font-weight: 800; letter-spacing: 1px; margin-bottom: 10px; }
+.collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.codex-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--valorant-bg2);
+    border: 1px solid var(--valorant-bg3);
+    opacity: 0.5;
+}
+.codex-item.owned { opacity: 1; border-left: 3px solid var(--success); }
+.codex-icon { font-size: 20px; }
+.codex-name { flex: 1; font-size: 12px; font-weight: 700; }
+.codex-note { font-size: 11px; color: var(--text-secondary); }
+
+.pay-config-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.pay-config-row { display: flex; flex-direction: column; gap: 4px; }
+.pay-config-name { font-size: 12px; font-weight: 700; color: var(--warning); }
+.pay-config-input {
+    width: 100%;
+    padding: 9px 12px;
+    background: var(--valorant-bg3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    font-size: 12px;
+}
+.pay-config-input:focus { outline: none; border-color: var(--valorant-red); }
 
 

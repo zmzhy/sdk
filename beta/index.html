@@ -5,7 +5,7 @@
     <base href="../">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VCT 战队经理 · 内测版 | Valorant Manager Beta</title>
-    <link rel="stylesheet" href="style.css?v=1.10.0">
+    <link rel="stylesheet" href="style.css?v=1.11.0">
     <meta name="description" content="VCT 战队经理 —— 一款免费的《无畏契约》战队经营模拟游戏，支持云存档、全球排行榜与创意工坊。">
     <meta name="theme-color" content="#0f1923">
 </head>
@@ -247,6 +247,21 @@
                         <h2 class="panel-title">🎯 本周任务</h2>
                         <div id="weekly-tasks-list" class="weekly-task-list"></div>
                     </div>
+
+                    <div class="panel daily-panel">
+                        <h2 class="panel-title">📅 每日签到</h2>
+                        <div id="daily-panel" class="daily-panel-body"></div>
+                    </div>
+
+                    <div class="panel fans-panel">
+                        <h2 class="panel-title">💗 粉丝经济</h2>
+                        <div id="fans-panel" class="fans-panel-body"></div>
+                    </div>
+
+                    <div class="panel season-goals-panel">
+                        <h2 class="panel-title">🏆 赛季目标</h2>
+                        <div id="season-goals-panel" class="season-goal-list"></div>
+                    </div>
                 </div>
 
                 <div class="action-bar">
@@ -283,6 +298,7 @@
                         <button class="btn btn-ghost" id="refresh-market" style="margin-left:auto;padding:8px 15px;" onclick="refreshMarket()">🔄 刷新</button>
                     </div>
                 </div>
+                <div id="scout-panel" class="scout-panel"></div>
                 <div id="market-grid" class="agent-grid"></div>
             </section>
 
@@ -290,6 +306,7 @@
                 <div class="screen-header">
                     <h1>战队商店</h1>
                     <p>外观与便利道具专区 · 不改变任何比赛数值</p>
+                    <button class="btn btn-ghost shop-pay-settings-btn" onclick="openPaySettings()">💳 支付设置</button>
                 </div>
                 <div id="shop-page-grid" class="shop-page-grid"></div>
                 <div id="shop-page-result" class="gh-result"></div>
@@ -775,7 +792,7 @@
     </div>
 
     <script>window.__CHANNEL__ = 'beta';</script>
-    <script src="github-backend.js?v=1.10.0"></script>
-    <script src="game.js?v=1.10.0"></script>
+    <script src="github-backend.js?v=1.11.0"></script>
+    <script src="game.js?v=1.11.0"></script>
 </body>
 </html>

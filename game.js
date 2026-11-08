@@ -404,7 +404,7 @@ const SHOP_ITEMS = [
     { id: 'card_autosave', kind: 'autosave', cat: 'util', name: '自动存档卡', icon: '💾', price: 60000, desc: '每场比赛结束后自动保存本地存档，再也不怕忘记存档。纯便利道具，不影响比赛。' }
 ];
 
-/* ---------- 付费内容：点券礼包 + 限定外观（模拟内购，不影响对局数值） ---------- */
+/* ---------- 付费内容：点券礼包 + 限定外观（真实支付，不影响对局数值） ---------- */
 const PAID_PACKS = [
     { id: 'credits_60', name: '60 点券', icon: '💠', price: 6, credits: 60, tag: '新手', desc: '入门档点券，适合兑换一件小型限定外观。' },
     { id: 'credits_300', name: '300 点券', icon: '💠', price: 30, credits: 300, tag: '热销', desc: '最受欢迎的档位，可兑换多数限定队徽与贴纸。' },
@@ -429,15 +429,35 @@ const PAID_ITEMS = [
 ];
 
 /* ---------- v1.5.0：赞助商 / 董事会 / 转会窗 / 国际邀请赛 ---------- */
+/* v1.11.0：12 家赞助商，分为 S / A / B / C / D 五个等级 */
+const SPONSOR_TIER_ORDER = { S: 1, A: 2, B: 3, C: 4, D: 5 };
+const SPONSOR_TIER_META = {
+    S: { label: 'S', name: '全球顶级', color: '#FF4655' },
+    A: { label: 'A', name: '国际一线', color: '#F7B500' },
+    B: { label: 'B', name: '知名品牌', color: '#A855F7' },
+    C: { label: 'C', name: '区域赞助', color: '#00E5A0' },
+    D: { label: 'D', name: '新兴品牌', color: '#53A7E2' }
+};
+
 const SPONSOR_BRANDS = [
-    { id: 'redbull', name: 'Red Bull', icon: '🐂', weekly: 10000, bonus: 90000, targetRank: 6, color: '#1E41FF', desc: '能量饮料巨头，为整支战队提供能量补给，赞助门槛较低。' },
-    { id: 'hyperx', name: 'HyperX', icon: '🎧', weekly: 12000, bonus: 140000, targetRank: 4, color: '#FF0000', desc: '电竞外设品牌，赞助训练设备，要求战队稳定在联赛上半区。' },
-    { id: 'monster', name: 'Monster Energy', icon: '🦖', weekly: 11000, bonus: 110000, targetRank: 5, color: '#00FF00', desc: '能量饮品品牌，偏爱有冲劲的年轻战队。' },
-    { id: 'nike', name: 'Nike Esports', icon: '👟', weekly: 16000, bonus: 200000, targetRank: 3, color: '#FFFFFF', desc: '运动巨头，只为联赛前三的强队提供顶级赞助。' },
-    { id: 'razer', name: 'Razer', icon: '🐍', weekly: 14000, bonus: 170000, targetRank: 4, color: '#00FF00', desc: '雷蛇外设，偏爱进攻风格鲜明、话题度高的战队。' },
-    { id: 'corsair', name: 'Corsair', icon: '⌨️', weekly: 12000, bonus: 130000, targetRank: 5, color: '#FFD700', desc: '海盗船外设，看重稳定的联赛表现与青训体系。' },
-    { id: 'intel', name: 'Intel Gaming', icon: '💻', weekly: 15000, bonus: 190000, targetRank: 3, color: '#0068B5', desc: '英特尔电竞，只与赛区前列、数据表现顶尖的战队合作。' }
+    { id: 'nike', name: 'Nike Esports', icon: '👟', tier: 'S', weekly: 26000, bonus: 350000, targetRank: 1, color: '#FFFFFF', desc: '运动巨头，只与联赛冠军争夺者合作，报价与奖金均为全联盟最高。' },
+    { id: 'redbull', name: 'Red Bull', icon: '🐂', tier: 'S', weekly: 24000, bonus: 320000, targetRank: 2, color: '#1E41FF', desc: '能量饮料巨头，全球顶级赛事赞助商，要求战队长期稳居赛区前列。' },
+    { id: 'intel', name: 'Intel Gaming', icon: '💻', tier: 'A', weekly: 20000, bonus: 250000, targetRank: 2, color: '#0068B5', desc: '英特尔电竞，只与数据表现顶尖、阵容稳定的强队合作。' },
+    { id: 'razer', name: 'Razer', icon: '🐍', tier: 'A', weekly: 19000, bonus: 230000, targetRank: 3, color: '#00FF00', desc: '雷蛇外设，偏爱进攻风格鲜明、话题度高的战队。' },
+    { id: 'hyperx', name: 'HyperX', icon: '🎧', tier: 'B', weekly: 16000, bonus: 190000, targetRank: 4, color: '#FF0000', desc: '电竞外设品牌，赞助训练设备，要求战队稳定在联赛上半区。' },
+    { id: 'samsung', name: 'Samsung Odyssey', icon: '🖥️', tier: 'B', weekly: 15500, bonus: 185000, targetRank: 3, color: '#1428A0', desc: '三星电竞显示器，重视赛场视觉呈现与战队曝光度。' },
+    { id: 'logitech', name: 'Logitech G', icon: '🖱️', tier: 'B', weekly: 15000, bonus: 180000, targetRank: 4, color: '#00B8FC', desc: '罗技电竞，长期支持职业青训体系，青睐有潜力的年轻阵容。' },
+    { id: 'corsair', name: 'Corsair', icon: '⌨️', tier: 'C', weekly: 13000, bonus: 140000, targetRank: 5, color: '#FFD700', desc: '海盗船外设，看重稳定的联赛表现与青训体系。' },
+    { id: 'monster', name: 'Monster Energy', icon: '🦖', tier: 'C', weekly: 12000, bonus: 130000, targetRank: 6, color: '#00FF00', desc: '能量饮品品牌，偏爱有冲劲的年轻战队。' },
+    { id: 'secretlab', name: 'Secretlab', icon: '🪑', tier: 'C', weekly: 11500, bonus: 125000, targetRank: 5, color: '#E23A3A', desc: '电竞椅品牌，为选手提供长期舒适训练环境。' },
+    { id: 'verizon', name: 'Verizon', icon: '📶', tier: 'D', weekly: 9500, bonus: 90000, targetRank: 7, color: '#EE0000', desc: '通信运营商，为战队提供稳定网络与赛事直播支持。' },
+    { id: 'primegaming', name: 'Prime Gaming', icon: '🎮', tier: 'D', weekly: 9000, bonus: 80000, targetRank: 8, color: '#9146FF', desc: '会员订阅平台，赞助门槛较低，适合起步阶段的战队。' }
 ];
+
+function sponsorTierBadge(tier) {
+    const meta = SPONSOR_TIER_META[tier] || SPONSOR_TIER_META.D;
+    return `<span class="sponsor-tier tier-${meta.label}" style="--st-color:${meta.color}">${meta.label}<em>${meta.name}</em></span>`;
+}
 const TRANSFER_WINDOW_WEEKS = [1, 2, 3, 4, 13, 14, 15, 16];
 
 function isTransferWindowOpen() {
@@ -475,24 +495,27 @@ function rollSponsorOffers(state) {
     const conf = (state.board && Number(state.board.confidence)) || 60;
     const confMult = 0.9 + (conf / 100) * 0.2;
     const leagueMult = state.league === 'premier' ? 1.15 : 0.9;
-    const pool = SPONSOR_BRANDS.slice();
+    /* 次级联赛无法获得 S 级赞助；顶级联赛可争取全部等级 */
+    const minTierRank = state.league === 'premier' ? 1 : 2;
+    const pool = shuffle(SPONSOR_BRANDS.filter(b => (SPONSOR_TIER_ORDER[b.tier] || 5) >= minTierRank));
+    const count = Math.min(state.league === 'premier' ? 4 : 3, pool.length);
     const offers = [];
-    const count = Math.min(3, pool.length);
     for (let i = 0; i < count; i++) {
-        const idx = Math.floor(Math.random() * pool.length);
-        const brand = pool.splice(idx, 1)[0];
+        const brand = pool[i];
         offers.push({
             id: brand.id + '_s' + (state.season || 1),
             brandId: brand.id,
             name: brand.name,
             icon: brand.icon,
             color: brand.color,
+            tier: brand.tier,
             desc: brand.desc,
             weekly: Math.round(brand.weekly * confMult * leagueMult),
             bonus: Math.round(brand.bonus * confMult * leagueMult),
             targetRank: Math.min(brand.targetRank, state.league === 'premier' ? 8 : 5)
         });
     }
+    offers.sort((a, b) => (SPONSOR_TIER_ORDER[a.tier] || 5) - (SPONSOR_TIER_ORDER[b.tier] || 5));
     return offers;
 }
 
@@ -503,6 +526,7 @@ function ensureSponsorBoardState(state) {
     }
     const sp = state.sponsors;
     if (!Array.isArray(sp.offers)) sp.offers = [];
+    if (!Array.isArray(sp.collection)) sp.collection = [];
     if (typeof sp.payoutSeason !== 'number') sp.payoutSeason = 0;
     sp.season = Number(sp.season) || 0;
     if (sp.season !== state.season) {
@@ -534,9 +558,10 @@ function openSponsorOffers() {
     if (sp.active) {
         const a = sp.active;
         body.innerHTML = `
-            <h2>${sponsorLogoHTML(a)} ${a.name} · 赞助合约</h2>
+            <h2>${sponsorLogoHTML(a)} ${a.name} · 赞助合约 ${sponsorTierBadge(a.tier)}</h2>
             <p class="gh-desc" style="margin:10px 0 16px;">${a.desc}</p>
             <div class="season-summary-grid">
+                <div class="season-summary-item"><span>赞助等级</span><b>${a.tier || '—'} 级</b></div>
                 <div class="season-summary-item"><span>每周赞助</span><b>$${a.weekly.toLocaleString()}</b></div>
                 <div class="season-summary-item"><span>赛季奖金</span><b>$${a.bonus.toLocaleString()}</b></div>
                 <div class="season-summary-item"><span>目标</span><b>联赛前 ${a.targetRank}</b></div>
@@ -551,11 +576,11 @@ function openSponsorOffers() {
     if (!Array.isArray(sp.offers) || !sp.offers.length) sp.offers = rollSponsorOffers(gameState);
     body.innerHTML = `
         <h2>选择主赞助商</h2>
-        <p class="gh-desc" style="margin:10px 0 16px;">本赛季有 ${sp.offers.length} 家品牌向你抛出橄榄枝，只能选择一家。每周自动到账，赛季末达成联赛排名目标可领取奖金。</p>
+        <p class="gh-desc" style="margin:10px 0 16px;">本赛季有 ${sp.offers.length} 家品牌向你抛出橄榄枝，只能选择一家。等级越高，周赞助与赛季奖金越丰厚，目标排名要求也越苛刻。${gameState.league === 'premier' ? '' : '（次级联赛暂时无法获得 S 级赞助）'}</p>
         <div class="sponsor-grid">
             ${sp.offers.map((o, i) => `
-                <div class="sponsor-card" style="border-left-color:${o.color};">
-                    <div class="sponsor-head">${sponsorLogoHTML(o)}<span class="sponsor-name">${o.name}</span></div>
+                <div class="sponsor-card sponsor-tier-${o.tier || 'D'}" style="border-left-color:${o.color};">
+                    <div class="sponsor-head">${sponsorLogoHTML(o)}<span class="sponsor-name">${o.name}</span>${sponsorTierBadge(o.tier)}</div>
                     <p class="sponsor-desc">${o.desc}</p>
                     <div class="sponsor-meta">每周 +$${o.weekly.toLocaleString()} · 达标奖金 $${o.bonus.toLocaleString()}</div>
                     <div class="sponsor-goal">目标：联赛前 ${o.targetRank}</div>
@@ -574,10 +599,13 @@ function selectSponsorOffer(index) {
     if (!offer) return;
     gameState.sponsors.active = offer;
     gameState.sponsors.offers = [];
+    if (!Array.isArray(gameState.sponsors.collection)) gameState.sponsors.collection = [];
+    if (gameState.sponsors.collection.indexOf(offer.brandId) === -1) gameState.sponsors.collection.push(offer.brandId);
     closeModal();
-    addMail('赞助商 ' + offer.name, '赞助合约生效', offer.name + ' 成为战队主赞助商，每周赞助 $' + offer.weekly.toLocaleString() + '，联赛前 ' + offer.targetRank + ' 可获 $' + offer.bonus.toLocaleString() + ' 奖金。', 0);
+    addMail('赞助商 ' + offer.name, '赞助合约生效', offer.name + '（' + (offer.tier || '—') + ' 级）成为战队主赞助商，每周赞助 $' + offer.weekly.toLocaleString() + '，联赛前 ' + offer.targetRank + ' 可获 $' + offer.bonus.toLocaleString() + ' 奖金。', 0);
     renderDashboard();
     updateAllDisplays();
+    checkAchievements();
     saveGame();
     showToast('赞助签约', offer.name + ' 成为战队主赞助商', 'success');
 }
@@ -601,7 +629,7 @@ function renderBoardPanel() {
         <div class="board-cell">
             <div class="board-cell-title">🤝 主赞助商</div>
             ${sp.active ? `
-                <div class="board-cell-desc">${sponsorLogoHTML(sp.active)} <b>${sp.active.name}</b> · 每周 +$${sp.active.weekly.toLocaleString()}</div>
+                <div class="board-cell-desc">${sponsorLogoHTML(sp.active)} <b>${sp.active.name}</b> ${sponsorTierBadge(sp.active.tier)} · 每周 +$${sp.active.weekly.toLocaleString()}</div>
                 <div class="board-cell-status ok">目标：联赛前 ${sp.active.targetRank} · 奖金 $${sp.active.bonus.toLocaleString()}</div>
             ` : `
                 <div class="board-cell-desc">尚未签约，每周白白损失赞助收入</div>
@@ -821,7 +849,7 @@ function initExtras(state) {
     if (state.history.length > 40) state.history = state.history.slice(-40);
 
     if (!state.career || typeof state.career !== 'object') state.career = {};
-    ['matches', 'wins', 'cups', 'kickoffCups', 'mastersCups', 'championsCups', 'invitationals', 'ascensionTitles', 'playoffTitles', 'trainings', 'signings', 'seasons', 'mvps'].forEach(k => {
+    ['matches', 'wins', 'cups', 'kickoffCups', 'mastersCups', 'championsCups', 'invitationals', 'ascensionTitles', 'playoffTitles', 'trainings', 'signings', 'seasons', 'mvps', 'weeklyClaimed', 'scouting', 'scoutElite'].forEach(k => {
         state.career[k] = Math.max(0, Number(state.career[k]) || 0);
     });
 
@@ -836,6 +864,10 @@ function initExtras(state) {
 
     ensureV17State(state);
     ensureWeeklyTasks(state);
+    ensureScoutState(state);
+    ensureDailyState(state);
+    ensureFansState(state);
+    ensureSeasonGoals(state);
     return state;
 }
 
@@ -864,7 +896,15 @@ const ACHIEVEMENTS = [
     { id: 'millionaire', name: '百万富翁', desc: '战队资金达到 $1,000,000', icon: '💰', reward: 50000, check: s => s.money >= 1000000 },
     { id: 's_grade', name: 'S 级阵容', desc: '拥有至少一名 S 级选手', icon: '⭐', reward: 40000, check: s => (s.roster || []).some(a => a && a.rating === 'S') },
     { id: 'mvp_king', name: 'MVP 之王', desc: '队内选手累计获得 10 次单场 MVP', icon: '🌟', reward: 50000, check: s => s.career.mvps >= 10 },
-    { id: 'unbeaten', name: '不败赛季', desc: '以全胜战绩完成一个赛季', icon: '💎', reward: 100000, check: s => (s.history || []).some(h => h && h.wins > 0 && h.losses === 0) }
+    { id: 'unbeaten', name: '不败赛季', desc: '以全胜战绩完成一个赛季', icon: '💎', reward: 100000, check: s => (s.history || []).some(h => h && h.wins > 0 && h.losses === 0) },
+    { id: 'scout_first', name: '初出茅庐', desc: '派出球探发现 1 名新星', icon: '🔎', reward: 15000, check: s => (Number(s.career && s.career.scouting) || 0) >= 1 },
+    { id: 'scout_ten', name: '伯乐之眼', desc: '累计发现 10 名新星', icon: '🧿', reward: 45000, check: s => (Number(s.career && s.career.scouting) || 0) >= 10 },
+    { id: 'scout_gem', name: '天降紫微星', desc: '发现一名战力 95+ 的天才', icon: '🌠', reward: 80000, check: s => (Number(s.career && s.career.scoutElite) || 0) >= 1 },
+    { id: 'daily_streak', name: '风雨无阻', desc: '连续签到 7 天', icon: '📅', reward: 60000, check: s => (Number(s.daily && s.daily.streak) || 0) >= 7 },
+    { id: 'fans_50k', name: '人气爆棚', desc: '粉丝达到 50,000', icon: '💗', reward: 50000, check: s => (Number(s.fans && s.fans.count) || 0) >= 50000 },
+    { id: 'fans_200k', name: '顶流战队', desc: '粉丝达到 200,000', icon: '🔥', reward: 120000, check: s => (Number(s.fans && s.fans.count) || 0) >= 200000 },
+    { id: 'sponsor_s', name: '顶级代言', desc: '签下 S 级赞助商', icon: '👑', reward: 80000, check: s => !!(s.sponsors && s.sponsors.active && s.sponsors.active.tier === 'S') },
+    { id: 'collection_5', name: '收藏家', desc: '拥有 5 件限定外观', icon: '🗂', reward: 40000, check: s => ((s.shop && Array.isArray(s.shop.paidOwned)) ? s.shop.paidOwned.length : 0) >= 5 }
 ];
 
 function seededRandom(seed) {
@@ -936,6 +976,8 @@ function claimWeeklyTask(id) {
     if ((Number(t.progress) || 0) < t.target) return showToast('任务未完成', '完成进度后才能领取奖励', 'warning');
     t.claimed = true;
     gameState.money += Number(t.reward) || 0;
+    if (!gameState.career) gameState.career = {};
+    gameState.career.weeklyClaimed = (Number(gameState.career.weeklyClaimed) || 0) + 1;
     showToast('任务奖励', '本周任务完成 · +$' + (Number(t.reward) || 0).toLocaleString(), 'success');
     updateAllDisplays();
     renderDashboard();
@@ -1144,6 +1186,8 @@ function renderHonors() {
             </table>
         </div>` : '<p class="no-match" style="padding:18px;">完成第一个赛季后，这里会记录每一季的战绩与荣誉。</p>'}
 
+        ${renderCollectionHTML()}
+
         <h2 class="honors-section-title">🏅 成就墙</h2>
         <div class="achievement-grid">
             ${ACHIEVEMENTS.map(a => {
@@ -1252,6 +1296,8 @@ function setupAIStandings() {
 }
 
 function generateMarket() {
+    /* 球探发现的新星不会被市场刷新清空，直到被签下 */
+    const keepScouts = (Array.isArray(gameState.market) ? gameState.market : []).filter(a => a && a.isScout);
     gameState.market = [];
     const numProPlayers = 8;
     const numAgents = 10;
@@ -1274,7 +1320,7 @@ function generateMarket() {
         agent.price = Math.round(agent.price * (0.85 + Math.random() * 0.3));
         gameState.market.push(agent);
     });
-    gameState.market = shuffle(gameState.market);
+    gameState.market = keepScouts.slice(0, 8).concat(shuffle(gameState.market));
     attachMarketEvents();
 }
 
@@ -1555,6 +1601,9 @@ function renderDashboard() {
     renderBoardPanel();
     renderOnboarding();
     renderWeeklyTasks();
+    renderDailyPanel();
+    renderFansPanel();
+    renderSeasonGoals();
 }
 
 function renderRoster() {
@@ -2823,7 +2872,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.10.0';
+const APP_VERSION = '1.11.0';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -4447,6 +4496,7 @@ function simulateMatchResult(match) {
     match.opponentScore = sb;
     match.result = sa > sb ? 'win' : 'loss';
     applyMoraleToRoster(sa > sb);
+    adjustFans(sa > sb, isCupMatch(match));
     if (isCupMatch(match)) applyCupPlayerResult(match, sa, sb);
     else recordStandingResult(match.opponent, sa > sb);
 
@@ -4493,6 +4543,7 @@ function finishMatch(match, playerScore, opponentScore) {
     const didWin = playerScore > opponentScore; match.result = didWin ? 'win' : 'loss';
     applyMoraleToRoster(didWin);
     const cup = isCupMatch(match);
+    adjustFans(didWin, cup);
     if (cup) applyCupPlayerResult(match, playerScore, opponentScore);
     else recordStandingResult(match.opponent, didWin);
 
@@ -5382,15 +5433,19 @@ function renderShop() {
         const affordable = gameState.money >= item.price;
         return `
             <div class="shop-card${owned ? ' owned' : ''}">
-                <div class="shop-icon">${item.icon}</div>
-                <div class="shop-body">
-                    <div class="shop-name">${item.name}</div>
-                    <div class="shop-desc">${item.desc}</div>
-                    <div class="shop-price">$${item.price.toLocaleString()}</div>
+                <div class="shop-card-main">
+                    <div class="shop-icon">${item.icon}</div>
+                    <div class="shop-body">
+                        <div class="shop-name">${item.name}</div>
+                        <div class="shop-desc">${item.desc}</div>
+                        <div class="shop-price">$${item.price.toLocaleString()}</div>
+                    </div>
                 </div>
-                <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
-                    ${owned || !affordable ? 'disabled' : ''}
-                    onclick="buyShopItem('${item.id}')">${owned ? '已拥有' : (affordable ? '购买' : '资金不足')}</button>
+                <div class="shop-card-actions">
+                    <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
+                        ${owned || !affordable ? 'disabled' : ''}
+                        onclick="buyShopItem('${item.id}')">${owned ? '已拥有' : (affordable ? '购买' : '资金不足')}</button>
+                </div>
             </div>`;
     };
     const paidCardFor = (item) => {
@@ -5398,36 +5453,45 @@ function renderShop() {
         const affordable = Number(gameState.credits || 0) >= item.credits;
         return `
             <div class="shop-card paid${owned ? ' owned' : ''}">
-                <div class="shop-icon">${item.icon}</div>
-                <div class="shop-body">
-                    <div class="shop-name">${item.name}<span class="paid-tag">限定</span></div>
-                    <div class="shop-desc">${item.desc}</div>
-                    <div class="shop-price shop-credits-price">💠 ${item.credits.toLocaleString()} 点券</div>
+                <div class="shop-card-main">
+                    <div class="shop-icon">${item.icon}</div>
+                    <div class="shop-body">
+                        <div class="shop-name">${item.name}<span class="paid-tag">限定</span></div>
+                        <div class="shop-desc">${item.desc}</div>
+                        <div class="shop-price shop-credits-price">💠 ${item.credits.toLocaleString()} 点券</div>
+                    </div>
                 </div>
-                <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
-                    ${owned || !affordable ? 'disabled' : ''}
-                    onclick="buyPaidItem('${item.id}')">${owned ? '已拥有' : (affordable ? '兑换' : '点券不足')}</button>
+                <div class="shop-card-actions">
+                    <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
+                        ${owned || !affordable ? 'disabled' : ''}
+                        onclick="buyPaidItem('${item.id}')">${owned ? '已拥有' : (affordable ? '兑换' : '点券不足')}</button>
+                </div>
             </div>`;
     };
     const packCardFor = (pack) => `
         <div class="shop-card paid">
-            <div class="shop-icon">${pack.icon}</div>
-            <div class="shop-body">
-                <div class="shop-name">${pack.name}<span class="paid-tag">${pack.tag}</span></div>
-                <div class="shop-desc">${pack.desc}</div>
-                <div class="shop-price shop-credits-price">¥ ${pack.price} · 💠 ${pack.credits.toLocaleString()}</div>
+            <div class="shop-card-main">
+                <div class="shop-icon">${pack.icon}</div>
+                <div class="shop-body">
+                    <div class="shop-name">${pack.name}<span class="paid-tag">${pack.tag}</span></div>
+                    <div class="shop-desc">${pack.desc}</div>
+                    <div class="shop-price shop-credits-price">¥ ${pack.price} · 💠 ${pack.credits.toLocaleString()}</div>
+                </div>
             </div>
-            <button class="btn btn-sm btn-primary" onclick="buyCreditsPack('${pack.id}')">模拟支付</button>
+            <div class="shop-card-actions">
+                <button class="btn btn-sm btn-primary" onclick="buyCreditsPack('${pack.id}')">💳 去支付 ¥${pack.price}</button>
+            </div>
         </div>`;
 
     const wallet = `
         <div class="shop-wallet">
             <span>游戏资金：<b>$${gameState.money.toLocaleString()}</b></span>
             <span>VCT 点券：<b>💠 ${Number(gameState.credits || 0).toLocaleString()}</b></span>
-            <span class="shop-wallet-note">模拟内购演示，不会产生真实扣款</span>
+            <button class="btn btn-sm btn-ghost" onclick="openPaySettings()">💳 支付设置</button>
+            <span class="shop-wallet-note">真实收款链接 · 支付完成后点击领取点券</span>
         </div>`;
     const recharge = `<div class="shop-category">
-        <h3 class="shop-category-title">💠 点券充值（模拟支付）</h3>
+        <h3 class="shop-category-title">💠 点券充值（真实支付）</h3>
         <div class="shop-category-grid">${PAID_PACKS.map(packCardFor).join('')}</div>
     </div>`;
     const paidSections = PAID_CATEGORIES.map(cat => {
@@ -5450,20 +5514,96 @@ function renderShop() {
         '<p class="shop-note">所有道具均为外观或便利类，付费内容同样不会改变任何比赛数值，保证公平对局。</p>';
 }
 
+/* ---------- v1.11.0：真实支付（本机收款链接 + 支付后领取点券） ---------- */
+const PAY_CONFIG_KEY = 'vct_pay_config';
+
+function loadPayConfig() {
+    try {
+        if (typeof localStorage === 'undefined') return {};
+        const raw = localStorage.getItem(PAY_CONFIG_KEY);
+        const obj = raw ? JSON.parse(raw) : {};
+        return (obj && typeof obj === 'object') ? obj : {};
+    } catch (e) { return {}; }
+}
+
+function savePayConfig(cfg) {
+    try {
+        if (typeof localStorage !== 'undefined') localStorage.setItem(PAY_CONFIG_KEY, JSON.stringify(cfg || {}));
+    } catch (e) { /* 忽略存储异常 */ }
+}
+
+function payLinkFor(packId) {
+    const cfg = loadPayConfig();
+    return String(cfg[packId] || '').trim();
+}
+
+function openPaySettings() {
+    if (!gameState) return showToast('请先开始游戏', '进入战队后才能配置支付', 'warning');
+    const cfg = loadPayConfig();
+    const body = document.getElementById('modal-body');
+    if (!body) return;
+    body.innerHTML = `
+        <h2>💳 支付设置</h2>
+        <p class="gh-desc" style="margin:10px 0 14px;">为每个点券档位填入你的真实收款链接（例如爱发电 / Stripe / 支付宝收款页）。玩家点击「去支付」会打开该链接，支付完成后点击「我已完成支付」领取点券。链接仅保存在本机浏览器。</p>
+        <div class="pay-config-list">
+            ${PAID_PACKS.map(p => `
+                <div class="pay-config-row">
+                    <span class="pay-config-name">${p.icon} ${p.name} · ¥${p.price}</span>
+                    <input class="pay-config-input" id="pay-url-${p.id}" type="url" placeholder="https://..." value="${escapeHtml(cfg[p.id] || '')}">
+                </div>`).join('')}
+        </div>
+        <div class="modal-actions">
+            <button class="btn btn-primary" onclick="savePaySettings()" style="flex:1;">保存</button>
+            <button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">关闭</button>
+        </div>
+    `;
+    openModal();
+}
+
+function savePaySettings() {
+    const cfg = {};
+    PAID_PACKS.forEach(p => {
+        const el = document.getElementById('pay-url-' + p.id);
+        if (!el) return;
+        const v = String(el.value || '').trim();
+        if (v) cfg[p.id] = v;
+    });
+    savePayConfig(cfg);
+    closeModal();
+    if (typeof renderShop === 'function') renderShop();
+    const filled = Object.keys(cfg).length;
+    showToast('支付设置', filled ? '已保存 ' + filled + ' 个收款链接' : '未填写链接，将无法发起真实支付', filled ? 'success' : 'warning');
+}
+
 function buyCreditsPack(id) {
     if (!gameState) return;
     const pack = PAID_PACKS.find(p => p.id === id);
     if (!pack) return;
-    showConfirmModal('模拟支付',
-        `即将模拟支付 ¥${pack.price} 购买「${pack.name}」，到账 💠 ${pack.credits.toLocaleString()} 点券。\n\n本游戏为演示项目，不会产生任何真实扣款。`,
-        () => {
-            gameState.credits = Number(gameState.credits || 0) + pack.credits;
-            addMail('战队商城', '充值成功：' + pack.name, '已到账 💠 ' + pack.credits.toLocaleString() + ' 点券（模拟支付，无真实扣款）。', 0);
-            updateAllDisplays();
-            renderShop();
-            saveGame();
-            showToast('充值成功', '💠 ' + pack.credits.toLocaleString() + ' 点券已到账', 'success');
-        });
+    const link = payLinkFor(id);
+    if (!link) {
+        showConfirmModal('尚未配置收款链接',
+            '请先在商店点击「支付设置」，为「' + pack.name + '」填入你的真实收款链接（如爱发电 / Stripe / 支付宝收款页）。\n\n配置后，点击「去支付」会打开该链接。',
+            () => openPaySettings());
+        return;
+    }
+    try {
+        window.open(link, '_blank', 'noopener,noreferrer');
+    } catch (e) { /* 弹窗被拦截时仍可手动打开 */ }
+    showConfirmModal('完成支付后领取点券',
+        '已在浏览器打开支付页面：\n' + link + '\n\n支付 ¥' + pack.price + ' 完成后，点击「我已完成支付」领取 💠 ' + pack.credits.toLocaleString() + ' 点券。\n\n本游戏无法自动校验支付结果，请诚信操作。',
+        () => claimCreditsPack(id));
+}
+
+function claimCreditsPack(id) {
+    if (!gameState) return;
+    const pack = PAID_PACKS.find(p => p.id === id);
+    if (!pack) return;
+    gameState.credits = Number(gameState.credits || 0) + pack.credits;
+    addMail('战队商城', '充值成功：' + pack.name, '已到账 💠 ' + pack.credits.toLocaleString() + ' 点券（真实支付）。', 0);
+    updateAllDisplays();
+    renderShop();
+    if (gameState.shop && gameState.shop.autoSave) saveGame();
+    showToast('充值成功', '💠 ' + pack.credits.toLocaleString() + ' 点券已到账', 'success');
 }
 
 function buyPaidItem(id) {
@@ -5490,34 +5630,444 @@ function buyPaidItem(id) {
     showToast('兑换成功', item.name + '（限定外观，不影响对局）', 'success');
 }
 
-function applyShopItem(item) {
-    if (!item || !gameState) return;
-    if (!gameState.shop) gameState.shop = { owned: [], badge: '', title: '', theme: '', autoSave: false, renameCards: 0 };
-    if (item.kind === 'badge') gameState.shop.badge = item.icon;
-    if (item.kind === 'theme') gameState.shop.theme = item.color;
-    if (item.kind === 'title') gameState.shop.title = item.name;
-    if (item.kind === 'rename') gameState.shop.renameCards++;
-    if (item.kind === 'autosave') gameState.shop.autoSave = true;
-    if (item.kind === 'board') gameState.shop.boardColor = item.color;
-    if (item.kind === 'banner') gameState.shop.bannerIcon = item.icon;
-    if (item.kind === 'collect') gameState.shop.collectible = item.icon;
-    if (item.kind === 'avatar') gameState.shop.managerAvatar = item.icon;
-    if (item.kind === 'frame') gameState.shop.avatarFrame = item.color;
-    if (item.kind === 'effect') gameState.shop.winEffect = item.icon;
-    if (item.kind === 'base') gameState.shop.baseDeco = item.icon;
-    if (item.kind === 'sticker') {
-        if (!Array.isArray(gameState.shop.stickers)) gameState.shop.stickers = [];
-        if (gameState.shop.stickers.indexOf(item.icon) === -1) gameState.shop.stickers.push(item.icon);
-    }
-    if (item.kind === 'analysis') {
-        if (item.id === 'analysis_scout') gameState.shop.scoutUnlocked = true;
-        if (item.id === 'analysis_replay') gameState.shop.replayUnlocked = true;
-    }
+/* ---------- v1.11.0：球探探索 / 每日签到 / 粉丝经济 / 赛季目标 / 收藏图鉴 ---------- */
+
+const SCOUT_COST = 25000;
+const SCOUT_WEEKLY_LIMIT = 3;
+const SCOUT_FIRST_NAMES = ['Kai', 'Ryu', 'Jin', 'Zed', 'Nova', 'Ace', 'Rook', 'Echo', 'Blaze', 'Frost', 'Luna', 'Neo', 'Vex', 'Kris', 'Yuki', 'Hao', 'Lin', 'Chen', 'Zhi', 'Marco', 'Diego', 'Luca', 'Milo', 'Noah', 'Ezra', 'Finn', 'Leon', 'Kira', 'Ivy', 'Rei'];
+const SCOUT_LAST_NAMES = ['Park', 'Kim', 'Lee', 'Choi', 'Wang', 'Li', 'Zhang', 'Chen', 'Liu', 'Sun', 'Nakamura', 'Sato', 'Tanaka', 'Silva', 'Santos', 'Costa', 'Rodriguez', 'Martinez', 'Morales', 'Smith', 'Walker', 'Brown', 'Miller', 'Novak', 'Petrov', 'Rossi', 'Bianchi', 'Muller', 'Fischer', 'Dubois'];
+const SCOUT_ROLES = ['Duelist', 'Initiator', 'Controller', 'Sentinel'];
+const DAILY_REWARDS = [
+    { money: 10000, credits: 0 },
+    { money: 12000, credits: 0 },
+    { money: 15000, credits: 0 },
+    { money: 18000, credits: 0 },
+    { money: 22000, credits: 10 },
+    { money: 28000, credits: 0 },
+    { money: 50000, credits: 30 }
+];
+const FAN_MILESTONES = [50000, 100000, 200000, 400000, 800000];
+
+function pickRandom(list) {
+    return list[Math.floor(Math.random() * list.length)];
 }
+
+function ensureScoutState(state) {
+    const st = state || gameState;
+    if (!st) return null;
+    if (!st.scout || typeof st.scout !== 'object') {
+        st.scout = { season: st.season, week: st.currentWeek, used: 0, total: 0, discovered: [] };
+    }
+    const sc = st.scout;
+    if (!Array.isArray(sc.discovered)) sc.discovered = [];
+    sc.total = Math.max(0, Number(sc.total) || 0);
+    if (Number(sc.season) !== Number(st.season) || Number(sc.week) !== Number(st.currentWeek)) {
+        sc.season = st.season;
+        sc.week = st.currentWeek;
+        sc.used = 0;
+    }
+    sc.used = Math.max(0, Number(sc.used) || 0);
+    return sc;
+}
+
+function generateScoutPlayer() {
+    const name = pickRandom(SCOUT_FIRST_NAMES) + ' ' + pickRandom(SCOUT_LAST_NAMES);
+    const role = pickRandom(SCOUT_ROLES);
+    let power = 62 + Math.floor(Math.random() * 29); // 62 - 90
+    const roll = Math.random();
+    if (roll < 0.06) power = 91 + Math.floor(Math.random() * 5); // 91 - 95
+    if (roll < 0.015) power = 96 + Math.floor(Math.random() * 4); // 96 - 99
+    const rating = power >= 92 ? 'S' : power >= 84 ? 'A' : power >= 76 ? 'B' : 'C';
+    const stat = (spread) => clampNumber(power + Math.round((Math.random() * 2 - 1) * spread), 40, 99);
+    const price = Math.round(power * power * (18 + Math.random() * 10) * 0.01) * 100;
+    const region = (REGION_META[gameState && gameState.region] || {}).flag || '🌱';
+    return {
+        id: 'scout_' + Date.now() + '_' + Math.floor(Math.random() * 9999),
+        uniqueId: 'scout_' + Date.now() + '_' + Math.floor(Math.random() * 99999),
+        name: name,
+        role: role,
+        avatar: name.split(' ').map(s => s.slice(0, 1)).join('').toUpperCase().slice(0, 2),
+        power: power,
+        rating: rating,
+        price: price,
+        aim: stat(8),
+        gameSense: stat(10),
+        leadership: stat(9),
+        utility: stat(8),
+        isPro: false,
+        isRookie: true,
+        isScout: true,
+        isPlayerOwned: false,
+        wins: 0,
+        losses: 0,
+        country: region,
+        bio: '球探在排位与青训营中发现的新星，潜力有待培养。'
+    };
+}
+
+function exploreScout() {
+    if (!gameState) return;
+    const sc = ensureScoutState(gameState);
+    if (!sc) return;
+    if (sc.used >= SCOUT_WEEKLY_LIMIT) return showToast('本周探索次数已用完', '进入下一周后可再次派出球探', 'warning');
+    if (gameState.money < SCOUT_COST) return showToast('资金不足', '球探探索需要 $' + SCOUT_COST.toLocaleString(), 'error');
+    gameState.money -= SCOUT_COST;
+    sc.used++;
+    sc.total++;
+    const player = generateScoutPlayer();
+    if (!Array.isArray(gameState.market)) gameState.market = [];
+    gameState.market.unshift(player);
+    sc.discovered.unshift({
+        name: player.name, power: player.power, rating: player.rating, role: player.role,
+        week: gameState.currentWeek, season: gameState.season
+    });
+    sc.discovered = sc.discovered.slice(0, 24);
+
+    if (!gameState.career) gameState.career = {};
+    gameState.career.scouting = (Number(gameState.career.scouting) || 0) + 1;
+    if (player.power >= 95) gameState.career.scoutElite = (Number(gameState.career.scoutElite) || 0) + 1;
+
+    updateAllDisplays();
+    renderScoutPanel();
+    renderMarket();
+    checkAchievements();
+    if (gameState.shop && gameState.shop.autoSave) saveGame();
+    const elite = player.power >= 95 ? ' ⭐ 顶级天才！' : '';
+    showToast('球探发现新星', player.name + ' · ' + getRoleCN(player.role) + ' · 战力 ' + player.power + elite, 'success');
+}
+
+function renderScoutPanel() {
+    const el = document.getElementById('scout-panel');
+    if (!el || !gameState) return;
+    const sc = ensureScoutState(gameState);
+    if (!sc) return;
+    const left = Math.max(0, SCOUT_WEEKLY_LIMIT - (Number(sc.used) || 0));
+    const affordable = Number(gameState.money) >= SCOUT_COST;
+    const recent = (sc.discovered || []).slice(0, 5);
+    el.innerHTML = `
+        <div class="scout-card">
+            <div class="scout-main">
+                <div class="scout-title">🔍 球探探索</div>
+                <div class="scout-desc">派出球探在排位与青训营中搜寻新星。每周 ${SCOUT_WEEKLY_LIMIT} 次，每次 $${SCOUT_COST.toLocaleString()}，发现的新星会直接加入转会市场。</div>
+                <div class="scout-meta">本周剩余 <b>${left}/${SCOUT_WEEKLY_LIMIT}</b> · 累计发现 <b>${Number(sc.total) || 0}</b> 人</div>
+            </div>
+            <div class="scout-action">
+                <span class="scout-cost">$${SCOUT_COST.toLocaleString()} / 次</span>
+                <button class="btn ${left > 0 && affordable ? 'btn-primary' : 'btn-ghost'}"
+                    ${left > 0 && affordable ? '' : 'disabled'}
+                    onclick="exploreScout()">${left <= 0 ? '本周已用完' : affordable ? '派出球探探索' : '资金不足'}</button>
+            </div>
+        </div>
+        ${recent.length ? `
+        <div class="scout-recent">
+            <span class="scout-recent-title">最近发现</span>
+            ${recent.map(d => `<span class="scout-chip">${escapeHtml(d.name)} · ${d.power} · ${d.rating}</span>`).join('')}
+        </div>` : ''}
+    `;
+}
+
+/* ---------- 每日签到 ---------- */
+
+function todayKey() {
+    const d = new Date();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + m + '-' + day;
+}
+
+function dayDiff(fromKey, toKey) {
+    if (!fromKey || !toKey) return 99;
+    const a = new Date(fromKey + 'T00:00:00');
+    const b = new Date(toKey + 'T00:00:00');
+    if (isNaN(a.getTime()) || isNaN(b.getTime())) return 99;
+    return Math.round((b.getTime() - a.getTime()) / 86400000);
+}
+
+function ensureDailyState(state) {
+    const st = state || gameState;
+    if (!st) return null;
+    if (!st.daily || typeof st.daily !== 'object') st.daily = { lastDate: '', streak: 0, total: 0 };
+    const d = st.daily;
+    d.lastDate = typeof d.lastDate === 'string' ? d.lastDate : '';
+    d.streak = Math.max(0, Number(d.streak) || 0);
+    d.total = Math.max(0, Number(d.total) || 0);
+    return d;
+}
+
+function dailyCheckIn() {
+    if (!gameState) return;
+    const d = ensureDailyState(gameState);
+    const today = todayKey();
+    if (d.lastDate === today) return showToast('今日已签到', '明天再来领取连签奖励', 'warning');
+    const continues = d.lastDate && dayDiff(d.lastDate, today) === 1;
+    const streak = continues ? Math.max(1, d.streak) + 1 : 1;
+    d.streak = streak;
+    d.total = (Number(d.total) || 0) + 1;
+    d.lastDate = today;
+    const cycle = ((streak - 1) % 7 + 7) % 7;
+    const reward = DAILY_REWARDS[cycle];
+    gameState.money += reward.money;
+    if (reward.credits) gameState.credits = Number(gameState.credits || 0) + reward.credits;
+    addMail('战队运营', '每日签到 · 第 ' + streak + ' 天', '签到奖励 $' + reward.money.toLocaleString() + (reward.credits ? ' · 💠 ' + reward.credits + ' 点券' : ''), 0);
+    updateAllDisplays();
+    renderDashboard();
+    checkAchievements();
+    if (gameState.shop && gameState.shop.autoSave) saveGame();
+    showToast('签到成功', '连续签到 ' + streak + ' 天 · +$' + reward.money.toLocaleString() + (reward.credits ? ' · 💠 ' + reward.credits : ''), 'success');
+}
+
+function renderDailyPanel() {
+    const el = document.getElementById('daily-panel');
+    if (!el || !gameState) return;
+    const d = ensureDailyState(gameState);
+    if (!d) return;
+    const today = todayKey();
+    const claimedToday = d.lastDate === today;
+    const willBe = (d.lastDate && dayDiff(d.lastDate, today) === 1) ? d.streak + 1 : 1;
+    const displayDay = claimedToday
+        ? (((d.streak - 1) % 7 + 7) % 7) + 1
+        : (((willBe - 1) % 7 + 7) % 7) + 1;
+    const doneCount = claimedToday ? displayDay : displayDay - 1;
+    const reward = DAILY_REWARDS[displayDay - 1];
+    el.innerHTML = `
+        <div class="daily-head">
+            <span class="daily-streak">连续签到 <b>${d.streak}</b> 天</span>
+            <span class="daily-total">累计 ${d.total} 次</span>
+        </div>
+        <div class="daily-grid">
+            ${DAILY_REWARDS.map((r, i) => {
+                const idx = i + 1;
+                const done = idx <= doneCount;
+                const current = idx === displayDay;
+                return `<div class="daily-day${done ? ' done' : ''}${current ? ' current' : ''}">
+                    <span class="daily-day-num">第 ${idx} 天</span>
+                    <span class="daily-day-reward">$${(r.money / 10000).toFixed(1)}万${r.credits ? ' +' + r.credits + '💠' : ''}</span>
+                </div>`;
+            }).join('')}
+        </div>
+        <button class="btn ${claimedToday ? 'btn-ghost' : 'btn-primary'} btn-block" ${claimedToday ? 'disabled' : ''} onclick="dailyCheckIn()">
+            ${claimedToday ? '今日已签到' : '签到领取 $' + reward.money.toLocaleString() + (reward.credits ? ' + 💠 ' + reward.credits : '')}
+        </button>
+    `;
+}
+
+/* ---------- 粉丝经济 ---------- */
+
+function ensureFansState(state) {
+    const st = state || gameState;
+    if (!st) return null;
+    if (!st.fans || typeof st.fans !== 'object') {
+        st.fans = { count: 20000, peak: 20000, lastDelta: 0, season: st.season };
+    }
+    const f = st.fans;
+    if (typeof f.count !== 'number' || isNaN(f.count)) f.count = 20000;
+    f.count = Math.max(0, Math.round(f.count));
+    if (!Number(f.peak)) f.peak = f.count;
+    f.peak = Math.max(Number(f.peak), f.count);
+    f.lastDelta = Number(f.lastDelta) || 0;
+    f.season = Number(f.season) || st.season;
+    return f;
+}
+
+function fansWeeklyIncome() {
+    const f = gameState && gameState.fans;
+    if (!f) return 0;
+    return Math.round((Number(f.count) || 0) * 0.35);
+}
+
+function adjustFans(didWin, isCup) {
+    if (!gameState) return;
+    const f = ensureFansState(gameState);
+    if (!f) return;
+    const rate = didWin ? 0.06 : -0.03;
+    let delta = Math.round(f.count * rate);
+    if (isCup) delta = Math.round(delta * 1.6);
+    if (didWin && delta < 600) delta = 600;
+    if (!didWin && delta > -400) delta = -400;
+    f.count = Math.max(0, f.count + delta);
+    f.lastDelta = delta;
+    f.peak = Math.max(Number(f.peak) || 0, f.count);
+}
+
+function renderFansPanel() {
+    const el = document.getElementById('fans-panel');
+    if (!el || !gameState) return;
+    const f = ensureFansState(gameState);
+    if (!f) return;
+    const next = FAN_MILESTONES.find(m => f.count < m) || (Math.ceil((f.count + 1) / 400000) * 400000);
+    const prevMilestone = FAN_MILESTONES.filter(m => m <= f.count).pop() || 0;
+    const pct = next > prevMilestone ? Math.min(100, Math.round((f.count - prevMilestone) / (next - prevMilestone) * 100)) : 100;
+    const delta = Number(f.lastDelta) || 0;
+    const deltaLabel = delta === 0 ? '暂无变化' : (delta > 0 ? '+' : '') + delta.toLocaleString();
+    el.innerHTML = `
+        <div class="fans-head">
+            <span class="fans-count">${f.count.toLocaleString()}</span>
+            <span class="fans-label">粉丝</span>
+        </div>
+        <div class="fans-bar"><div class="fans-bar-fill" style="width:${pct}%"></div></div>
+        <div class="fans-meta">下一个里程碑 <b>${next.toLocaleString()}</b> · 最近变化 <b class="${delta >= 0 ? 'up' : 'down'}">${deltaLabel}</b></div>
+        <div class="fans-note">每周周边收入 <b>$${fansWeeklyIncome().toLocaleString()}</b> · 比赛胜利涨粉，失利掉粉，杯赛影响更大</div>
+    `;
+}
+
+/* ---------- 赛季目标 ---------- */
+
+function ensureSeasonGoals(state) {
+    const st = state || gameState;
+    if (!st) return null;
+    if (!st.seasonGoals || typeof st.seasonGoals !== 'object') st.seasonGoals = { season: st.season, claimed: {} };
+    if (!st.seasonGoals.claimed || typeof st.seasonGoals.claimed !== 'object') st.seasonGoals.claimed = {};
+    if (Number(st.seasonGoals.season) !== Number(st.season)) {
+        st.seasonGoals = { season: st.season, claimed: {} };
+    }
+    return st.seasonGoals;
+}
+
+function seasonGoalDefs() {
+    if (!gameState) return [];
+    const standing = (gameState.standings || []).find(s => s && s.isPlayerTeam) || { wins: 0, losses: 0 };
+    const rank = typeof getPlayerRank === 'function' ? getPlayerRank() : 0;
+    const premier = gameState.league === 'premier';
+    const wins = Number(standing.wins) || 0;
+    const winsTarget = premier ? 15 : 12;
+    const rankTarget = premier ? 4 : 2;
+    const fans = Number((gameState.fans || {}).count) || 0;
+    const fansTarget = premier ? 80000 : 40000;
+    const money = Number(gameState.money) || 0;
+    const moneyTarget = premier ? 1500000 : 800000;
+    const tasks = Number((gameState.career || {}).weeklyClaimed) || 0;
+    const tasksTarget = 12;
+    const rankProgress = rank > 0 ? Math.min(rankTarget, Math.max(0, rankTarget - rank + 1)) : 0;
+    return [
+        { id: 'rank', icon: '🏅', name: '联赛前 ' + rankTarget, desc: '当前排名进入联赛前 ' + rankTarget, target: rankTarget, current: rankProgress, valueLabel: '#' + (rank || '—'), done: rank > 0 && rank <= rankTarget, reward: 120000 },
+        { id: 'wins', icon: '⚔', name: '赛季胜场', desc: '赢下 ' + winsTarget + ' 场联赛 / 杯赛', target: winsTarget, current: Math.min(winsTarget, wins), valueLabel: wins + ' / ' + winsTarget, done: wins >= winsTarget, reward: 100000 },
+        { id: 'fans', icon: '💗', name: '粉丝基础', desc: '粉丝达到 ' + fansTarget.toLocaleString(), target: fansTarget, current: Math.min(fansTarget, fans), valueLabel: fans.toLocaleString() + ' / ' + fansTarget.toLocaleString(), done: fans >= fansTarget, reward: 80000 },
+        { id: 'funds', icon: '💰', name: '商业资金', desc: '资金达到 $' + moneyTarget.toLocaleString(), target: moneyTarget, current: Math.min(moneyTarget, money), valueLabel: '$' + money.toLocaleString(), done: money >= moneyTarget, reward: 150000 },
+        { id: 'tasks', icon: '🎯', name: '任务达人', desc: '本赛季领取 ' + tasksTarget + ' 个周任务奖励', target: tasksTarget, current: Math.min(tasksTarget, tasks), valueLabel: tasks + ' / ' + tasksTarget, done: tasks >= tasksTarget, reward: 90000 }
+    ];
+}
+
+function claimSeasonGoal(id) {
+    if (!gameState) return;
+    ensureSeasonGoals(gameState);
+    const goal = seasonGoalDefs().find(g => g.id === id);
+    if (!goal) return;
+    if (!goal.done) return showToast('目标未达成', goal.desc, 'warning');
+    if (gameState.seasonGoals.claimed[id]) return showToast('已领取', '该赛季目标奖励已领取', 'warning');
+    gameState.seasonGoals.claimed[id] = true;
+    gameState.money += Number(goal.reward) || 0;
+    addMail('董事会', '赛季目标达成：' + goal.name, '奖励 $' + (Number(goal.reward) || 0).toLocaleString() + ' 已发放。', 0);
+    updateAllDisplays();
+    renderDashboard();
+    checkAchievements();
+    if (gameState.shop && gameState.shop.autoSave) saveGame();
+    showToast('赛季目标达成', goal.name + ' · +$' + (Number(goal.reward) || 0).toLocaleString(), 'success');
+}
+
+function renderSeasonGoals() {
+    const el = document.getElementById('season-goals-panel');
+    if (!el || !gameState) return;
+    const sg = ensureSeasonGoals(gameState);
+    if (!sg) return;
+    const goals = seasonGoalDefs();
+    el.innerHTML = goals.map(g => {
+        const claimed = !!sg.claimed[g.id];
+        const pct = Math.round((Number(g.current) || 0) / (Number(g.target) || 1) * 100);
+        return `
+            <div class="season-goal${g.done ? ' done' : ''}${claimed ? ' claimed' : ''}">
+                <div class="season-goal-main">
+                    <div class="season-goal-label">${g.icon} ${escapeHtml(g.name)}</div>
+                    <div class="season-goal-meta">${escapeHtml(g.desc)} · 进度 ${escapeHtml(g.valueLabel)}</div>
+                    <div class="weekly-task-bar"><div class="weekly-task-bar-fill" style="width:${pct}%"></div></div>
+                </div>
+                <button class="btn ${g.done && !claimed ? 'btn-primary' : 'btn-ghost'} weekly-task-btn"
+                    ${g.done && !claimed ? '' : 'disabled'}
+                    onclick="claimSeasonGoal('${g.id}')">${claimed ? '已领取' : g.done ? '领取 $' + (Number(g.reward) || 0).toLocaleString() : '进行中'}</button>
+            </div>`;
+    }).join('');
+}
+
+/* ---------- 收藏图鉴 ---------- */
+
+function renderCollectionHTML() {
+    if (!gameState) return '';
+    const shop = gameState.shop || {};
+    const paidOwned = Array.isArray(shop.paidOwned) ? shop.paidOwned : [];
+    const ownedItems = Array.isArray(shop.owned) ? shop.owned : [];
+    const sponsorOwned = Array.isArray((gameState.sponsors || {}).collection) ? gameState.sponsors.collection : [];
+    const paidTotal = PAID_ITEMS.length;
+    const paidGot = PAID_ITEMS.filter(i => paidOwned.indexOf(i.id) !== -1).length;
+    const sponsorGot = SPONSOR_BRANDS.filter(b => sponsorOwned.indexOf(b.id) !== -1).length;
+
+    const paidGrid = PAID_ITEMS.map(item => {
+        const got = paidOwned.indexOf(item.id) !== -1;
+        return `<div class="codex-item${got ? ' owned' : ''}">
+            <span class="codex-icon">${got ? item.icon : '❔'}</span>
+            <span class="codex-name">${got ? escapeHtml(item.name) : '未解锁限定'}</span>
+            <span class="codex-note">${got ? '已收藏' : '💠 ' + item.credits}</span>
+        </div>`;
+    }).join('');
+
+    const sponsorGrid = SPONSOR_BRANDS.map(b => {
+        const got = sponsorOwned.indexOf(b.id) !== -1;
+        return `<div class="codex-item${got ? ' owned' : ''}">
+            <span class="codex-icon">${got ? b.icon : '❔'}</span>
+            <span class="codex-name">${got ? escapeHtml(b.name) : '未知赞助商'}</span>
+            ${sponsorTierBadge(b.tier)}
+        </div>`;
+    }).join('');
+
+    const itemGrid = SHOP_ITEMS.map(item => {
+        const got = ownedItems.indexOf(item.id) !== -1;
+        return `<div class="codex-item${got ? ' owned' : ''}">
+            <span class="codex-icon">${got ? item.icon : '❔'}</span>
+            <span class="codex-name">${got ? escapeHtml(item.name) : '未购买'}</span>
+            <span class="codex-note">${got ? '已拥有' : '商店'}</span>
+        </div>`;
+    }).join('');
+
+    return `
+        <h2 class="honors-section-title">🗂 收藏图鉴</h2>
+        <div class="collection-summary">
+            <span>限定外观 <b>${paidGot}/${paidTotal}</b></span>
+            <span>赞助商 <b>${sponsorGot}/${SPONSOR_BRANDS.length}</b></span>
+            <span>商店道具 <b>${SHOP_ITEMS.filter(i => ownedItems.indexOf(i.id) !== -1).length}/${SHOP_ITEMS.length}</b></span>
+        </div>
+        <div class="collection-group">
+            <h3>✨ 限定外观</h3>
+            <div class="collection-grid">${paidGrid}</div>
+        </div>
+        <div class="collection-group">
+            <h3>🤝 赞助商图鉴</h3>
+            <div class="collection-grid">${sponsorGrid}</div>
+        </div>
+        <div class="collection-group">
+            <h3>🛒 商店道具</h3>
+            <div class="collection-grid">${itemGrid}</div>
+        </div>
+    `;
+}
+
 
 /* ---------- 游戏公告 ---------- */
 
 const GAME_ANNOUNCEMENTS = [
+    {
+        version: '1.11.0',
+        date: '2026-11-08',
+        tag: '真实支付 · 球探 · 粉丝经济',
+        title: 'v1.11.0 真实支付、12 家分级赞助商与球探系统',
+        content: [
+            '点券充值改为真实支付：在商店「支付设置」中填入你的收款链接，点击「去支付」打开真实收款页，支付完成后点「我已完成支付」领取点券。',
+            '商店所有商品的购买 / 兑换按钮统一固定在卡片底部。',
+            '赞助商扩充到 12 家，并划分为 S / A / B / C / D 五个等级；等级越高，周赞助与赛季奖金越高。',
+            '新增球探探索：每周最多 3 次，每次 $25,000，随机发现不同姓名与战力的新星，直接加入转会市场。',
+            '新增每日签到与连签奖励，连续签到 7 天可获得额外点券。',
+            '新增粉丝经济：比赛胜负会带来粉丝增减，粉丝越多每周周边收入越高。',
+            '新增赛季目标与收藏图鉴：达成目标可领取资金奖励，图鉴收录限定外观、赞助商与商店道具。',
+            '新增 9 项成就，覆盖球探、签到、粉丝与收藏。'
+        ]
+    },
     {
         version: '1.10.0',
         date: '2026-11-08',
@@ -5914,7 +6464,7 @@ function rosterWeeklySalary() {
 }
 
 function weeklyTransitionIncome() {
-    const base = 10000 + gameState.currentWeek * 500 + sponsorWeeklyIncome();
+    const base = 10000 + gameState.currentWeek * 500 + sponsorWeeklyIncome() + fansWeeklyIncome();
     return base - rosterWeeklySalary();
 }
 
@@ -5991,7 +6541,8 @@ function teamLogoHTML(name, sizeClass) {
 
 const SPONSOR_LOGO_TAG = {
     redbull: 'RB', hyperx: 'HX', monster: 'ME', nike: 'NK', razer: 'RZ', corsair: 'CS', intel: 'IN',
-    vctbank: 'VB', logitech: 'LG'
+    samsung: 'SS', logitech: 'LG', secretlab: 'SL', verizon: 'VZ', primegaming: 'PG',
+    vctbank: 'VB'
 };
 
 const SPONSOR_LOGO_FILE = {
@@ -6193,15 +6744,19 @@ function renderShop() {
         const affordable = gameState.money >= item.price;
         return `
             <div class="shop-card${owned ? ' owned' : ''}">
-                <div class="shop-icon">${item.icon}</div>
-                <div class="shop-body">
-                    <div class="shop-name">${item.name}</div>
-                    <div class="shop-desc">${item.desc}</div>
-                    <div class="shop-price">$${item.price.toLocaleString()}</div>
+                <div class="shop-card-main">
+                    <div class="shop-icon">${item.icon}</div>
+                    <div class="shop-body">
+                        <div class="shop-name">${item.name}</div>
+                        <div class="shop-desc">${item.desc}</div>
+                        <div class="shop-price">$${item.price.toLocaleString()}</div>
+                    </div>
                 </div>
-                <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
-                    ${owned || !affordable ? 'disabled' : ''}
-                    onclick="buyShopItem('${item.id}')">${owned ? '已拥有' : (affordable ? '购买' : '资金不足')}</button>
+                <div class="shop-card-actions">
+                    <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
+                        ${owned || !affordable ? 'disabled' : ''}
+                        onclick="buyShopItem('${item.id}')">${owned ? '已拥有' : (affordable ? '购买' : '资金不足')}</button>
+                </div>
             </div>`;
     };
     const paidCardFor = (item) => {
@@ -6209,36 +6764,45 @@ function renderShop() {
         const affordable = Number(gameState.credits || 0) >= item.credits;
         return `
             <div class="shop-card paid${owned ? ' owned' : ''}">
-                <div class="shop-icon">${item.icon}</div>
-                <div class="shop-body">
-                    <div class="shop-name">${item.name}<span class="paid-tag">限定</span></div>
-                    <div class="shop-desc">${item.desc}</div>
-                    <div class="shop-price shop-credits-price">💠 ${item.credits.toLocaleString()} 点券</div>
+                <div class="shop-card-main">
+                    <div class="shop-icon">${item.icon}</div>
+                    <div class="shop-body">
+                        <div class="shop-name">${item.name}<span class="paid-tag">限定</span></div>
+                        <div class="shop-desc">${item.desc}</div>
+                        <div class="shop-price shop-credits-price">💠 ${item.credits.toLocaleString()} 点券</div>
+                    </div>
                 </div>
-                <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
-                    ${owned || !affordable ? 'disabled' : ''}
-                    onclick="buyPaidItem('${item.id}')">${owned ? '已拥有' : (affordable ? '兑换' : '点券不足')}</button>
+                <div class="shop-card-actions">
+                    <button class="btn btn-sm ${owned ? 'btn-ghost' : 'btn-primary'}"
+                        ${owned || !affordable ? 'disabled' : ''}
+                        onclick="buyPaidItem('${item.id}')">${owned ? '已拥有' : (affordable ? '兑换' : '点券不足')}</button>
+                </div>
             </div>`;
     };
     const packCardFor = (pack) => `
         <div class="shop-card paid">
-            <div class="shop-icon">${pack.icon}</div>
-            <div class="shop-body">
-                <div class="shop-name">${pack.name}<span class="paid-tag">${pack.tag}</span></div>
-                <div class="shop-desc">${pack.desc}</div>
-                <div class="shop-price shop-credits-price">¥ ${pack.price} · 💠 ${pack.credits.toLocaleString()}</div>
+            <div class="shop-card-main">
+                <div class="shop-icon">${pack.icon}</div>
+                <div class="shop-body">
+                    <div class="shop-name">${pack.name}<span class="paid-tag">${pack.tag}</span></div>
+                    <div class="shop-desc">${pack.desc}</div>
+                    <div class="shop-price shop-credits-price">¥ ${pack.price} · 💠 ${pack.credits.toLocaleString()}</div>
+                </div>
             </div>
-            <button class="btn btn-sm btn-primary" onclick="buyCreditsPack('${pack.id}')">模拟支付</button>
+            <div class="shop-card-actions">
+                <button class="btn btn-sm btn-primary" onclick="buyCreditsPack('${pack.id}')">💳 去支付 ¥${pack.price}</button>
+            </div>
         </div>`;
 
     const wallet = `
         <div class="shop-wallet">
             <span>游戏资金：<b>$${gameState.money.toLocaleString()}</b></span>
             <span>VCT 点券：<b>💠 ${Number(gameState.credits || 0).toLocaleString()}</b></span>
-            <span class="shop-wallet-note">模拟内购演示，不会产生真实扣款</span>
+            <button class="btn btn-sm btn-ghost" onclick="openPaySettings()">💳 支付设置</button>
+            <span class="shop-wallet-note">真实收款链接 · 支付完成后点击领取点券</span>
         </div>`;
     const recharge = `<div class="shop-category">
-        <h3 class="shop-category-title">💠 点券充值（模拟支付）</h3>
+        <h3 class="shop-category-title">💠 点券充值（真实支付）</h3>
         <div class="shop-category-grid">${PAID_PACKS.map(packCardFor).join('')}</div>
     </div>`;
     const paidSections = PAID_CATEGORIES.map(cat => {
@@ -6635,6 +7199,7 @@ function marketEventsHTML() {
 function renderMarket() {
     if (!gameState) return;
     updateTransferWindowBadge();
+    renderScoutPanel();
     const grid = document.getElementById('market-grid');
     if (!grid) return;
     const filter = document.querySelector('.filter-btn.active')?.dataset.filter || 'all';
