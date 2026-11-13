@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VCT 战队经理 · 运营后台</title>
+<base href="../">
+<link rel="stylesheet" href="style.css?v=1.12.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+<style>
+    body { background: var(--valorant-bg); overflow-x: hidden; }
+    .admin-site { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+    .admin-site-head {
+        display: flex; justify-content: space-between; align-items: flex-end;
+        gap: 16px; flex-wrap: wrap; padding-bottom: 18px;
+        border-bottom: 3px solid var(--valorant-red); margin-bottom: 24px;
+    }
+    .admin-site-head h1 { font-size: 24px; letter-spacing: 2px; font-weight: 900; }
+    .admin-site-head h1 span { color: var(--valorant-red); }
+    .admin-site-head p { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+    .admin-site-head a {
+        color: var(--valorant-red); font-size: 12px; text-decoration: none;
+        border: 1px solid rgba(255, 70, 85, .45); padding: 7px 14px; letter-spacing: 1px;
+    }
+    .admin-site-head a:hover { background: rgba(255, 70, 85, .12); }
+    .admin-card {
+        background: var(--valorant-bg2); border: 1px solid rgba(255, 255, 255, .07);
+        padding: 18px 20px; margin-bottom: 18px;
+    }
+    .admin-card h2 {
+        font-size: 14px; letter-spacing: 1px; margin-bottom: 14px;
+        display: flex; align-items: center; gap: 8px;
+    }
+    .admin-card h2 .tag {
+        font-size: 10px; font-weight: 500; color: var(--text-secondary);
+        border: 1px solid rgba(255,255,255,.12); padding: 1px 7px; letter-spacing: 0;
+    }
+    .admin-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+    .admin-field { display: flex; flex-direction: column; gap: 5px; }
+    .admin-field label { font-size: 11px; color: var(--text-secondary); letter-spacing: .5px; }
+    .admin-field input, .admin-field textarea, .admin-field select {
+        background: var(--valorant-bg3); border: 1px solid rgba(255,255,255,.09);
+        color: var(--text-primary); padding: 9px 11px; font-size: 13px; font-family: inherit;
+        border-radius: 2px; width: 100%;
+    }
+    .admin-field textarea { min-height: 96px; resize: vertical; line-height: 1.6; }
+    .admin-field input:focus, .admin-field textarea:focus { outline: none; border-color: var(--valorant-red); }
+    .admin-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; align-items: center; }
+    .admin-row .btn { padding: 9px 18px; font-size: 12px; letter-spacing: 1px; }
+    .admin-status { font-size: 12px; color: var(--text-secondary); }
+    .admin-status.ok { color: var(--success); }
+    .admin-status.err { color: var(--danger); }
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .stat-box {
+        background: linear-gradient(160deg, rgba(255,255,255,.045), rgba(255,255,255,.01));
+        border: 1px solid rgba(255,255,255,.07); padding: 16px 16px 14px;
+    }
+    .stat-box .k { font-size: 11px; color: var(--text-secondary); letter-spacing: 1px; }
+    .stat-box .v { font-size: 26px; font-weight: 900; margin-top: 8px; color: var(--valorant-gold); }
+    .stat-box .v.accent { color: var(--valorant-red); }
+    .stat-box .sub { font-size: 11px; color: var(--text-secondary); margin-top: 6px; }
+    .trend-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .trend-table th, .trend-table td { padding: 8px 10px; text-align: left; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .trend-table th { color: var(--text-secondary); font-weight: 500; font-size: 11px; letter-spacing: .5px; }
+    .trend-bar { height: 6px; background: var(--valorant-red); opacity: .8; min-width: 2px; }
+    .mail-list { display: flex; flex-direction: column; gap: 10px; }
+    .mail-item {
+        border: 1px solid rgba(255,255,255,.07); background: rgba(255,255,255,.02);
+        padding: 12px 14px; display: flex; justify-content: space-between; gap: 14px; align-items: flex-start;
+    }
+    .mail-item h3 { font-size: 13px; margin-bottom: 5px; }
+    .mail-item p { font-size: 12px; color: var(--text-secondary); line-height: 1.6; white-space: pre-wrap; }
+    .mail-item .meta { font-size: 11px; color: var(--text-secondary); margin-top: 7px; }
+    .mail-item .del {
+        border: 1px solid rgba(255,70,85,.4); color: var(--valorant-red); background: transparent;
+        font-size: 11px; padding: 5px 10px; cursor: pointer; flex-shrink: 0;
+    }
+    .mail-item .del:hover { background: rgba(255,70,85,.12); }
+    .admin-empty { font-size: 12px; color: var(--text-secondary); padding: 12px 0; }
+    .admin-note { font-size: 11px; color: var(--text-secondary); line-height: 1.7; margin-top: 10px; }
+    #admin-toast {
+        position: fixed; right: 20px; bottom: 24px; z-index: 999;
+        background: var(--valorant-bg3); border-left: 3px solid var(--valorant-red);
+        padding: 12px 18px; font-size: 13px; box-shadow: 0 8px 24px rgba(0,0,0,.45);
+        opacity: 0; transform: translateY(10px); transition: .22s; pointer-events: none;
+    }
+    #admin-toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 640px) {
+        .admin-site { padding: 18px 12px 60px; }
+        .stat-box .v { font-size: 21px; }
+    }
+</style>
+</head>
+<body>
+<div class="admin-site">
+    <div class="admin-site-head">
+        <div>
+            <h1>🛠️ VCT 战队经理 · <span>运营后台</span></h1>
+            <p>网站人数统计 · 云端群发邮件 · 仅管理员使用</p>
+        </div>
+        <a href="./">← 返回游戏</a>
+    </div>
+
+    <div class="admin-card">
+        <h2>🔗 GitHub 云端连接 <span class="tag">与游戏共用同一份配置</span></h2>
+        <div class="admin-form-grid">
+            <div class="admin-field">
+                <label>仓库所有者</label>
+                <input id="cfg-owner" type="text" placeholder="GitHub 用户名 / 组织名">
+            </div>
+            <div class="admin-field">
+                <label>仓库名</label>
+                <input id="cfg-repo" type="text" placeholder="仓库名">
+            </div>
+            <div class="admin-field">
+                <label>分支</label>
+                <input id="cfg-branch" type="text" placeholder="main">
+            </div>
+            <div class="admin-field">
+                <label>访问令牌（需 Contents 读写）</label>
+                <input id="cfg-token" type="password" placeholder="Fine-grained PAT">
+            </div>
+        </div>
+        <div class="admin-row">
+            <button class="btn btn-primary" onclick="saveAdminConfig()">保存配置</button>
+            <button class="btn btn-ghost" onclick="testAdminConn()">测试连接</button>
+            <span class="admin-status" id="conn-status">未连接</span>
+        </div>
+        <p class="admin-note">统计与群发都需要写入仓库，令牌必须拥有 <b>Contents: Read and write</b> 权限。令牌只保存在本机浏览器。</p>
+    </div>
+
+    <div class="admin-card">
+        <h2>📊 网站人数 <span class="tag">数据来自仓库 data/ 目录</span></h2>
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="k">云端存档玩家</div>
+                <div class="v accent" id="stat-saves">--</div>
+                <div class="sub">已同步云存档的设备数</div>
+            </div>
+            <div class="stat-box">
+                <div class="k">排行榜玩家</div>
+                <div class="v" id="stat-lb">--</div>
+                <div class="sub">提交过战绩的玩家</div>
+            </div>
+            <div class="stat-box">
+                <div class="k">累计访问 PV</div>
+                <div class="v" id="stat-pv">--</div>
+                <div class="sub">进入游戏的总次数</div>
+            </div>
+            <div class="stat-box">
+                <div class="k">独立访客 UV</div>
+                <div class="v" id="stat-uv">--</div>
+                <div class="sub">去重后的设备数</div>
+            </div>
+            <div class="stat-box">
+                <div class="k">今日 PV / UV</div>
+                <div class="v accent" id="stat-today">--</div>
+                <div class="sub" id="stat-today-date">--</div>
+            </div>
+        </div>
+        <div class="admin-row">
+            <button class="btn btn-primary" onclick="refreshAdminData()">刷新数据</button>
+            <span class="admin-status" id="data-status"></span>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <h2>📈 近 7 天访问趋势</h2>
+        <table class="trend-table">
+            <thead>
+                <tr><th style="width:120px;">日期</th><th style="width:90px;">PV</th><th style="width:90px;">UV</th><th>PV 分布</th></tr>
+            </thead>
+            <tbody id="trend-body">
+                <tr><td colspan="4" class="admin-empty">暂无数据</td></tr>
+            </tbody>
+        </table>
+        <p class="admin-note">PV 每次进入游戏 +1（同一浏览器标签会话只记一次）；UV 按设备去重。纯前端写入遇到并发会有少量丢失。</p>
+    </div>
+
+    <div class="admin-card">
+        <h2>✉ 群发邮件 <span class="tag">所有配置了云端的玩家下次进入游戏时收到</span></h2>
+        <div class="admin-form-grid">
+            <div class="admin-field">
+                <label>发件人</label>
+                <input id="mail-from" type="text" value="VCT 联盟">
+            </div>
+            <div class="admin-field">
+                <label>附件资金（0 表示无）</label>
+                <input id="mail-reward" type="number" min="0" step="10000" value="0">
+            </div>
+            <div class="admin-field" style="grid-column:1/-1;">
+                <label>邮件标题</label>
+                <input id="mail-subject" type="text" placeholder="例如：赛季更新公告">
+            </div>
+            <div class="admin-field" style="grid-column:1/-1;">
+                <label>邮件正文</label>
+                <textarea id="mail-body" placeholder="支持多行文本"></textarea>
+            </div>
+        </div>
+        <div class="admin-row">
+            <button class="btn btn-primary" onclick="sendBroadcast()">群发这封邮件</button>
+            <span class="admin-status" id="mail-status"></span>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <h2>📜 已发送公告 <span class="tag" id="broadcast-count">0 条</span></h2>
+        <div class="mail-list" id="broadcast-list">
+            <div class="admin-empty">暂无公告</div>
+        </div>
+    </div>
+</div>
+<div id="admin-toast"></div>
+<script src="github-backend.js?v=1.12.0"></script>
+<script src="admin/admin.js?v=1.12.0"></script>
+</body>
+</html>

@@ -7,11 +7,11 @@ Kickoff / Masters 1 / Masters 2 / Champions / Ascension / Game Changers 全杯�
 比赛 MVP 与选手数据统计，并支持基于 GitHub 仓库的云存档、全球排行榜、创意工坊、
 站内邮箱、玩家对战（阵容码友谊赛 / 同屏双人）与战绩分享。
 
-- 版本：**v1.11.0**
+- 版本：**v1.12.0**
 - 渠道：正式版 `/` · 内测版 `/beta/` · 测试版 `/alpha/`
 - 技术栈：HTML + CSS + 原生 JavaScript（零依赖、零构建）
 - 后端：GitHub 仓库（GitHub Pages 托管 + GitHub Contents API 存储）
-- 付费内容：真实收款链接（点券礼包与限定外观），仅影响外观，不影响任何比赛数值
+- 付费内容：真实收款链接（点券礼包与限定外观），内测版点券需通过爱发电订单号验证后到账，仅影响外观，不影响任何比赛数值
 
 [![宣传海报](promo/vct-manager-poster.jpg)](promo/vct-manager-poster.jpg)
 
@@ -119,6 +119,38 @@ data/
 
 ---
 
+## 运营后台
+
+两个入口，功能一致：
+
+| 入口 | 形式 | 说明 |
+| --- | --- | --- |
+| `/admin/` | 网页版 | 浏览器打开，复用游戏的 GitHub 云端配置 |
+| `/admin-app/` | Electron 桌面版 | 独立软件，仓库地址内置，双击运行（`npm start`）或打包为 exe（`npm run dist`） |
+
+功能：
+
+- **网站人数**：云端存档玩家数、排行榜玩家数、累计访问 PV、去重 UV、今日 PV/UV、近 7 天趋势、云存档玩家列表
+- **群发邮件**：写入 `data/mail/broadcast.json`，所有配置了云端的玩家下次进入游戏时自动收到站内邮件（按公告 id 去重），支持附带资金奖励、查看与删除历史公告
+- **控制台指令**（桌面版）：`help`、`stats`、`saves`、`top`、`visits`、`mail list/send/rm`、`test`、`config`、`token`、`open repo|pages`、`clear`
+
+桌面版配置位于 `admin-app/config.json`，仓库与分支已内置为 `zmzhy/sdk`。
+
+> ⚠️ `config.json` 含访问令牌，已加入 `.gitignore`，不要提交到仓库。首次克隆后请复制 `config.example.json` 为 `config.json` 并填入 Token。
+
+桌面版打包产物：`admin-app/dist/VCT运营后台-1.0.0.exe`（portable 单文件，双击即可运行）。
+重新打包：
+
+```bash
+cd admin-app
+npm install
+npm run dist
+```
+
+打包后如需修改令牌，可在软件「控制台」执行 `token <令牌>`，配置会写入用户数据目录（`%APPDATA%/VCT运营后台/config.json`），不会改动安装包内文件。
+
+---
+
 ## 安全与隐私
 
 这套方案没有服务器，因此必须了解以下边界：
@@ -158,6 +190,8 @@ data/
 ├── style.css               全部样式
 ├── game.js                 游戏逻辑与云端接入
 ├── github-backend.js       GitHub Contents API 封装（云存档/排行榜/工坊）
+├── admin/                  运营后台（网页版：人数统计 / 群发邮件）
+├── admin-app/              运营后台（Electron 桌面版：数据看板 + 控制台指令）
 ├── promo/                  宣传海报
 ├── .github/workflows/      Pages 自动部署
 ├── .nojekyll               关闭 Jekyll 处理
@@ -199,6 +233,20 @@ data/
 ---
 
 ## 版本记录
+
+### v1.12.0
+- 新增独立运营后台 `/admin/`（管理员专用）：网站人数统计与云端群发邮件，正式版游戏内不显示入口
+- 后台可查看云端存档玩家数、排行榜玩家数、累计访问 PV、独立访客 UV 与今日 PV/UV，以及近 7 天趋势
+- 游戏在配置云端后上报访问（同一浏览器会话只记一次），写入 `data/stats/visits.json`
+- 后台群发系统邮件写入 `data/mail/broadcast.json`，所有配置了云端的玩家下次进入游戏时自动收到站内邮件，按公告 id 去重
+- 群发邮件支持附带资金奖励，可在后台查看与删除历史公告
+
+### v1.11.1
+- 内测版（`/beta/`）新增支付验证：付款后填入爱发电订单号，游戏调用爱发电 `query-order` 接口校验订单状态（交易成功）与金额（不低于所选档位），通过后才发放点券
+- 正式版与测试版保持原有流程：支付后手动点击「我已完成支付」领取点券
+- 内测版支付设置新增 user_id / API Token / 查询接口地址；凭证仅保存在本机浏览器
+- 同一订单号只能领取一次，使用记录写入本地存档，防止重复到账
+- 若浏览器跨域拦截爱发电接口，可在支付设置中把查询接口地址改为自建转发地址（如 Cloudflare Worker）
 
 ### v1.11.0
 - 点券充值改为真实支付：商店「支付设置」填入每个档位的收款链接，点击「去支付」打开真实收款页，支付完成后点击「我已完成支付」领取点券

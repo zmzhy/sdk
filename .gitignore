@@ -1,2 +1,10 @@
 # 依赖目录（通过 package-lock.json 还原）
 node_modules/
+
+# 桌面版构建产物与缓存
+admin-app/dist/
+admin-app/.cache/
+admin-app/node_modules/
+
+# 桌面版本地配置（含 Token，切勿提交）
+admin-app/config.json

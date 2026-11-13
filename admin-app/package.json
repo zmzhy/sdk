@@ -1,0 +1,34 @@
+{
+  "name": "vct-admin-console",
+  "version": "1.0.0",
+  "description": "VCT 战队经理 · 运营后台（Electron 桌面版）",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.vct.manager.admin",
+    "productName": "VCT运营后台",
+    "asar": true,
+    "electronDownload": {
+      "mirror": "https://npmmirror.com/mirrors/electron/"
+    },
+    "electronDist": "node_modules/electron/dist",
+    "files": [
+      "main.js",
+      "preload.js",
+      "config.json",
+      "renderer/**"
+    ],
+    "win": {
+      "target": "portable",
+      "artifactName": "VCT运营后台-${version}.exe"
+    }
+  }
+}

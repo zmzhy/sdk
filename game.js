@@ -2872,7 +2872,7 @@ function adminQuickSim(n) {
 
 /* ==================== 正式版：云端 / 全球榜 / 创意工坊 ==================== */
 
-const APP_VERSION = '1.11.0';
+const APP_VERSION = '1.12.0';
 
 /* ---------- GitHub 设置 ---------- */
 
@@ -3314,6 +3314,128 @@ function autoCloudBackup(force) {
             if (typeof showToast === 'function') showToast('云备份完成', '当前存档已备份到你的 GitHub 仓库', 'success');
         })
         .catch(() => {});
+}
+
+/* ---------- v1.12.0：运营统计（访问上报）与云端群发邮件 ---------- */
+const VISITS_PATH = 'data/stats/visits.json';
+const BROADCAST_PATH = 'data/mail/broadcast.json';
+const BROADCAST_SEEN_KEY = 'vct_broadcast_seen';
+const VISIT_SESSION_KEY = 'vct_visit_reported';
+const BROADCAST_PULL_KEY = 'vct_broadcast_pulled_at';
+
+function todayDateKey() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function loadSeenBroadcastIds() {
+    const ids = [];
+    try {
+        const raw = localStorage.getItem(BROADCAST_SEEN_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        if (Array.isArray(arr)) arr.forEach(v => ids.push(String(v)));
+    } catch (e) { /* 忽略损坏数据 */ }
+    if (gameState && Array.isArray(gameState.broadcastSeen)) {
+        gameState.broadcastSeen.forEach(v => { if (ids.indexOf(String(v)) === -1) ids.push(String(v)); });
+    }
+    return ids;
+}
+
+function markSeenBroadcastIds(ids) {
+    const all = loadSeenBroadcastIds();
+    ids.forEach(v => { if (all.indexOf(String(v)) === -1) all.push(String(v)); });
+    const clipped = all.slice(-200);
+    try { localStorage.setItem(BROADCAST_SEEN_KEY, JSON.stringify(clipped)); } catch (e) { /* 忽略 */ }
+    if (gameState) gameState.broadcastSeen = clipped.slice();
+}
+
+/* 每次进入游戏上报一次访问（同一浏览器会话只报一次），写入 data/stats/visits.json */
+async function reportVisit() {
+    if (typeof GHBackend === 'undefined' || !GHBackend.canWrite()) return;
+    try {
+        if (sessionStorage.getItem(VISIT_SESSION_KEY) === '1') return;
+        sessionStorage.setItem(VISIT_SESSION_KEY, '1');
+    } catch (e) { /* 无 sessionStorage 时仍然上报 */ }
+
+    const pid = GHBackend.playerId();
+    const day = todayDateKey();
+    for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+            let data = null;
+            try {
+                const file = await GHBackend.getFile(VISITS_PATH, { noCache: true });
+                if (file && file.data) data = file.data;
+            } catch (e) { data = null; }
+            if (!data || typeof data !== 'object') {
+                data = { pv: 0, uv: 0, uvs: [], daily: {}, dailyUv: {}, createdAt: new Date().toISOString() };
+            }
+            data.pv = Number(data.pv || 0) + 1;
+            if (!Array.isArray(data.uvs)) data.uvs = [];
+            if (data.uvs.indexOf(pid) === -1) data.uvs.push(pid);
+            if (data.uvs.length > 3000) data.uvs = data.uvs.slice(-3000);
+            data.uv = data.uvs.length;
+            if (!data.daily || typeof data.daily !== 'object') data.daily = {};
+            if (!data.daily[day] || typeof data.daily[day] !== 'object') data.daily[day] = { pv: 0, uv: 0 };
+            data.daily[day].pv = Number(data.daily[day].pv || 0) + 1;
+            if (!data.dailyUv || typeof data.dailyUv !== 'object') data.dailyUv = {};
+            if (!Array.isArray(data.dailyUv[day])) data.dailyUv[day] = [];
+            if (data.dailyUv[day].indexOf(pid) === -1) data.dailyUv[day].push(pid);
+            data.daily[day].uv = data.dailyUv[day].length;
+            data.updatedAt = new Date().toISOString();
+            const days = Object.keys(data.daily).sort();
+            if (days.length > 60) {
+                days.slice(0, days.length - 60).forEach(k => {
+                    delete data.daily[k];
+                    delete data.dailyUv[k];
+                });
+            }
+            await GHBackend.putFile(VISITS_PATH, data, 'stats: visit ' + day, { throwOnConflict: true, retries: 1 });
+            return;
+        } catch (e) {
+            await new Promise(r => setTimeout(r, 400 + attempt * 600));
+        }
+    }
+}
+
+/* 拉取管理员群发的云端邮件，注入站内邮箱（按 id 去重） */
+async function pullBroadcastMails() {
+    if (typeof GHBackend === 'undefined' || !GHBackend.isConfigured()) return;
+    try {
+        const last = Number(localStorage.getItem(BROADCAST_PULL_KEY) || 0);
+        if (last && Date.now() - last < 5 * 60 * 1000) return;
+        localStorage.setItem(BROADCAST_PULL_KEY, String(Date.now()));
+    } catch (e) { /* 忽略 */ }
+
+    let payload = null;
+    try {
+        const file = await GHBackend.getFile(BROADCAST_PATH, { noCache: true });
+        if (file && file.data) payload = file.data;
+    } catch (e) { return; }
+    if (!payload || !Array.isArray(payload.items) || !payload.items.length) return;
+
+    const seen = loadSeenBroadcastIds();
+    const fresh = [];
+    payload.items.forEach(item => {
+        if (!item || !item.id) return;
+        const id = String(item.id);
+        if (seen.indexOf(id) !== -1) return;
+        if (item.expiresAt && Number(item.expiresAt) < Date.now()) return;
+        seen.push(id);
+        fresh.push(item);
+    });
+    if (!fresh.length) return;
+    fresh.sort((a, b) => Number(a.ts || 0) - Number(b.ts || 0));
+    fresh.forEach(item => {
+        addMail(item.from || 'VCT 联盟', item.subject || '(无标题)', item.body || '', Number(item.reward) || 0);
+    });
+    markSeenBroadcastIds(fresh.map(i => String(i.id)));
+    saveGame();
+    if (typeof showToast === 'function') showToast('收到新邮件', fresh.length + ' 封来自 VCT 联盟的公告', 'success');
+}
+
+function syncOperations() {
+    reportVisit().catch(() => {});
+    pullBroadcastMails().catch(() => {});
 }
 
 const versionEl = document.getElementById('app-version');
@@ -5308,6 +5430,7 @@ function initGame() {
     updateAllDisplays();
     showScreen('dashboard');
     autoCloudBackup();
+    syncOperations();
 }
 
 function initGame_custom() {
@@ -5359,6 +5482,7 @@ function initGame_withTeam(team) {
     showScreen('dashboard');
     maybeAnnounceVersion();
     autoCloudBackup();
+    syncOperations();
 }
 
 function loadGameSilent() {
@@ -5374,6 +5498,7 @@ function loadGameSilent() {
         showScreen('dashboard');
         maybeAnnounceVersion();
         autoCloudBackup();
+        syncOperations();
         return true;
     } catch (e) { return false; }
 }
@@ -5488,10 +5613,10 @@ function renderShop() {
             <span>游戏资金：<b>$${gameState.money.toLocaleString()}</b></span>
             <span>VCT 点券：<b>💠 ${Number(gameState.credits || 0).toLocaleString()}</b></span>
             <button class="btn btn-sm btn-ghost" onclick="openPaySettings()">💳 支付设置</button>
-            <span class="shop-wallet-note">真实收款链接 · 支付完成后点击领取点券</span>
+            <span class="shop-wallet-note">${isPayVerifyChannel() ? '真实收款链接 · 付款后填订单号，爱发电验证通过才到账' : '真实收款链接 · 支付完成后点击领取点券'}</span>
         </div>`;
     const recharge = `<div class="shop-category">
-        <h3 class="shop-category-title">💠 点券充值（真实支付）</h3>
+        <h3 class="shop-category-title">💠 点券充值（${isPayVerifyChannel() ? '爱发电订单验证' : '真实支付'}）</h3>
         <div class="shop-category-grid">${PAID_PACKS.map(packCardFor).join('')}</div>
     </div>`;
     const paidSections = PAID_CATEGORIES.map(cat => {
@@ -5514,8 +5639,15 @@ function renderShop() {
         '<p class="shop-note">所有道具均为外观或便利类，付费内容同样不会改变任何比赛数值，保证公平对局。</p>';
 }
 
-/* ---------- v1.11.0：真实支付（本机收款链接 + 支付后领取点券） ---------- */
+/* ---------- v1.11.1：真实支付 + 爱发电订单验证 ---------- */
 const PAY_CONFIG_KEY = 'vct_pay_config';
+const PAY_USED_KEY = 'vct_pay_used_orders';
+const AFDIAN_DEFAULT_API = 'https://afdian.com/api/open/query-order';
+
+/* 支付验证仅在「内测版」启用：正式版 / 测试版保持手动领取流程 */
+function isPayVerifyChannel() {
+    return typeof window !== 'undefined' && window.__CHANNEL__ === 'beta';
+}
 
 function loadPayConfig() {
     try {
@@ -5537,6 +5669,45 @@ function payLinkFor(packId) {
     return String(cfg[packId] || '').trim();
 }
 
+function afdianConfig() {
+    const cfg = loadPayConfig();
+    return {
+        userId: String(cfg.afdian_user_id || '').trim(),
+        token: String(cfg.afdian_token || '').trim(),
+        apiUrl: String(cfg.afdian_api || '').trim() || AFDIAN_DEFAULT_API
+    };
+}
+
+function loadUsedPayOrders() {
+    try {
+        if (typeof localStorage === 'undefined') return [];
+        const raw = localStorage.getItem(PAY_USED_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr.map(v => String(v)) : [];
+    } catch (e) { return []; }
+}
+
+function isPayOrderUsed(orderNo) {
+    const key = String(orderNo || '').trim();
+    if (!key) return false;
+    if (loadUsedPayOrders().indexOf(key) !== -1) return true;
+    return Array.isArray(gameState && gameState.payUsedOrders) && gameState.payUsedOrders.indexOf(key) !== -1;
+}
+
+function markPayOrderUsed(orderNo) {
+    const key = String(orderNo || '').trim();
+    if (!key) return;
+    const list = loadUsedPayOrders();
+    if (list.indexOf(key) === -1) list.push(key);
+    try {
+        if (typeof localStorage !== 'undefined') localStorage.setItem(PAY_USED_KEY, JSON.stringify(list.slice(-500)));
+    } catch (e) { /* 忽略存储异常 */ }
+    if (gameState) {
+        if (!Array.isArray(gameState.payUsedOrders)) gameState.payUsedOrders = [];
+        if (gameState.payUsedOrders.indexOf(key) === -1) gameState.payUsedOrders.push(key);
+    }
+}
+
 function openPaySettings() {
     if (!gameState) return showToast('请先开始游戏', '进入战队后才能配置支付', 'warning');
     const cfg = loadPayConfig();
@@ -5544,7 +5715,7 @@ function openPaySettings() {
     if (!body) return;
     body.innerHTML = `
         <h2>💳 支付设置</h2>
-        <p class="gh-desc" style="margin:10px 0 14px;">为每个点券档位填入你的真实收款链接（例如爱发电 / Stripe / 支付宝收款页）。玩家点击「去支付」会打开该链接，支付完成后点击「我已完成支付」领取点券。链接仅保存在本机浏览器。</p>
+        <p class="gh-desc" style="margin:10px 0 14px;">为每个点券档位填入真实收款链接（例如爱发电方案页 / Stripe / 支付宝收款页）。玩家点击「去支付」会打开该链接，${isPayVerifyChannel() ? '付款后需填入订单号通过爱发电 API 验证，验证通过才会发放点券。' : '支付完成后点击「我已完成支付」领取点券。'}所有配置仅保存在本机浏览器。</p>
         <div class="pay-config-list">
             ${PAID_PACKS.map(p => `
                 <div class="pay-config-row">
@@ -5552,6 +5723,24 @@ function openPaySettings() {
                     <input class="pay-config-input" id="pay-url-${p.id}" type="url" placeholder="https://..." value="${escapeHtml(cfg[p.id] || '')}">
                 </div>`).join('')}
         </div>
+        ${isPayVerifyChannel() ? `
+        <h3 class="pay-config-name" style="margin:18px 0 8px;">🔐 爱发电订单验证（内测版）</h3>
+        <div class="pay-config-list">
+            <div class="pay-config-row">
+                <span class="pay-config-name">user_id</span>
+                <input class="pay-config-input" id="pay-afdian-user" type="text" placeholder="爱发电开发者后台的 user_id" value="${escapeHtml(cfg.afdian_user_id || '')}">
+            </div>
+            <div class="pay-config-row">
+                <span class="pay-config-name">API Token</span>
+                <input class="pay-config-input" id="pay-afdian-token" type="password" placeholder="爱发电开发者后台的 api token" value="${escapeHtml(cfg.afdian_token || '')}">
+            </div>
+            <div class="pay-config-row">
+                <span class="pay-config-name">查询接口地址（可选）</span>
+                <input class="pay-config-input" id="pay-afdian-api" type="url" placeholder="${AFDIAN_DEFAULT_API}" value="${escapeHtml(cfg.afdian_api || '')}">
+            </div>
+        </div>
+        <p class="gh-desc" style="margin:8px 0 14px;font-size:12px;">若浏览器提示跨域被拦截，请把「查询接口地址」改为你自己的转发地址（例如 Cloudflare Worker / 自建 PHP，服务端转发到爱发电 query-order 接口）。</p>
+        ` : ''}
         <div class="modal-actions">
             <button class="btn btn-primary" onclick="savePaySettings()" style="flex:1;">保存</button>
             <button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">关闭</button>
@@ -5568,11 +5757,118 @@ function savePaySettings() {
         const v = String(el.value || '').trim();
         if (v) cfg[p.id] = v;
     });
+    const userEl = document.getElementById('pay-afdian-user');
+    const tokenEl = document.getElementById('pay-afdian-token');
+    const apiEl = document.getElementById('pay-afdian-api');
+    const userId = isPayVerifyChannel() && userEl ? String(userEl.value || '').trim() : '';
+    const token = isPayVerifyChannel() && tokenEl ? String(tokenEl.value || '').trim() : '';
+    const apiUrl = isPayVerifyChannel() && apiEl ? String(apiEl.value || '').trim() : '';
+    if (userId) cfg.afdian_user_id = userId;
+    if (token) cfg.afdian_token = token;
+    if (apiUrl) cfg.afdian_api = apiUrl;
     savePayConfig(cfg);
     closeModal();
     if (typeof renderShop === 'function') renderShop();
-    const filled = Object.keys(cfg).length;
-    showToast('支付设置', filled ? '已保存 ' + filled + ' 个收款链接' : '未填写链接，将无法发起真实支付', filled ? 'success' : 'warning');
+    const filled = PAID_PACKS.filter(p => cfg[p.id]).length;
+    const verifyReady = !!(userId && token);
+    showToast('支付设置',
+        (filled ? '已保存 ' + filled + ' 个收款链接' : '未填写收款链接，将无法发起支付') +
+        (verifyReady ? ' · 爱发电验证已启用' : ' · 未填写爱发电凭证，支付后无法验证'),
+        verifyReady ? 'success' : 'warning');
+}
+
+function friendlyPayError(err) {
+    const msg = String((err && err.message) || err || '');
+    if (/Failed to fetch|NetworkError|Load failed|CORS|Access-Control/i.test(msg)) {
+        return '无法访问爱发电查询接口（浏览器跨域被拦截或网络不可用）。请在「支付设置」把查询接口地址改为你自己的转发地址。';
+    }
+    return msg || '未知错误';
+}
+
+/* MD5：用于爱发电接口签名，纯前端无依赖实现 */
+function md5Hex(input) {
+    const text = String(input);
+    let bytes;
+    if (typeof TextEncoder !== 'undefined') {
+        bytes = Array.prototype.slice.call(new TextEncoder().encode(text));
+    } else {
+        const encoded = unescape(encodeURIComponent(text));
+        bytes = [];
+        for (let i = 0; i < encoded.length; i++) bytes.push(encoded.charCodeAt(i));
+    }
+    const n = bytes.length;
+    const totalWords = (((n + 8) >> 6) + 1) * 16;
+    const words = new Array(totalWords).fill(0);
+    for (let i = 0; i < n; i++) words[i >> 2] |= bytes[i] << ((i % 4) * 8);
+    words[n >> 2] |= 0x80 << ((n % 4) * 8);
+    words[totalWords - 2] = (n * 8) | 0;
+    words[totalWords - 1] = 0;
+
+    const S = [7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
+        5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
+        4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
+        6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21];
+    const K = new Array(64);
+    for (let i = 0; i < 64; i++) K[i] = Math.floor(Math.abs(Math.sin(i + 1)) * 0x100000000) | 0;
+    const rotl = (x, c) => ((x << c) | (x >>> (32 - c))) | 0;
+
+    let a0 = 0x67452301, b0 = 0xefcdab89, c0 = 0x98badcfe, d0 = 0x10325476;
+    for (let off = 0; off < totalWords; off += 16) {
+        const W = words.slice(off, off + 16);
+        let A = a0, B = b0, C = c0, D = d0;
+        for (let i = 0; i < 64; i++) {
+            let F, g;
+            if (i < 16) { F = (B & C) | (~B & D); g = i; }
+            else if (i < 32) { F = (D & B) | (~D & C); g = (5 * i + 1) % 16; }
+            else if (i < 48) { F = B ^ C ^ D; g = (3 * i + 5) % 16; }
+            else { F = C ^ (B | ~D); g = (7 * i) % 16; }
+            const tmp = D;
+            D = C;
+            C = B;
+            B = (B + rotl((A + F + K[i] + W[g]) | 0, S[i])) | 0;
+            A = tmp;
+        }
+        a0 = (a0 + A) | 0;
+        b0 = (b0 + B) | 0;
+        c0 = (c0 + C) | 0;
+        d0 = (d0 + D) | 0;
+    }
+    return [a0, b0, c0, d0].map(v => {
+        let out = '';
+        for (let j = 0; j < 4; j++) out += (((v >>> (j * 8)) & 0xff) + 0x100).toString(16).slice(1);
+        return out;
+    }).join('');
+}
+
+async function afdianQueryOrderPage(cfg, page) {
+    const paramsStr = JSON.stringify({ page });
+    const ts = Math.floor(Date.now() / 1000);
+    const sign = md5Hex(cfg.token + 'params' + paramsStr + 'ts' + ts + 'user_id' + cfg.userId);
+    const res = await fetch(cfg.apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: cfg.userId, token: cfg.token, ts, sign, params: paramsStr })
+    });
+    if (!res.ok) throw new Error('查询接口返回 HTTP ' + res.status);
+    const json = await res.json();
+    const ec = Number(json && json.ec);
+    if (ec !== 200) {
+        const emsg = String((json && (json.em || (json.data && json.data.msg))) || '');
+        throw new Error('爱发电接口返回错误码 ' + ec + (emsg ? '：' + emsg : ''));
+    }
+    return (json && json.data) || {};
+}
+
+async function findAfdianOrder(cfg, orderNo) {
+    for (let page = 1; page <= 5; page++) {
+        const data = await afdianQueryOrderPage(cfg, page);
+        const list = Array.isArray(data.list) ? data.list : [];
+        const hit = list.find(o => String((o && o.out_trade_no) || '').trim() === orderNo);
+        if (hit) return hit;
+        const totalPage = Number(data.total_page || 1);
+        if (!list.length || page >= totalPage) break;
+    }
+    return null;
 }
 
 function buyCreditsPack(id) {
@@ -5582,16 +5878,20 @@ function buyCreditsPack(id) {
     const link = payLinkFor(id);
     if (!link) {
         showConfirmModal('尚未配置收款链接',
-            '请先在商店点击「支付设置」，为「' + pack.name + '」填入你的真实收款链接（如爱发电 / Stripe / 支付宝收款页）。\n\n配置后，点击「去支付」会打开该链接。',
+            '请先在商店点击「支付设置」，为「' + pack.name + '」填入真实收款链接（如爱发电方案页 / Stripe / 支付宝收款页）。\n\n配置后，点击「去支付」会打开该链接。',
             () => openPaySettings());
         return;
     }
     try {
         window.open(link, '_blank', 'noopener,noreferrer');
     } catch (e) { /* 弹窗被拦截时仍可手动打开 */ }
-    showConfirmModal('完成支付后领取点券',
-        '已在浏览器打开支付页面：\n' + link + '\n\n支付 ¥' + pack.price + ' 完成后，点击「我已完成支付」领取 💠 ' + pack.credits.toLocaleString() + ' 点券。\n\n本游戏无法自动校验支付结果，请诚信操作。',
-        () => claimCreditsPack(id));
+    if (isPayVerifyChannel()) {
+        openPayVerify(id);
+    } else {
+        showConfirmModal('完成支付后领取点券',
+            '已在浏览器打开支付页面：\n' + link + '\n\n支付 ¥' + pack.price + ' 完成后，点击「我已完成支付」领取 💠 ' + pack.credits.toLocaleString() + ' 点券。\n\n本渠道暂未启用订单验证，请诚信操作。',
+            () => claimCreditsPack(id));
+    }
 }
 
 function claimCreditsPack(id) {
@@ -5603,6 +5903,78 @@ function claimCreditsPack(id) {
     updateAllDisplays();
     renderShop();
     if (gameState.shop && gameState.shop.autoSave) saveGame();
+    showToast('充值成功', '💠 ' + pack.credits.toLocaleString() + ' 点券已到账', 'success');
+}
+
+function openPayVerify(packId) {
+    const pack = PAID_PACKS.find(p => p.id === packId);
+    if (!pack) return;
+    const body = document.getElementById('modal-body');
+    if (!body) return;
+    const acfg = afdianConfig();
+    const ready = !!(acfg.userId && acfg.token);
+    body.innerHTML = `
+        <h2>🔐 支付验证 · ${pack.name}</h2>
+        <p class="gh-desc" style="margin:10px 0 14px;">支付 ¥${pack.price} 获得 💠 ${pack.credits.toLocaleString()} 点券。请在支付完成后填入爱发电订单号，验证通过才会到账。</p>
+        <div class="pay-config-row">
+            <span class="pay-config-name">爱发电订单号</span>
+            <input class="pay-config-input" id="pay-order-no" type="text" placeholder="填写支付订单号（out_trade_no）">
+        </div>
+        <div id="pay-verify-status" class="gh-result" style="margin-top:10px;">${ready ? '' : '⚠️ 未配置爱发电 user_id / token，请先打开「支付设置」填写后再验证。'}</div>
+        <div class="modal-actions">
+            <button class="btn btn-primary" id="pay-verify-btn" onclick="verifyPayOrder('${pack.id}')" style="flex:1;"${ready ? '' : ' disabled'}>验证并领取</button>
+            <button class="btn btn-ghost" onclick="closeModal()" style="flex:1;">取消</button>
+        </div>
+    `;
+    openModal();
+}
+
+async function verifyPayOrder(packId) {
+    if (!gameState) return;
+    const pack = PAID_PACKS.find(p => p.id === packId);
+    if (!pack) return;
+    const input = document.getElementById('pay-order-no');
+    const statusEl = document.getElementById('pay-verify-status');
+    const btn = document.getElementById('pay-verify-btn');
+    const orderNo = String((input && input.value) || '').trim();
+    const setStatus = (html) => { if (statusEl) statusEl.innerHTML = html; };
+
+    if (!orderNo) return setStatus('请输入爱发电订单号后再验证。');
+    if (orderNo.length < 10) return setStatus('订单号长度不正确，请核对后再试。');
+    const cfg = afdianConfig();
+    if (!cfg.userId || !cfg.token) return setStatus('未配置爱发电 user_id / token，请先打开「支付设置」填写。');
+    if (isPayOrderUsed(orderNo)) return setStatus('该订单号已经领取过点券，不能重复领取。');
+
+    if (btn) { btn.disabled = true; btn.textContent = '验证中…'; }
+    setStatus('正在向爱发电查询订单，请稍候…');
+    try {
+        const order = await findAfdianOrder(cfg, orderNo);
+        if (!order) throw new Error('未查询到该订单号，请确认订单号与收款账号是否正确。');
+        const status = Number(order.status);
+        if (status !== 2) throw new Error('该订单尚未交易成功（当前状态 ' + status + '），请完成支付后再验证。');
+        const paid = Number(order.total_amount || 0);
+        if (paid + 0.001 < pack.price) {
+            throw new Error('订单金额 ¥' + paid.toFixed(2) + ' 低于该档位 ¥' + pack.price + '，请选择对应档位支付。');
+        }
+        markPayOrderUsed(orderNo);
+        grantCreditsPack(pack, order, orderNo);
+        setStatus('✅ 验证通过：订单 ' + escapeHtml(orderNo) + ' 已确认支付 ¥' + paid.toFixed(2) +
+            '，💠 ' + pack.credits.toLocaleString() + ' 点券已到账。');
+        if (btn) { btn.disabled = true; btn.textContent = '已完成'; }
+        return;
+    } catch (err) {
+        setStatus('❌ 验证失败：' + escapeHtml(friendlyPayError(err)));
+    }
+    if (btn) { btn.disabled = false; btn.textContent = '验证并领取'; }
+}
+
+function grantCreditsPack(pack, order, orderNo) {
+    gameState.credits = Number(gameState.credits || 0) + pack.credits;
+    addMail('战队商城', '充值成功：' + pack.name,
+        '爱发电订单 ' + orderNo + ' 验证通过（¥' + Number(order.total_amount || 0).toFixed(2) + '），已到账 💠 ' + pack.credits.toLocaleString() + ' 点券。', 0);
+    updateAllDisplays();
+    renderShop();
+    saveGame();
     showToast('充值成功', '💠 ' + pack.credits.toLocaleString() + ' 点券已到账', 'success');
 }
 
@@ -6053,12 +6425,39 @@ function renderCollectionHTML() {
 
 const GAME_ANNOUNCEMENTS = [
     {
+        version: '1.12.0',
+        date: '2026-11-13',
+        tag: '运营后台 · 群发邮件',
+        title: 'v1.12.0 新增运营后台：网站人数统计与云端群发邮件',
+        content: [
+            '新增独立运营后台 /admin/，仅管理员使用，正式版游戏内不显示入口。',
+            '后台可查看云端存档玩家数、排行榜玩家数、累计访问 PV / 独立访客 UV 与今日数据。',
+            '游戏会在配置云端后上报访问（同一浏览器会话只记一次），用于统计 PV / UV。',
+            '后台支持群发系统邮件：填写标题与正文后写入云端，所有已配置云端的玩家下次进入游戏时自动收到站内邮件。',
+            '群发邮件可附带资金奖励，并按公告 id 去重，不会重复发放。'
+        ]
+    },
+    {
+        version: '1.11.1',
+        date: '2026-11-08',
+        tag: '内测版 · 支付验证',
+        title: 'v1.11.1 内测版支付验证：爱发电订单校验后发放点券',
+        content: [
+            '本功能仅在内测版（/beta/）启用；正式版与测试版仍为「支付后手动领取点券」。',
+            '内测版付款后填入爱发电订单号，游戏调用爱发电 query-order 接口校验订单状态与金额，通过后才发放点券。',
+            '支付设置新增 user_id / API Token / 查询接口地址，凭证仅保存在本机浏览器。',
+            '同一订单号只能领取一次，使用记录写入本地存档，防止重复到账。',
+            '验证会校验订单状态为交易成功、且金额不低于所选档位，避免串档领取。',
+            '若浏览器跨域拦截爱发电接口，可在支付设置里把查询接口地址改为自己的转发地址。'
+        ]
+    },
+    {
         version: '1.11.0',
         date: '2026-11-08',
         tag: '真实支付 · 球探 · 粉丝经济',
         title: 'v1.11.0 真实支付、12 家分级赞助商与球探系统',
         content: [
-            '点券充值改为真实支付：在商店「支付设置」中填入你的收款链接，点击「去支付」打开真实收款页，支付完成后点「我已完成支付」领取点券。',
+            '点券充值改为真实支付：在商店「支付设置」中填入收款链接，点击「去支付」打开真实收款页。',
             '商店所有商品的购买 / 兑换按钮统一固定在卡片底部。',
             '赞助商扩充到 12 家，并划分为 S / A / B / C / D 五个等级；等级越高，周赞助与赛季奖金越高。',
             '新增球探探索：每周最多 3 次，每次 $25,000，随机发现不同姓名与战力的新星，直接加入转会市场。',
@@ -6799,10 +7198,10 @@ function renderShop() {
             <span>游戏资金：<b>$${gameState.money.toLocaleString()}</b></span>
             <span>VCT 点券：<b>💠 ${Number(gameState.credits || 0).toLocaleString()}</b></span>
             <button class="btn btn-sm btn-ghost" onclick="openPaySettings()">💳 支付设置</button>
-            <span class="shop-wallet-note">真实收款链接 · 支付完成后点击领取点券</span>
+            <span class="shop-wallet-note">${isPayVerifyChannel() ? '真实收款链接 · 付款后填订单号，爱发电验证通过才到账' : '真实收款链接 · 支付完成后点击领取点券'}</span>
         </div>`;
     const recharge = `<div class="shop-category">
-        <h3 class="shop-category-title">💠 点券充值（真实支付）</h3>
+        <h3 class="shop-category-title">💠 点券充值（${isPayVerifyChannel() ? '爱发电订单验证' : '真实支付'}）</h3>
         <div class="shop-category-grid">${PAID_PACKS.map(packCardFor).join('')}</div>
     </div>`;
     const paidSections = PAID_CATEGORIES.map(cat => {
